@@ -1,0 +1,38 @@
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">table_chart</span> Bảng phân phối</h4>
+  <table class="symbol-table">
+    <tr><th>Tên</th><th>\(\E\)</th><th>Var</th></tr>
+    <tr><td>Bern(\(p\))</td><td>\(p\)</td><td>\(pq\)</td></tr>
+    <tr><td>Bin(\(n,p\))</td><td>\(np\)</td><td>\(npq\)</td></tr>
+    <tr><td>Geo(\(p\))</td><td>\(\frac{q}{p}\)</td><td>\(\frac{q}{p^2}\)</td></tr>
+    <tr><td>Poi(\(\lambda\))</td><td>\(\lambda\)</td><td>\(\lambda\)</td></tr>
+    <tr><td>Exp(\(\lambda\))</td><td>\(\frac{1}{\lambda}\)</td><td>\(\frac{1}{\lambda^2}\)</td></tr>
+    <tr><td>\(\mathcal{N}(\mu,\sigma^2)\)</td><td>\(\mu\)</td><td>\(\sigma^2\)</td></tr>
+  </table>
+  <p class="sidebar-tip">\(q = 1 - p\). Poisson có \(\E = \text{Var}\) / dấu hiệu nhận biết nhanh.</p>
+</div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">auto_awesome</span> Tính chất quan trọng</h4>
+
+  <h5>Phân phối mũ</h5>
+  <ul>
+    <li>Min Exp &rarr; \(\text{Exp}(\sum \lambda_i)\)</li>
+    <li>Không nhớ: biết đã đợi \(s\) không giúp gì</li>
+  </ul>
+  <p class="sidebar-tip">Khi nào dùng: mô hình thời gian chờ giữa các sự kiện (hàng đợi, phân rã phóng xạ).</p>
+
+  <h5>Kỳ vọng</h5>
+  <ul>
+    <li>Tower: \(\E[X] = \E[\E[X \mid Y]]\)</li>
+    <li>Tuyến tính: luôn đúng, kể cả phụ thuộc</li>
+  </ul>
+  <p class="sidebar-tip">Khi nào dùng: Tower property rất hữu ích trong phân tích bước đầu tiên (Ch. 2).</p>
+
+  <h5>Bất đẳng thức</h5>
+  <ul>
+    <li>Markov: \(\PP(X \geq a) \leq \dfrac{\E[X]}{a}\)</li>
+    <li>Chebyshev: \(\PP(|X - \mu| \geq k) \leq \dfrac{\sigma^2}{k^2}\)</li>
+  </ul>
+  <p class="sidebar-tip">Khi nào dùng: chặn trên xác suất khi không biết phân phối chính xác.</p>
+</div>

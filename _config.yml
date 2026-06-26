@@ -1,0 +1,10 @@
+title: "HP Library - Thư viện Nghiên cứu"
+description: "Thư viện tài liệu nghiên cứu PhD cá nhân - Đại học Debrecen"
+baseurl: ""
+url: "https://hp-lib.io.vn"
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - .gitignore

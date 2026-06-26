@@ -1,0 +1,36 @@
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">first_page</span> Phương pháp FSA</h4>
+  <p class="sidebar-tip">Viết phương trình cho trạng thái chưa biết dựa trên <strong>bước đầu tiên</strong> / "nếu đi sang \(j\), thì bài toán trở thành gì?"</p>
+
+  <h5>Xác suất chạm trạng thái \(l\)</h5>
+  <p>\(g_l(k) = \sum_m P_{k,m}\, g_l(m)\)</p>
+  <p class="sidebar-tip">Biên: \(g_l(l) = 1\), \(g_l(k) = 0\) nếu \(k\) là trạng thái hấp thụ khác \(l\).</p>
+
+  <h5>Thời gian chạm trung bình</h5>
+  <p>\(h_A(k) = 1 + \sum_l P_{k,l}\, h_A(l)\)</p>
+  <p class="sidebar-tip">Biên: \(h_A(l) = 0\) khi \(l \in A\). Mỗi bước tốn 1 đơn vị thời gian.</p>
+
+  <h5>Dạng ma trận</h5>
+  <p>\(\mathbf{g}_l = (I - Q)^{-1} R\, \mathbf{e}_l\)</p>
+  <p>\(\mathbf{h}_A = (I - Q)^{-1} \mathbf{1}\)</p>
+  <p class="sidebar-tip">\(Q\) = phần chuyển giữa các trạng thái tạm thời, \(R\) = phần chuyển đến trạng thái hấp thụ.</p>
+</div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">casino</span> Bài toán con bạc</h4>
+  <p class="sidebar-tip">Bắt đầu với \(i\) đồng, mục tiêu đạt \(N\) trước khi về 0.</p>
+
+  <h5>Khi \(p \neq q\)</h5>
+  <p>\(g(i) = \dfrac{1 - \rho^i}{1 - \rho^N}\), trong đó \(\rho = q/p\)</p>
+  <p class="sidebar-tip">Nếu \(p < q\) (\(\rho > 1\)): xác suất thắng giảm nhanh khi \(N\) tăng / nhà cái luôn thắng.</p>
+
+  <h5>Khi \(p = q = 1/2\)</h5>
+  <p>\(g(i) = i / N\)</p>
+  <p class="sidebar-tip">Tuyến tính: bắt đầu giữa đường thì xác suất thắng 50%.</p>
+</div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">link</span> Liên hệ \(\pi\) &harr; \(\mu\)</h4>
+  <p>\(\pi_j = \dfrac{1}{\mu_j(j)}\)</p>
+  <p class="sidebar-tip">Phân phối dừng = nghịch đảo thời gian hồi quy trung bình. Trạng thái nào quay lại nhanh thì chiếm tỷ lệ cao.</p>
+</div>

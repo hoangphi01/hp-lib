@@ -1,0 +1,686 @@
+---
+layout: book-chapter
+slug: ch1
+book_key: markov
+sidebar_include: sidebars/markov/ch1.html
+title: "Ch 1: Rời rạc"
+sections:
+  - id: tai-sao-markov
+    title: "1. Tại sao chuỗi Markov quan trọng?"
+  - id: tinh-chat-markov
+    title: "2. Tính chất Markov"
+  - id: ma-tran-chuyen
+    title: "2.1. Ma trận chuyển"
+  - id: xac-suat-nhieu-buoc
+    title: "2.2. Xác suất chuyển nhiều bước"
+  - id: chuoi-hai-trang-thai
+    title: "3. Chuỗi Markov hai trạng thái"
+  - id: cheo-hoa
+    title: "3.1. Chéo hóa ma trận"
+  - id: phan-phoi-gioi-han
+    title: "3.2. Phân phối giới hạn"
+  - id: toc-do-hoi-tu
+    title: "3.3. Tốc độ hội tụ"
+  - id: bai-tap
+    title: "4. Bài tập"
+---
+
+      <!-- ================================================================ -->
+      <h2 id="tai-sao-markov">1. Tại sao chuỗi Markov quan trọng? <small>(Why Markov Chains Matter)</small></h2>
+
+      <p><strong>Câu chuyện:</strong> Hãy tưởng tượng bạn đang chơi cờ tỷ phú (Monopoly).
+      Bạn đang ở ô "Nhà ga". Bạn sẽ đi đâu tiếp theo?
+      Điều đó chỉ phụ thuộc vào ô hiện tại và kết quả gieo xúc xắc ---
+      không quan trọng bạn đã đi qua những ô nào trước đó.
+      Đây chính là ý tưởng cốt lõi của chuỗi Markov: <strong>tương lai chỉ phụ thuộc hiện tại, không phụ thuộc quá khứ</strong>.</p>
+
+      <p><strong>Ứng dụng thực tế:</strong></p>
+      <ul>
+        <li><strong>Thời tiết:</strong> Ngày mai mưa hay nắng chỉ phụ thuộc hôm nay, không phụ thuộc tuần trước.</li>
+        <li><strong>Xếp hạng Google (PageRank):</strong> Người lướt web "nhảy" ngẫu nhiên giữa các trang.</li>
+        <li><strong>Tài chính:</strong> Giá cổ phiếu ngày mai phụ thuộc giá hôm nay (mô hình đơn giản).</li>
+        <li><strong>Sinh học:</strong> Kích thước quần thể thế hệ sau phụ thuộc thế hệ hiện tại.</li>
+        <li><strong>Truyền thông:</strong> Xếp hạng tín dụng năm sau phụ thuộc xếp hạng năm nay.</li>
+      </ul>
+
+      <!-- ================================================================ -->
+      <h2 id="tinh-chat-markov">2. Tính chất Markov <small>(Markov Property)</small></h2>
+
+      <p><strong>Câu chuyện:</strong> Hãy tưởng tượng một con kiến trên bàn cờ. Con kiến chỉ biết ô nó đang đứng.
+      Nó không nhớ đã đi qua bao nhiêu ô, cũng không nhớ con đường đã đi.
+      Quyết định bước tiếp theo chỉ dựa vào vị trí hiện tại --- đây là "con kiến Markov".</p>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Tính chất Markov / <em>Markov property</em>)' %}
+        <p>Một <strong>quá trình ngẫu nhiên</strong> <em>(stochastic process)</em> \((Z_n)_{n\in\mathbb{N}}\) nhận giá trị trong \(\mathbb{Z}\)
+        được gọi là <strong>Markov</strong>, hay có <strong>tính chất Markov</strong>, nếu với mọi \(n \geq 1\),
+        phân phối xác suất của \(Z_{n+1}\) chỉ được xác định bởi trạng thái \(Z_n\) tại thời điểm \(n\),
+        và không phụ thuộc vào các giá trị quá khứ \(Z_k\) với \(k \leq n-1\).</p>
+        <p>Nói cách khác, với mọi \(n \geq 1\) và mọi \(j, i_n, \ldots, i_1 \in \mathbb{Z}\):
+        \[
+          \PP(Z_{n+1} = j \mid Z_n = i_n,\; Z_{n-1} = i_{n-1},\; \ldots,\; Z_0 = i_0)
+          = \PP(Z_{n+1} = j \mid Z_n = i_n).
+        \]</p>
+
+
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="summary" title='Tóm tắt' %}
+        <p>Nói đơn giản: nếu bạn biết trạng thái hiện tại \(Z_n\),
+        thì biết thêm quá khứ \((Z_0, Z_1, \ldots, Z_{n-1})\) cũng không giúp dự đoán tương lai \(Z_{n+1}\) tốt hơn.
+        Đây chính là tính chất "không nhớ" <em>(memoryless property)</em>.</p>
+        <p>Ví dụ con kiến: biết con kiến đang ở ô \(A\) là đủ. Biết thêm "nó đi từ \(C \to B \to A\)" không thay đổi xác suất bước tiếp theo.</p>
+
+
+      {% include components/box-end.html %}
+
+      <p>Đặc biệt ta có:
+      \[
+        \PP(Z_{n+1} = j \mid Z_n = i_n,\; Z_{n-1} = i_{n-1}) = \PP(Z_{n+1} = j \mid Z_n = i_n),
+      \]
+      và:
+      \[
+        \PP(Z_2 = j \mid Z_1 = i_1,\; Z_0 = i_0) = \PP(Z_2 = j \mid Z_1 = i_1).
+      \]</p>
+
+      <p>Mặt khác, các <strong>xác suất chuyển bậc một</strong> <em>(first order transition probabilities)</em>
+      có thể dùng để tính toàn bộ phân phối của quá trình bằng quy nạp:
+      \begin{align}
+        \PP(Z_n = i_n, Z_{n-1} = i_{n-1}, \ldots, Z_0 = i_0)
+        &= P_{i_{n-1}, i_n} \cdots P_{i_0, i_1} \, \PP(Z_0 = i_0),
+      \end{align}
+      với \(i_0, i_1, \ldots, i_n \in \mathbb{Z}\).</p>
+
+      <p>Theo <strong>quy tắc xác suất toàn phần</strong> <em>(law of total probability)</em>:
+      \begin{equation}\label{eq:total-prob}
+        \PP(Z_1 = i) = \sum_{j \in \mathbb{Z}} \PP(Z_1 = i \mid Z_0 = j)\,\PP(Z_0 = j), \qquad i \in \mathbb{Z}.
+      \end{equation}</p>
+
+      {% include components/example-start.html title='Ví dụ: Bước đi ngẫu nhiên / <em>Random walk</em>' %}
+        <p>Bước đi ngẫu nhiên <em>(random walk)</em>:
+        \begin{equation}\label{eq:random-walk}
+          S_n = X_1 + \cdots + X_n, \qquad n \in \mathbb{N},
+        \end{equation}
+        trong đó \((X_n)_{n \geq 1}\) là dãy các biến ngẫu nhiên <strong>độc lập</strong> <em>(independent)</em>
+        nhận giá trị trong \(\mathbb{Z}\), là một chuỗi Markov thời gian rời rạc.</p>
+        <p><strong>Chứng minh:</strong> Ta cần chỉ ra tính Markov. Với mọi \(j, i_n, \ldots, i_1 \in \mathbb{Z}\):
+        \begin{align*}
+          \PP(S_{n+1} = j \mid S_n = i_n,\; S_{n-1} = i_{n-1},\; \ldots,\; S_1 = i_1)
+          &= \PP(S_n + X_{n+1} = j \mid S_n = i_n, \ldots) \\
+          &= \PP(X_{n+1} = j - i_n \mid S_n = i_n, \ldots) \\
+          &= \PP(X_{n+1} = j - i_n) \\
+          &= \PP(S_{n+1} = j \mid S_n = i_n).
+        \end{align*}
+        Bước thứ ba dùng tính <strong>độc lập</strong> của \(X_{n+1}\) với \(S_1, \ldots, S_n\) (vì \(X_{n+1}\) độc lập với \(X_1, \ldots, X_n\)).</p>
+
+
+      {% include components/example-end.html %}
+
+      <p>Tổng quát hơn, mọi quá trình có <strong>gia số độc lập</strong> <em>(independent increments)</em> đều là chuỗi Markov. Tuy nhiên, không phải mọi chuỗi Markov đều có gia số độc lập.</p>
+
+      <!-- ================================================================ -->
+      <h3 id="ma-tran-chuyen">2.1. Ma trận chuyển <small>(Transition Matrix)</small></h3>
+
+      <p><strong>Câu chuyện:</strong> Ma trận chuyển là "bản đồ xác suất": từ mỗi thành phố (trạng thái),
+      bạn biết xác suất đi đến các thành phố khác. Hàng \(i\) trong ma trận cho bạn biết:
+      "Nếu đang ở thành phố \(i\), xác suất đi đến mỗi thành phố khác là bao nhiêu?"</p>
+
+      <p>Sự tiến hóa ngẫu nhiên của quá trình Markov \((Z_n)_{n\in\mathbb{N}}\) được xác định bởi dữ liệu:
+      \[
+        P_{i,j} := \PP(Z_{n+1} = j \mid Z_n = i), \qquad i, j \in \mathbb{Z},
+      \]
+      trong đó ta giả sử xác suất \(\PP(Z_{n+1} = j \mid Z_n = i)\) không phụ thuộc vào \(n \in \mathbb{N}\).
+      Khi đó chuỗi Markov \((Z_n)_{n\in\mathbb{N}}\) được gọi là <strong>đồng nhất theo thời gian</strong> <em>(time homogeneous)</em>.</p>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Ma trận chuyển / <em>Transition matrix</em>)' %}
+        <p>Dữ liệu trên được mã hóa thành một ma trận, gọi là <strong>ma trận chuyển</strong> <em>(transition matrix)</em> của chuỗi Markov:
+        \[
+          [P_{i,j}]_{i,j\in\mathbb{Z}} = [\PP(Z_{n+1} = j \mid Z_n = i)]_{i,j\in\mathbb{Z}}.
+        \]</p>
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Lưu ý quan trọng:</strong> Thứ tự các chỉ số \((i,j)\) trong \(\PP(Z_{n+1} = j \mid Z_n = i)\) và \(P_{i,j}\) bị đảo ngược. Cụ thể, trạng thái ban đầu \(i\) là <em>số hàng</em> trong ma trận, còn trạng thái đích \(j\) là <em>số cột</em>.</p>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Trạng thái hấp thụ / <em>Absorbing state</em>)' %}
+        <p>Trạng thái \(k \in \mathbb{Z}\) được gọi là <strong>hấp thụ</strong> <em>(absorbing)</em> nếu \(P_{k,k} = 1\).</p>
+
+
+      {% include components/box-end.html %}
+
+      <p>Do quan hệ:
+      \begin{equation}\label{eq:row-sum-1}
+        \sum_{j \in \mathbb{Z}} \PP(Z_{n+1} = j \mid Z_n = i) = 1, \qquad i \in \mathbb{N},
+      \end{equation}
+      các <em>hàng</em> của ma trận chuyển thỏa mãn: \(\sum_{j} P_{i,j} = 1\) với mọi \(i\).</p>
+
+      <p>Trong trường hợp chuỗi Markov \((Z_k)_{k\in\mathbb{N}}\) nhận giá trị trong không gian trạng thái hữu hạn \(\{0, \ldots, N\}\), ma trận chuyển có dạng:
+      \[
+        [P_{i,j}]_{0 \leq i,j \leq N}
+        = \begin{bmatrix}
+          P_{0,0} & P_{0,1} & P_{0,2} & \cdots & P_{0,N} \\
+          P_{1,0} & P_{1,1} & P_{1,2} & \cdots & P_{1,N} \\
+          P_{2,0} & P_{2,1} & P_{2,2} & \cdots & P_{2,N} \\
+          \vdots  & \vdots  & \vdots  & \ddots & \vdots \\
+          P_{N,0} & P_{N,1} & P_{N,2} & \cdots & P_{N,N}
+        \end{bmatrix}.
+      \]</p>
+
+      <div id="ex:gambler">
+
+
+      {% include components/example-start.html title='Ví dụ: Quá trình cờ bạc / <em>Gambling process</em>' %}
+        <p>Một người chơi bắt đầu với \(i\) đô la. Mỗi ván, anh ta thắng \(1\) đô la (xác suất \(p\))
+        hoặc thua \(1\) đô la (xác suất \(q = 1-p\)). Trò chơi dừng khi cháy túi (\(0\) đô la) hoặc đạt mục tiêu (\(N\) đô la).</p>
+        <p>Ma trận chuyển trên \(\{0, 1, \ldots, N\}\) với các trạng thái hấp thụ \(0\) và \(N\):
+        \[
+          P = [P_{i,j}]_{0 \leq i,j \leq N}
+          = \begin{bmatrix}
+            1   & 0 & 0 & \cdots & 0 & 0 & 0 \\
+            q   & 0 & p & \cdots & 0 & 0 & 0 \\
+            \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+            0   & 0 & 0 & \cdots & q & 0 & p \\
+            0   & 0 & 0 & \cdots & 0 & 0 & 1
+          \end{bmatrix}.
+        \]</p>
+
+
+      {% include components/example-end.html %}
+
+
+      </div>
+
+      <div id="ex:ehrenfest">
+
+
+      {% include components/example-start.html title='Ví dụ: Chuỗi Ehrenfest / <em>Ehrenfest chain</em>' %}
+        <p>Hai bình khí (trái và phải) nối với nhau bằng một lỗ, chứa tổng cộng \(N\) viên bi.
+        Tại mỗi bước, ta chọn ngẫu nhiên một viên bi và chuyển nó sang bình kia.
+        Gọi \(X_n \in \{0,\ldots,N\}\) là số bi bên trái tại thời điểm \(n\).
+        Xác suất chuyển:
+        \[
+          \PP(X_{n+1} = k+1 \mid X_n = k) = \frac{N-k}{N}, \qquad
+          \PP(X_{n+1} = k-1 \mid X_n = k) = \frac{k}{N}.
+        \]</p>
+        <p><strong>Ý nghĩa vật lý:</strong> Mô hình này mô phỏng sự khuếch tán khí giữa hai ngăn.
+        Nếu bên trái có nhiều bi hơn (\(k > N/2\)), xác suất giảm (\(k/N\)) lớn hơn xác suất tăng (\((N-k)/N\))
+        / hệ thống "kéo" về trạng thái cân bằng \(k = N/2\).</p>
+
+
+      {% include components/example-end.html %}
+
+
+      </div>
+
+      <div id="ex:ehrenfest-N4">
+
+
+      {% include components/example-start.html title='Ví dụ: Ehrenfest \(N = 4\) / ma trận cụ thể' %}
+        <p>Với \(N = 4\) viên bi, ma trận chuyển \(5 \times 5\):
+        \[
+          P = \begin{bmatrix}
+            0 & 1 & 0 & 0 & 0 \\
+            1/4 & 0 & 3/4 & 0 & 0 \\
+            0 & 2/4 & 0 & 2/4 & 0 \\
+            0 & 0 & 3/4 & 0 & 1/4 \\
+            0 & 0 & 0 & 1 & 0
+          \end{bmatrix}.
+        \]</p>
+        <p><strong>Đọc ma trận:</strong></p>
+        <ul>
+          <li>Hàng 0: nếu bên trái có 0 bi, chắc chắn tăng lên 1 (chọn bi nào cũng từ bên phải).</li>
+          <li>Hàng 2: nếu bên trái có 2 bi, xác suất giảm = \(2/4\), xác suất tăng = \(2/4\) (cân bằng!).</li>
+          <li>Hàng 4: nếu bên trái có 4 bi (tất cả), chắc chắn giảm xuống 3.</li>
+        </ul>
+
+
+      {% include components/example-end.html %}
+
+
+      </div>
+
+      {% include components/example-start.html title='Ví dụ: Xếp hạng tín dụng / <em>Credit rating</em>' %}
+        <p>Trong tài chính, xếp hạng tín dụng (AAA, AA, A, BBB, &hellip;, D) có thể được mô hình hóa
+        bằng chuỗi Markov. Ma trận chuyển ghi lại xác suất thay đổi hạng tín dụng sau mỗi năm.
+        Các hạng cao hơn có hệ số đường chéo lớn hơn (ổn định hơn).</p>
+
+
+      {% include components/example-end.html %}
+
+      {% include components/review-start.html title="Ôn tập: Nhân ma trận (Matrix Multiplication)" %}
+        <h4>Tại sao cần?</h4>
+        <p>Phần tiếp theo tính \(P^2 = P \cdot P\) — lũy thừa ma trận. Muốn hiểu, bạn cần biết cách nhân hai ma trận.</p>
+
+        <h4>Quy tắc "hàng × cột"</h4>
+        <p>Cho \(A\) kích thước \(m \times n\) và \(B\) kích thước \(n \times p\). Tích \(C = A \cdot B\) có kích thước \(m \times p\), với:
+        \[
+          C_{i,j} = \sum_{k=1}^{n} A_{i,k} \cdot B_{k,j} = \text{(hàng } i \text{ của } A) \cdot \text{(cột } j \text{ của } B).
+        \]</p>
+
+        <h4>Ví dụ: Nhân ma trận 2×2</h4>
+        <p>\[
+          A = \begin{bmatrix} 2 & 3 \\ 1 & 4 \end{bmatrix}, \quad
+          B = \begin{bmatrix} 5 & 1 \\ 0 & 2 \end{bmatrix}.
+        \]</p>
+        <p>Tính \(C = A \cdot B\):</p>
+        <ul>
+          <li>\(C_{1,1} = 2 \times 5 + 3 \times 0 = 10\).</li>
+          <li>\(C_{1,2} = 2 \times 1 + 3 \times 2 = 8\).</li>
+          <li>\(C_{2,1} = 1 \times 5 + 4 \times 0 = 5\).</li>
+          <li>\(C_{2,2} = 1 \times 1 + 4 \times 2 = 9\).</li>
+        </ul>
+        <p>\[
+          C = \begin{bmatrix} 10 & 8 \\ 5 & 9 \end{bmatrix}.
+        \]</p>
+
+        <h4>Lưu ý quan trọng</h4>
+        <ul>
+          <li><strong>Kiểm tra kích thước:</strong> Số cột của \(A\) phải bằng số hàng của \(B\).</li>
+          <li><strong>KHÔNG giao hoán:</strong> \(AB \neq BA\) nói chung! Ví dụ \(BA = \begin{bmatrix} 11 & 19 \\ 2 & 8 \end{bmatrix} \neq C\).</li>
+          <li><strong>Kết hợp:</strong> \((AB)C = A(BC)\) — luôn đúng.</li>
+        </ul>
+
+        <div class="try-it">
+          <p><strong>Thử ngay:</strong> Tính \(P^2\) với \(P = \begin{bmatrix} 0.7 & 0.3 \\ 0.4 & 0.6 \end{bmatrix}\).</p>
+          <p><em>Đáp án:</em> \(P^2_{1,1} = 0.49 + 0.12 = 0.61\), \(P^2_{1,2} = 0.21 + 0.18 = 0.39\), \(P^2_{2,1} = 0.28 + 0.24 = 0.52\), \(P^2_{2,2} = 0.12 + 0.36 = 0.48\).</p>
+        </div>
+      {% include components/review-end.html %}
+
+      <!-- ================================================================ -->
+      <h3 id="xac-suat-nhieu-buoc">2.2. Xác suất chuyển nhiều bước <small>(Multi-step Transition Probabilities)</small></h3>
+
+      <p>Ta muốn tính <strong>xác suất chuyển hai bước</strong> <em>(two-step transition probability)</em>
+      \(\PP(Z_{n+2} = j \mid Z_n = i)\), không có trực tiếp trong ma trận chuyển.</p>
+
+      <p>Bằng <strong>phân tích bước đầu tiên</strong> <em>(first step analysis)</em>, ký hiệu \(S\) là không gian trạng thái:
+      \begin{align*}
+        \PP(Z_{n+2} = j \mid Z_n = i)
+        &= \sum_{l \in S} \PP(Z_{n+1} = l \mid Z_n = i)\,\PP(Z_{n+2} = j \mid Z_{n+1} = l)\\
+        &= \sum_{l \in S} P_{i,l}\,P_{l,j}
+        = P^2_{i,j}, \qquad i, j \in S.
+      \end{align*}</p>
+
+      <p>Tổng quát hơn, với mọi \(k \in \mathbb{N}\):</p>
+
+      {% include components/box-start.html type="formula" %}
+        <p><strong>Xác suất chuyển \(k\) bước:</strong>
+        \[
+          [\PP(Z_{n+k} = j \mid Z_n = i)]_{i,j\in S} = [P^k_{i,j}]_{i,j\in S} = P^k.
+        \]
+        Nghĩa là: xác suất chuyển \(k\) bước chính là phần tử tương ứng của lũy thừa bậc \(k\) của ma trận chuyển.</p>
+
+
+      {% include components/box-end.html %}
+
+      <p>Quan hệ \(P^{m+n} = P^m P^n\) chính là <strong>phương trình Chapman&ndash;Kolmogorov</strong> <em>(Chapman&ndash;Kolmogorov equation)</em>:
+      \[
+        P^{m+n}_{i,j} = \sum_{l \in S} P^m_{i,l}\,P^n_{l,j}, \qquad i,j \in S, \quad m, n \in \mathbb{N}.
+      \]</p>
+
+      <div id="ex:P2-three-state">
+
+
+      {% include components/example-start.html title='Ví dụ: Tính \(P^2\) cho chuỗi 3 trạng thái' %}
+        <p>Xét ma trận chuyển trên \(S = \{0, 1, 2\}\):
+        \[
+          P = \begin{bmatrix}
+            0 & 1/2 & 1/2 \\
+            1/3 & 1/3 & 1/3 \\
+            1/2 & 0 & 1/2
+          \end{bmatrix}.
+        \]</p>
+        <p>Tính \(P^2 = P \cdot P\):
+        \begin{align*}
+          P^2_{0,0} &= 0 \cdot 0 + \frac{1}{2} \cdot \frac{1}{3} + \frac{1}{2} \cdot \frac{1}{2} = \frac{1}{6} + \frac{1}{4} = \frac{5}{12}, \\
+          P^2_{0,1} &= 0 \cdot \frac{1}{2} + \frac{1}{2} \cdot \frac{1}{3} + \frac{1}{2} \cdot 0 = \frac{1}{6}, \\
+          P^2_{0,2} &= 0 \cdot \frac{1}{2} + \frac{1}{2} \cdot \frac{1}{3} + \frac{1}{2} \cdot \frac{1}{2} = \frac{5}{12}.
+        \end{align*}</p>
+        <p>Kiểm tra: \(P^2_{0,0} + P^2_{0,1} + P^2_{0,2} = 5/12 + 1/6 + 5/12 = 5/12 + 2/12 + 5/12 = 12/12 = 1\). Đúng!</p>
+        <p><strong>Ý nghĩa:</strong> Xuất phát từ trạng thái 0, sau 2 bước, xác suất ở trạng thái 0 là \(5/12 \approx 0.42\).</p>
+
+
+      {% include components/example-end.html %}
+
+
+      </div>
+
+      <div id="ex:Pn-ehrenfest">
+
+
+      {% include components/example-start.html title='Ví dụ: Tính \(P^n\) cho chuỗi Ehrenfest \(N = 4\)' %}
+        <p>Với ma trận \(P\) ở Ví dụ Ehrenfest \(N=4\), ta tính \(P^2\):
+        \[
+          P^2_{0,0} = 0 \cdot 0 + 1 \cdot \frac{1}{4} + 0 + 0 + 0 = \frac{1}{4}.
+        \]
+        Nghĩa là: nếu bên trái có 0 bi, sau 2 bước xác suất trở về 0 bi là \(1/4\).</p>
+        <p>Thật vậy: từ 0 phải đi lên 1 (chắc chắn), rồi từ 1 quay về 0 (xác suất \(1/4\)).</p>
+
+
+      {% include components/example-end.html %}
+
+
+      </div>
+
+      {% include components/box-start.html type="summary" title='Tóm tắt' %}
+        <p>Các xác suất chuyển \(k\) bước được tính bằng cách lũy thừa ma trận chuyển: \(P^k\).
+        Phương trình Chapman&ndash;Kolmogorov cho phép phân rã quá trình chuyển thành hai giai đoạn.</p>
+        <p><strong>Mẹo tính toán:</strong> Đối với ma trận \(n \times n\) lớn, dùng chéo hóa \(P = M D M^{-1}\)
+        sẽ cho \(P^k = M D^k M^{-1}\) / dễ tính hơn nhiều so với nhân ma trận \(k\) lần.</p>
+
+
+      {% include components/box-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="chuoi-hai-trang-thai">3. Chuỗi Markov hai trạng thái <small>(The Two-State Markov Chain)</small></h2>
+
+      <p><strong>Câu chuyện:</strong> Mô hình đơn giản nhất: thời tiết ngày mai chỉ có "Nắng" (0) hoặc "Mưa" (1).
+      Nếu hôm nay nắng, ngày mai mưa với xác suất \(a\); nếu hôm nay mưa, ngày mai nắng với xác suất \(b\).
+      Sau nhiều ngày, tỷ lệ ngày nắng/mưa sẽ ổn định / đây là phân phối giới hạn.</p>
+
+      <p>Việc tính ma trận chuyển bậc \(n\), tức \(P^n\), nói chung là khó. Tuy nhiên, khi số trạng thái bằng 2, tức \(S = \{0, 1\}\), ta có thể tính chính xác.</p>
+
+      <p>Ma trận chuyển có dạng:
+      \begin{equation}\label{eq:two-state}
+        P = \begin{bmatrix} 1-a & a \\ b & 1-b \end{bmatrix},
+      \end{equation}
+      với \(a \in [0,1]\) và \(b \in [0,1]\).</p>
+
+      <p><strong>Ý nghĩa:</strong></p>
+      <ul>
+        <li>\(\PP(Z_{n+1} = 1 \mid Z_n = 0) = a\): xác suất chuyển từ \(0\) sang \(1\).</li>
+        <li>\(\PP(Z_{n+1} = 0 \mid Z_n = 0) = 1-a\): xác suất ở lại trạng thái \(0\).</li>
+        <li>\(\PP(Z_{n+1} = 0 \mid Z_n = 1) = b\): xác suất chuyển từ \(1\) sang \(0\).</li>
+        <li>\(\PP(Z_{n+1} = 1 \mid Z_n = 1) = 1-b\): xác suất ở lại trạng thái \(1\).</li>
+      </ul>
+
+      <p>Ta loại trừ trường hợp \(a = b = 0\) (ma trận đơn vị, chuỗi hằng).</p>
+
+      {% include components/review-start.html title="Ôn tập: Trị riêng và vectơ riêng (Eigenvalues & Eigenvectors)" %}
+        <h4>Tại sao cần?</h4>
+        <p>Phần tiếp theo dùng trị riêng để chéo hóa \(P\) và tính \(P^n\) dễ dàng. Đây là kỹ thuật cốt lõi.</p>
+
+        <h4>Tại sao Markov cần trị riêng?</h4>
+        <ul>
+          <li>\(\lambda_1 = 1\) → ứng với <strong>phân phối dừng</strong>: chuỗi "đi về đâu" khi \(n \to \infty\).</li>
+          <li>\(|\lambda_2| < 1\) → chuỗi "quên" trạng thái ban đầu, tốc độ quên = \(|\lambda_2|\).</li>
+          <li>Ví dụ: Thời tiết \(\lambda_2 = 0.3\) → sau 10 ngày, ảnh hưởng ban đầu chỉ còn \(0.3^{10} \approx 0.000006\).</li>
+        </ul>
+
+        <h4>\(Av = \lambda v\) nghĩa là gì?</h4>
+        <p>Nếu nhân ma trận \(A\) với vectơ \(v\) mà kết quả chỉ là \(v\) nhân với một số \(\lambda\), thì:
+        <ul>
+          <li>\(\lambda\) là <strong>trị riêng</strong> <em>(eigenvalue)</em> của \(A\).</li>
+          <li>\(v\) là <strong>vectơ riêng</strong> <em>(eigenvector)</em> tương ứng.</li>
+        </ul>
+        Hình học: \(A\) chỉ "co giãn" \(v\) theo hệ số \(\lambda\), không xoay.</p>
+
+        <h4>Cách tìm trị riêng</h4>
+        <p>Giải phương trình đặc trưng <em>(characteristic equation)</em>:
+        \[
+          \det(A - \lambda I) = 0.
+        \]</p>
+
+        <h4>Ví dụ: Ma trận 2×2</h4>
+        <p>Cho \(A = \begin{bmatrix} 4 & 1 \\ 2 & 3 \end{bmatrix}\). Tìm trị riêng:</p>
+        <ul>
+          <li>Bước 1: \(A - \lambda I = \begin{bmatrix} 4-\lambda & 1 \\ 2 & 3-\lambda \end{bmatrix}\).</li>
+          <li>Bước 2: \(\det(A-\lambda I) = (4-\lambda)(3-\lambda) - 2 = \lambda^2 - 7\lambda + 10\).</li>
+          <li>Bước 3: Giải \(\lambda^2 - 7\lambda + 10 = 0\). Nghiệm: \(\lambda_1 = 5\), \(\lambda_2 = 2\).</li>
+        </ul>
+        <p>Tìm vectơ riêng cho \(\lambda_1 = 5\): giải \((A - 5I)v = 0\):
+        \[
+          \begin{bmatrix} -1 & 1 \\ 2 & -2 \end{bmatrix} v = 0 \implies v_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}.
+        \]
+        Cho \(\lambda_2 = 2\): \(\begin{bmatrix} 2 & 1 \\ 2 & 1 \end{bmatrix} v = 0 \implies v_2 = \begin{bmatrix} 1 \\ -2 \end{bmatrix}\).</p>
+
+        <div class="try-it">
+          <p><strong>Thử ngay:</strong> Tìm trị riêng của \(B = \begin{bmatrix} 3 & 1 \\ 0 & 2 \end{bmatrix}\).</p>
+          <p><em>Đáp án:</em> \(\det(B - \lambda I) = (3-\lambda)(2-\lambda) = 0\). Trị riêng: \(\lambda_1 = 3\), \(\lambda_2 = 2\) (ma trận tam giác trên — trị riêng nằm trên đường chéo!).</p>
+        </div>
+      {% include components/review-end.html %}
+
+      <!-- ================================================================ -->
+      <h3 id="cheo-hoa">3.1. Chéo hóa ma trận <small>(Matrix Diagonalization)</small></h3>
+
+      <p>Ma trận \(P\) có hai <strong>trị riêng</strong> <em>(eigenvalues)</em>:
+      \[
+        \lambda_1 = 1 \qquad \text{và} \qquad \lambda_2 = 1 - a - b,
+      \]
+      với các <strong>vectơ riêng</strong> <em>(eigenvectors)</em> tương ứng:
+      \[
+        \begin{bmatrix} 1 \\ 1 \end{bmatrix}
+        \qquad \text{và} \qquad
+        \begin{bmatrix} -a \\ b \end{bmatrix}.
+      \]</p>
+
+      <p>Do đó \(P\) có thể <strong>chéo hóa</strong> <em>(diagonalize)</em>: \(P = M D M^{-1}\), và:
+      \begin{equation}\label{eq:Pn-two-state}
+        P^n = M D^n M^{-1}
+        = \frac{1}{a+b}
+        \begin{bmatrix}
+          b + a\lambda_2^n & a(1 - \lambda_2^n) \\
+          b(1-\lambda_2^n) & a + b\lambda_2^n
+        \end{bmatrix}.
+      \end{equation}</p>
+
+      <p><strong>Chi tiết tính toán:</strong>
+      \[
+        M = \begin{bmatrix} 1 & -a \\ 1 & b \end{bmatrix}, \quad
+        D = \begin{bmatrix} 1 & 0 \\ 0 & 1-a-b \end{bmatrix}, \quad
+        M^{-1} = \frac{1}{a+b}\begin{bmatrix} b & a \\ -1 & 1 \end{bmatrix}.
+      \]</p>
+
+      {% include components/review-start.html title="Ôn tập: Ma trận nghịch đảo 2×2 (Inverse of a 2×2 Matrix)" %}
+        <h4>Tại sao cần?</h4>
+        <p>Để tính \(M^{-1}\) ở trên, bạn cần biết công thức nghịch đảo ma trận 2×2.</p>
+
+        <h4>Công thức</h4>
+        <p>Cho \(A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}\) với \(\det(A) = ad - bc \neq 0\):
+        \[
+          A^{-1} = \frac{1}{ad - bc}\begin{bmatrix} d & -b \\ -c & a \end{bmatrix}.
+        \]</p>
+        <p><strong>Mẹo nhớ:</strong> Đổi chỗ 2 phần tử đường chéo chính, đổi dấu 2 phần tử đường chéo phụ, chia cho định thức.</p>
+
+        <h4>Ví dụ</h4>
+        <p>Tính nghịch đảo của \(M = \begin{bmatrix} 1 & -a \\ 1 & b \end{bmatrix}\):</p>
+        <ul>
+          <li>Bước 1: \(\det(M) = 1 \cdot b - (-a) \cdot 1 = b + a = a + b\).</li>
+          <li>Bước 2: Đổi chỗ đường chéo chính: \(b\) và \(1\). Đổi dấu đường chéo phụ: \(a\) và \(-1\).</li>
+          <li>Bước 3: \(M^{-1} = \frac{1}{a+b}\begin{bmatrix} b & a \\ -1 & 1 \end{bmatrix}\).</li>
+        </ul>
+
+        <h4>Kiểm tra: \(M \cdot M^{-1} = I\)</h4>
+        <p>\[
+          \frac{1}{a+b}\begin{bmatrix} 1 & -a \\ 1 & b \end{bmatrix}\begin{bmatrix} b & a \\ -1 & 1 \end{bmatrix}
+          = \frac{1}{a+b}\begin{bmatrix} b+a & a-a \\ b-b & a+b \end{bmatrix}
+          = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}. \checkmark
+        \]</p>
+
+        <div class="try-it">
+          <p><strong>Thử ngay:</strong> Tính nghịch đảo của \(\begin{bmatrix} 3 & 1 \\ 2 & 1 \end{bmatrix}\).</p>
+          <p><em>Đáp án:</em> \(\det = 3-2 = 1\). \(A^{-1} = \begin{bmatrix} 1 & -1 \\ -2 & 3 \end{bmatrix}\). Kiểm tra: \(\begin{bmatrix}3&1\\2&1\end{bmatrix}\begin{bmatrix}1&-1\\-2&3\end{bmatrix} = \begin{bmatrix}1&0\\0&1\end{bmatrix}\). Đúng!</p>
+        </div>
+      {% include components/review-end.html %}
+
+      {% include components/review-start.html title="Ôn tập: Chéo hóa ma trận — Toàn bộ quy trình (Full Diagonalization Process)" %}
+        <h4>Tại sao cần?</h4>
+        <p>Chéo hóa \(P = MDM^{-1}\) cho phép tính \(P^n = MD^nM^{-1}\) cực nhanh, vì \(D^n\) chỉ là lũy thừa từng phần tử đường chéo. Đây là toàn bộ quy trình, từ đầu đến cuối.</p>
+
+        <h4>Trực giác: Tại sao \(D^n\) dễ tính?</h4>
+        <p>\(D\) là ma trận đường chéo → \(D^n\) chỉ lũy thừa từng phần tử trên đường chéo:
+        \[
+          \begin{bmatrix} 1 & 0 \\ 0 & 0.3 \end{bmatrix}^{10}
+          = \begin{bmatrix} 1^{10} & 0 \\ 0 & 0.3^{10} \end{bmatrix}
+          = \begin{bmatrix} 1 & 0 \\ 0 & 0.0000059 \end{bmatrix}.
+        \]</p>
+        <p>Chéo hóa = biến <strong>bài toán khó</strong> (nhân ma trận \(n\) lần) thành <strong>bài toán dễ</strong> (lũy thừa số).
+        \(M\) "dịch" sang hệ tọa độ riêng, \(D^n\) lũy thừa, \(M^{-1}\) "dịch ngược".</p>
+
+        <h4>Ví dụ hoàn chỉnh: Ma trận thời tiết</h4>
+        <p>Cho \(P = \begin{bmatrix} 0.7 & 0.3 \\ 0.4 & 0.6 \end{bmatrix}\) (nắng ↔ mưa, \(a=0.3\), \(b=0.4\)).</p>
+
+        <p><strong>Bước 1: Tìm trị riêng</strong></p>
+        <ul>
+          <li>\(\det(P - \lambda I) = (0.7-\lambda)(0.6-\lambda) - 0.12 = \lambda^2 - 1.3\lambda + 0.3\).</li>
+          <li>Nghiệm: \(\lambda_1 = 1\), \(\lambda_2 = 0.3\).</li>
+        </ul>
+
+        <p><strong>Bước 2: Tìm vectơ riêng</strong></p>
+        <ul>
+          <li>Cho \(\lambda_1 = 1\): \((P - I)v = 0 \Rightarrow \begin{bmatrix} -0.3 & 0.3 \\ 0.4 & -0.4 \end{bmatrix}v = 0 \Rightarrow v_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}\).</li>
+          <li>Cho \(\lambda_2 = 0.3\): \((P - 0.3I)v = 0 \Rightarrow \begin{bmatrix} 0.4 & 0.3 \\ 0.4 & 0.3 \end{bmatrix}v = 0 \Rightarrow v_2 = \begin{bmatrix} 3 \\ -4 \end{bmatrix}\).</li>
+        </ul>
+
+        <p><strong>Bước 3: Lập \(M\) và \(D\)</strong></p>
+        <p>\[
+          M = \begin{bmatrix} 1 & 3 \\ 1 & -4 \end{bmatrix}, \quad
+          D = \begin{bmatrix} 1 & 0 \\ 0 & 0.3 \end{bmatrix}.
+        \]</p>
+        <p>Tính \(M^{-1}\): \(\det(M) = -4 - 3 = -7\).
+        \[
+          M^{-1} = \frac{1}{-7}\begin{bmatrix} -4 & -3 \\ -1 & 1 \end{bmatrix} = \frac{1}{7}\begin{bmatrix} 4 & 3 \\ 1 & -1 \end{bmatrix}.
+        \]</p>
+
+        <p><strong>Bước 4: Tính \(P^n = MD^nM^{-1}\)</strong></p>
+        <p>\[
+          P^n = \frac{1}{7}\begin{bmatrix} 1 & 3 \\ 1 & -4 \end{bmatrix}\begin{bmatrix} 1 & 0 \\ 0 & 0.3^n \end{bmatrix}\begin{bmatrix} 4 & 3 \\ 1 & -1 \end{bmatrix}
+          = \frac{1}{7}\begin{bmatrix} 4 + 3(0.3)^n & 3 - 3(0.3)^n \\ 4 - 4(0.3)^n & 3 + 4(0.3)^n \end{bmatrix}.
+        \]</p>
+        <p>Khi \(n \to \infty\): \(0.3^n \to 0\), nên \(P^\infty = \frac{1}{7}\begin{bmatrix} 4 & 3 \\ 4 & 3 \end{bmatrix}\). Phân phối dừng: \(\pi = [4/7, 3/7]\).</p>
+
+        <div class="try-it">
+          <p><strong>Thử ngay:</strong> Với ma trận trên, tính \(P^2_{1,1}\) (xác suất 2 ngày nắng liên tiếp) bằng công thức \(P^n\).</p>
+          <p><em>Đáp án:</em> \(P^2_{1,1} = \frac{1}{7}(4 + 3 \times 0.09) = \frac{4.27}{7} \approx 0.61\). Kiểm tra bằng nhân trực tiếp: \(0.7^2 + 0.3 \times 0.4 = 0.49 + 0.12 = 0.61\). Đúng!</p>
+        </div>
+      {% include components/review-end.html %}
+
+      <!-- ================================================================ -->
+      <h3 id="phan-phoi-gioi-han">3.2. Phân phối giới hạn <small>(Limiting Distribution)</small></h3>
+
+      <p>Cho \(n \to \infty\) trong \(\eqref{eq:Pn-two-state}\), vì \(|\lambda_2| = |1-a-b| < 1\) khi \((a,b) \neq (1,1)\):</p>
+
+      {% include components/box-start.html type="theorem" title='Định lý (Phân phối giới hạn của chuỗi hai trạng thái)' %}
+        <p>\[
+          \lim_{n\to\infty} P^n = \frac{1}{a+b}
+          \begin{bmatrix} b & a \\ b & a \end{bmatrix},
+        \]
+        do đó:
+        \begin{align}
+          \lim_{n\to\infty} \PP(Z_n = 1 \mid Z_0 = 0) &= \lim_{n\to\infty} \PP(Z_n = 1 \mid Z_0 = 1) = \frac{a}{a+b}, \label{eq:limit-1}\\
+          \lim_{n\to\infty} \PP(Z_n = 0 \mid Z_0 = 0) &= \lim_{n\to\infty} \PP(Z_n = 0 \mid Z_0 = 1) = \frac{b}{a+b}. \label{eq:limit-0}
+        \end{align}</p>
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Phân phối giới hạn</strong> <em>(limiting distribution)</em>:
+      \begin{equation}\label{eq:pi-two-state}
+        \pi = [\pi_0, \pi_1] = \left[\frac{b}{a+b},\; \frac{a}{a+b}\right].
+      \end{equation}</p>
+
+      {% include components/box-start.html type="summary" title='Tóm tắt' %}
+        <p>Phân phối giới hạn \(\pi\) <strong>không phụ thuộc vào trạng thái ban đầu</strong> \(Z_0\).
+        Sau thời gian đủ lớn, xác suất ở trạng thái \(1\) xấp xỉ \(a/(a+b)\),
+        và ở trạng thái \(0\) xấp xỉ \(b/(a+b)\).</p>
+        <p>Phân phối \(\pi\) là <strong>bất biến</strong> <em>(invariant)</em> theo \(P\), tức \(\pi P = \pi\).</p>
+        <p><strong>Ví dụ thời tiết:</strong> Nếu \(a = 0.3\) (nắng&rarr;mưa) và \(b = 0.4\) (mưa&rarr;nắng),
+        thì dài hạn: \(\pi_{\text{nắng}} = 0.4/0.7 \approx 57\%\), \(\pi_{\text{mưa}} = 0.3/0.7 \approx 43\%\).</p>
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Trường hợp đặc biệt:</strong> Khi \(a + b = 1\) (hay \(a = 1-b\)):
+      \[
+        P^n = \begin{bmatrix} b & a \\ b & a \end{bmatrix} = P, \qquad n \in \mathbb{N},
+      \]
+      và \(\PP(Z_n = 1 \mid Z_0 = 0) = \PP(Z_n = 1 \mid Z_0 = 1) = a\) với mọi \(n \geq 1\).</p>
+
+      <p><strong>Trường hợp \(a = b = 1\):</strong> Giới hạn \(\lim_{n\to\infty} P^n\) không tồn tại vì:
+      \[
+        P^n = \begin{cases}
+          \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}, & n = 2k, \\[6pt]
+          \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}, & n = 2k+1.
+        \end{cases}
+      \]
+      Chuỗi "dao động" mãi mãi / đây là chuỗi <strong>tuần hoàn</strong> với chu kỳ \(d = 2\).</p>
+
+      <!-- ================================================================ -->
+      <h3 id="toc-do-hoi-tu">3.3. Tốc độ hội tụ <small>(Rate of Convergence)</small></h3>
+
+      <p>Từ \(\eqref{eq:Pn-two-state}\), sai số giữa \(P^n_{i,j}\) và \(\pi_j\) là:
+      \[
+        |P^n_{i,j} - \pi_j| \leq C \cdot |\lambda_2|^n = C \cdot |1 - a - b|^n.
+      \]</p>
+
+      <p>Sai số giảm theo cấp số nhân. Hội tụ nhanh khi \(|1-a-b|\) nhỏ, tức \(a + b\) gần \(1\).</p>
+
+      {% include components/example-start.html title='Ví dụ: So sánh tốc độ hội tụ' %}
+        <ul>
+          <li>\(a = 0.5, b = 0.5\): \(|\lambda_2| = |1-1| = 0\). Hội tụ ngay sau 1 bước!</li>
+          <li>\(a = 0.1, b = 0.1\): \(|\lambda_2| = 0.8\). Hội tụ chậm (cần \(\sim 30\) bước).</li>
+          <li>\(a = 0.01, b = 0.01\): \(|\lambda_2| = 0.98\). Rất chậm (cần \(\sim 300\) bước).</li>
+        </ul>
+        <p>Trực quan: khi \(a, b\) nhỏ, chuỗi "dính" ở mỗi trạng thái lâu, nên mất nhiều thời gian mới "quên" trạng thái ban đầu.</p>
+
+
+      {% include components/example-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="bai-tap">4. Bài tập <small>(Exercises)</small></h2>
+
+      {% include components/exercise-start.html title='Bài tập 1' %}
+        <p>Trong mô hình đơn giản hóa của một chương trình truyền hình, người chơi đã thắng \(k\) đô la,
+        sẽ có \(k+1\) đô la ở lượt tiếp theo với xác suất \(q\), hoặc bị loại (về \(0\)) với xác suất \(p = 1-q\).
+        Giả sử người chơi bắt đầu với \(1\) đô la. Hãy mô hình hóa tiền thắng sau \(n\) lượt chơi
+        bằng chuỗi Markov và viết ma trận chuyển tương ứng.</p>
+
+
+      {% include components/exercise-end.html %}
+
+      {% include components/exercise-start.html title='Bài tập 2' %}
+        <p>Xét chuỗi Markov trên \(S = \{0, 1, 2\}\) với ma trận chuyển:
+        \[
+          P = \begin{bmatrix}
+            1/2 & 1/4 & 1/4 \\
+            1/3 & 1/3 & 1/3 \\
+            1/4 & 1/4 & 1/2
+          \end{bmatrix}.
+        \]</p>
+        <ol type="a">
+          <li>Tính \(P^2\) (nhân ma trận).</li>
+          <li>Tính \(\PP(Z_2 = 0 \mid Z_0 = 1)\).</li>
+          <li>Tính \(\PP(Z_3 = 2 \mid Z_0 = 0)\) (gợi ý: dùng \(P^3 = P^2 \cdot P\)).</li>
+        </ol>
+
+
+      {% include components/exercise-end.html %}
+
+      {% include components/exercise-start.html title='Bài tập 3' %}
+        <p>Cho chuỗi Ehrenfest với \(N = 4\) viên bi (xem Ví dụ Ehrenfest \(N=4\)).</p>
+        <ol type="a">
+          <li>Bắt đầu với 4 bi bên trái. Tính xác suất có 2 bi bên trái sau 2 bước.</li>
+          <li>Chuỗi này có trạng thái hấp thụ không? Giải thích.</li>
+          <li>Tìm phân phối dừng \(\pi\) (gợi ý: so sánh với phân phối nhị thức \(B(4, 1/2)\)).</li>
+        </ol>
+
+
+      {% include components/exercise-end.html %}
+
+      {% include components/exercise-start.html title='Bài tập 4 (Chapman&ndash;Kolmogorov trực tiếp)' %}
+        <p>Xét chuỗi Markov hai trạng thái với \(a = 0.4\), \(b = 0.6\).</p>
+        <ol type="a">
+          <li>Tính \(P^2\) trực tiếp bằng nhân ma trận.</li>
+          <li>Tính \(P^2\) bằng công thức \(\eqref{eq:Pn-two-state}\) với \(n = 2\). Xác minh kết quả trùng nhau.</li>
+          <li>Tìm \(n\) nhỏ nhất sao cho \(|P^n_{0,1} - \pi_1| < 0.01\).</li>
+        </ol>
+
+
+      {% include components/exercise-end.html %}
+
+      {% include components/exercise-start.html title='Bài tập 5' %}
+        <p>Chứng minh rằng nếu \((S_n)_{n\geq 0}\) là bước đi ngẫu nhiên với \(S_n = X_1 + \cdots + X_n\)
+        và \((X_k)\) độc lập cùng phân phối, thì \((S_n)\) thỏa mãn tính chất Markov.
+        (Gợi ý: sử dụng tính độc lập của \(X_{n+1}\) với \((X_1, \ldots, X_n)\).)</p>
+
+
+      {% include components/exercise-end.html %}

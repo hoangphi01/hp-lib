@@ -1,0 +1,46 @@
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">compare</span> Ma trận P vs Q</h4>
+  <table class="symbol-table">
+    <tr><th></th><th>\(P\) (chuyển)</th><th>\(Q\) (sinh)</th></tr>
+    <tr><td>Ngoài chéo</td><td>\(\geq 0\)</td><td>\(\geq 0\)</td></tr>
+    <tr><td>Đường chéo</td><td>\(\geq 0\)</td><td>\(\leq 0\)</td></tr>
+    <tr><td>Tổng hàng</td><td>\(= 1\)</td><td>\(= 0\)</td></tr>
+  </table>
+  <p class="sidebar-tip">\(P\) trả lời "<em>đi đâu</em>" (xác suất). \(Q\) trả lời "<em>đi nhanh thế nào</em>" (tốc độ).</p>
+</div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">timer</span> Phân phối mũ Exp(\(\lambda\))</h4>
+  <p>\(\PP(X > t) = e^{-\lambda t}\), \(\E[X] = 1/\lambda\)</p>
+
+  <h5>Tính không nhớ</h5>
+  <p>\(\PP(X > s + t \mid X > s) = \PP(X > t)\)</p>
+  <p class="sidebar-tip">Biết đã đợi \(s\) giây không giúp dự đoán thêm / "bắt đầu lại từ đầu".</p>
+
+  <h5>Min của các biến mũ độc lập</h5>
+  <p>\(\min(X_1, \ldots, X_n) \sim \text{Exp}(\sum \lambda_i)\)</p>
+  <p class="sidebar-tip">Khi nào dùng: nhiều "đồng hồ" chạy song song, sự kiện đầu tiên xảy ra theo tổng tốc độ.</p>
+
+  <h5>Cạnh tranh</h5>
+  <p>\(\PP(X_1 < X_2) = \dfrac{\lambda_1}{\lambda_1 + \lambda_2}\)</p>
+  <p class="sidebar-tip">Ai nhanh hơn (tốc độ \(\lambda\) lớn hơn) thì xác suất "thắng" cao hơn.</p>
+</div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">functions</span> Công thức chính</h4>
+  <h5>Ma trận chuyển liên tục</h5>
+  <p>\(P(t) = e^{tQ}\)</p>
+  <p class="sidebar-tip">Tương tự \(P^n\) trong rời rạc, nhưng dùng hàm mũ ma trận.</p>
+
+  <h5>Phương trình Kolmogorov</h5>
+  <p>\(P'(t) = P(t) Q = Q P(t)\)</p>
+  <p class="sidebar-tip">Mô tả cách \(P(t)\) thay đổi theo thời gian / "tốc độ biến đổi xác suất".</p>
+
+  <h5>Phân phối dừng</h5>
+  <p>\(\pi Q = 0\)</p>
+  <p class="sidebar-tip">Tương tự \(\pi P = \pi\) rời rạc, nhưng thay \(P - I\) bằng \(Q\).</p>
+
+  <h5>Chuỗi nhúng</h5>
+  <p>\(\hat{P}_{i,j} = \dfrac{\lambda_{i,j}}{-\lambda_{i,i}}\)</p>
+  <p class="sidebar-tip">Bỏ qua thời gian, chỉ giữ xác suất chuyển / biến liên tục thành rời rạc.</p>
+</div>

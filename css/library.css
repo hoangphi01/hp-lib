@@ -1,0 +1,161 @@
+/* Library landing page styles */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f8f6f1;
+  color: #333;
+  min-height: 100vh;
+}
+
+.library-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+
+.library-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.library-header h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.library-subtitle {
+  font-size: 16px;
+  color: #888;
+}
+
+/* Book grid */
+.book-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.book-card {
+  display: flex;
+  gap: 28px;
+  padding: 32px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e8e4dc;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+
+.book-card:hover {
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+
+.book-cover {
+  flex-shrink: 0;
+  width: 120px;
+  height: 160px;
+  background: linear-gradient(135deg, #e8dcc8 0%, #d4c5aa 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+}
+
+.book-cover-icon {
+  font-size: 48px;
+  color: #8b7355;
+  opacity: 0.7;
+}
+
+.book-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.book-info h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+}
+
+.book-en {
+  font-size: 14px;
+  font-style: italic;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.book-subtitle {
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 12px;
+}
+
+.book-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #555;
+  flex: 1;
+}
+
+.book-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.book-source {
+  font-size: 13px;
+  color: #999;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-active { background: #d4edda; color: #155724; }
+.badge-draft { background: #fff3cd; color: #856404; }
+.badge-planned { background: #e2e3e5; color: #6c757d; }
+
+/* Footer */
+.library-footer {
+  text-align: center;
+  margin-top: 60px;
+  padding-top: 24px;
+  border-top: 1px solid #e8e4dc;
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .library-container {
+    padding: 30px 16px;
+  }
+
+  .book-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 24px;
+    gap: 16px;
+  }
+
+  .book-meta {
+    justify-content: center;
+  }
+}

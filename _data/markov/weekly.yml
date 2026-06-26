@@ -1,0 +1,14 @@
+# Nhật ký tiến độ hàng tuần (mới nhất ở trên)
+# Cập nhật trước mỗi buổi báo cáo với giáo sư
+
+- week: "2026-06-16"
+  items:
+    - "Chương 2: Hoàn thành phần Phân tích bước đầu tiên"
+    - "Chương 3: Thêm ví dụ Gambler's Ruin song ngữ"
+    - "Sửa lỗi MathJax hiển thị ma trận"
+
+- week: "2026-06-09"
+  items:
+    - "Chương 0: Hoàn thiện toàn bộ phần Giới thiệu"
+    - "Chương 1: Bổ sung bài tập cuối chương"
+    - "Refactor CSS framework cho web book"

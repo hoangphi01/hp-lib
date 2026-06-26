@@ -1,0 +1,935 @@
+---
+layout: book-chapter
+slug: ch2
+book_key: markov
+sidebar_include: sidebars/markov/ch2.html
+title: "Ch 2: Bước đầu tiên"
+sections:
+  - id: sec-hitting-prob
+    title: "1. Xác suất chạm"
+  - id: sec-fsa-method
+    title: "1.1 Phương pháp FSA"
+  - id: sec-absorbing-matrix
+    title: "1.2 Tập hấp thu & ma trận"
+  - id: sec-mean-hitting
+    title: "2. Thời gian chạm TB"
+  - id: sec-generalization
+    title: "2.1 Tổng quát hóa"
+  - id: sec-first-return
+    title: "3. Thời gian quay lại"
+  - id: sec-mean-return
+    title: "3.1 Thời gian quay lại TB"
+  - id: sec-number-returns
+    title: "4. Số lần quay lại"
+  - id: sec-summary
+    title: "5. Tổng kết chương"
+  - id: sec-gamblers-ruin
+    title: "6. Con bạc (Gambler's Ruin)"
+  - id: sec-ruin-prob
+    title: "6.1 Xác suất phá sản"
+  - id: sec-expected-duration
+    title: "6.2 Thời gian chơi TB"
+  - id: sec-exercises
+    title: "7. Bài tập"
+---
+
+      <p><strong>Câu chuyện:</strong> Hãy tưởng tượng bạn đang ở tầng 3 của một tòa nhà 5 tầng.
+      Mỗi phút, bạn ngẫu nhiên đi lên hoặc xuống 1 tầng. Câu hỏi:
+      "Xác suất bạn đến tầng trệt (tầng 0) trước khi lên mái nhà (tầng 5)?"
+      và "Trung bình mất bao lâu để bạn đến một trong hai?"</p>
+
+      <p>Kỹ thuật <strong>phân tích bước đầu tiên</strong> trả lời cả hai câu hỏi bằng cách:
+      "Nhìn bước đầu tiên --- bạn đi lên hay xuống? --- rồi từ vị trí mới, bài toán giống hệt nhưng nhỏ hơn."</p>
+
+      {% include components/box-start.html type="summary" title='Tóm tắt' %}
+        <p><strong>Ý tưởng cốt lõi:</strong> Điều kiện hóa theo bước đầu tiên \(Z_1\), rồi dùng tính Markov
+        để quy về bài toán cùng dạng. Kết quả: hệ phương trình tuyến tính --- giải là xong!</p>
+
+
+      {% include components/box-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="sec-hitting-prob">1. Xác suất chạm <small>(Hitting Probabilities)</small></h2>
+
+      <p>Cho chuỗi Markov \((Z_n)_{n \in \N}\) nhận giá trị trong không gian trạng thái hữu hạn
+      \(S = \{0, 1, \ldots, N\}\) với ma trận chuyển \(P = [P_{k,l}]_{k,l \in S}\).</p>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Thời gian chạm / <em>Hitting time</em>)' %}
+        <p>Cho \(A \subseteq S\). <strong>Thời gian chạm</strong> <em>(hitting time)</em> tập \(A\) được định nghĩa là:</p>
+        \[
+          T_A := \inf\{n \geq 0 : Z_n \in A\},
+        \]
+        <p>tức là thời điểm đầu tiên chuỗi Markov rơi vào tập \(A\).</p>
+
+
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Xác suất chạm / <em>Hitting probability</em>)' %}
+        <p><strong>Xác suất chạm</strong> <em>(hitting probability)</em> trạng thái \(l \in A\) xuất phát từ \(k \in S\) là:</p>
+        \[
+          g_l(k) := \PP(Z_{T_A} = l \mid Z_0 = k), \qquad k \in S, \quad l \in A.
+        \]
+        <p>Đây là xác suất mà chuỗi Markov sẽ đến trạng thái \(l\) khi lần đầu tiên đi vào tập \(A\),
+        biết rằng ban đầu chuỗi ở trạng thái \(k\).</p>
+
+
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Thời gian chạm trung bình / <em>Mean hitting time</em>)' %}
+        <p><strong>Thời gian chạm trung bình</strong> <em>(mean hitting time)</em> tập \(A\) xuất phát từ \(k\) là:</p>
+        \[
+          h_A(k) := \E[T_A \mid Z_0 = k], \qquad k \in S.
+        \]
+
+
+      {% include components/box-end.html %}
+
+      <h3 id="sec-fsa-method">1.1 Phương pháp phân tích bước đầu tiên <small>(First Step Analysis Method)</small></h3>
+
+      <p>Ý tưởng chính của <strong>phân tích bước đầu tiên</strong> <em>(first step analysis)</em> là điều kiện hóa
+      theo bước đầu tiên \(Z_1\) của chuỗi Markov. Từ tính Markov và quy tắc xác suất toàn phần, ta có:</p>
+
+      \begin{align*}
+        g_l(k) &= \PP(Z_{T_A} = l \mid Z_0 = k)\\
+        &= \sum_{m \in S} \PP(Z_{T_A} = l \mid Z_1 = m,\; Z_0 = k)\,\PP(Z_1 = m \mid Z_0 = k)\\
+        &= \sum_{m \in S} P_{k,m}\, g_l(m), \qquad k \in S \setminus A.
+      \end{align*}
+
+      <p>Với <strong>điều kiện biên</strong> <em>(boundary condition)</em>: nếu \(k \in A\) thì chuỗi đã ở trong \(A\)
+      ngay tại \(n = 0\), do đó:</p>
+      \[
+        g_l(k) = \ind_{\{k = l\}}, \qquad k \in A, \quad l \in A.
+      \]
+
+      {% include components/box-start.html type="formula" %}
+        <p><strong>Hệ phương trình phân tích bước đầu tiên cho xác suất chạm:</strong></p>
+        \[
+          \boxed{
+            g_l(k) = \sum_{m \in S} P_{k,m}\, g_l(m), \qquad k \in S \setminus A,
+          }
+        \]
+        <p>với điều kiện biên \(g_l(k) = \ind_{\{k = l\}}\) khi \(k \in A\).</p>
+
+
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="summary" title='Tóm tắt' %}
+        <p>Phân tích bước đầu tiên biến bài toán tính xác suất chạm thành một hệ phương trình tuyến tính.
+        Ta "mở ra" bước đầu tiên \(Z_0 \to Z_1\), sau đó sử dụng tính Markov để quy bài toán
+        về cùng dạng nhưng xuất phát từ trạng thái \(Z_1\).</p>
+        <p><strong>Trực giác:</strong> FSA giống như hỏi đường: "Bước đầu tiên đi hướng nào?"
+        Nếu đi sang trạng thái \(j\), thì bài toán CÒN LẠI chính là bài toán gốc nhưng xuất phát từ \(j\).
+        Đây là sức mạnh của tính Markov: quá khứ không quan trọng, chỉ cần biết bạn ĐANG Ở ĐÂU.</p>
+
+
+      {% include components/box-end.html %}
+
+      {% include components/review-start.html title="Ôn tập: Hệ phương trình tuyến tính (Solving Linear Systems)" %}
+        <h4>Tại sao cần?</h4>
+        <p>FSA biến bài toán xác suất thành hệ phương trình tuyến tính.
+        Giải hệ = tìm xác suất chạm. Nếu bạn chưa quen giải hệ 2 ẩn, 3 ẩn, hãy ôn lại ở đây.</p>
+
+        <h4>Giải hệ 2 ẩn bằng phương pháp thế <em>(Substitution)</em></h4>
+        <p><strong>Ví dụ:</strong></p>
+        \[
+          \begin{cases}
+            x + 2y = 5 \\
+            3x - y = 1
+          \end{cases}
+        \]
+        <p><strong>Bước 1:</strong> Rút \(x\) từ phương trình 1: \(x = 5 - 2y\).</p>
+        <p><strong>Bước 2:</strong> Thế vào phương trình 2: \(3(5 - 2y) - y = 1\).</p>
+        <p><strong>Bước 3:</strong> Giải: \(15 - 6y - y = 1 \Rightarrow -7y = -14 \Rightarrow y = 2\).</p>
+        <p><strong>Bước 4:</strong> Thế ngược: \(x = 5 - 2(2) = 1\).</p>
+        <p><strong>Kết quả:</strong> \(x = 1,\; y = 2\).</p>
+
+        <h4>Giải hệ bằng phương pháp khử Gauss <em>(Elimination)</em></h4>
+        <p>Cùng ví dụ trên. Nhân phương trình 2 với \(2\): \(6x - 2y = 2\).</p>
+        <p>Cộng với phương trình 1: \((x + 2y) + (6x - 2y) = 5 + 2\), suy ra \(7x = 7\), tức \(x = 1\).</p>
+        <p>Thế lại: \(1 + 2y = 5 \Rightarrow y = 2\). Hai phương pháp cho cùng kết quả.</p>
+
+        <h4>Kết nối với First Step Analysis</h4>
+        <p>Hệ FSA luôn có dạng:</p>
+        \[
+          g(k) = \sum_{m \in S} P_{k,m}\, g(m) + \text{điều kiện biên}.
+        \]
+        <p>Trong đó:</p>
+        <ul>
+          <li><strong>Ẩn số</strong> = xác suất chạm tại các trạng thái chưa biết (thuộc \(S \setminus A\)).</li>
+          <li><strong>Điều kiện biên</strong> = giá trị đã biết tại tập hấp thụ \(A\).</li>
+          <li>Thay điều kiện biên vào → hệ phương trình tuyến tính "thuần" → giải bằng thế hoặc khử.</li>
+        </ul>
+
+        <div class="try-it">
+          <p><strong>Thử ngay:</strong> Giải hệ sau (gặp thường xuyên trong FSA):</p>
+          \[
+            \begin{cases}
+              0.5x + 0.5y = 0.5 \\
+              0.3x + 0.7y = 0.3
+            \end{cases}
+          \]
+          <p><em>Đáp án:</em> Từ pt1: \(x = 1 - y\). Thế vào pt2: \(0.3(1 - y) + 0.7y = 0.3\),
+          suy ra \(0.3 + 0.4y = 0.3\), tức \(y = 0\) và \(x = 1\).
+          Pattern quen thuộc: xác suất chạm thường là 0 hoặc 1!</p>
+        </div>
+      {% include components/review-end.html %}
+
+      <h3 id="sec-absorbing-matrix">1.2 Tập hấp thụ và dạng ma trận <small>(Absorbing Set and Matrix Form)</small></h3>
+
+      <p>Ta nói \(A\) là <strong>tập hấp thụ</strong> <em>(absorbing set)</em> nếu chuỗi Markov không thể rời khỏi \(A\):</p>
+      \[
+        P_{k,l} = \ind_{\{k = l\}}, \qquad k, l \in A.
+      \]
+      <p>Nghĩa là mọi trạng thái trong \(A\) đều là <strong>trạng thái hấp thụ</strong> <em>(absorbing state)</em>.</p>
+
+      <p>Khi \(A = \{r+1, r+2, \ldots, N\}\) là tập hấp thụ, ta có thể sắp xếp ma trận chuyển thành dạng khối:</p>
+      \begin{equation}\label{eq:block-matrix}
+        P = \begin{bmatrix} Q & R \\ \mathbf{0} & I \end{bmatrix},
+      \end{equation}
+      <p>trong đó:</p>
+      <ul>
+        <li>\(Q\) là ma trận \((r+1) \times (r+1)\) chứa xác suất chuyển giữa các trạng thái <em>không hấp thụ</em>
+            <em>(transient states)</em> \(S \setminus A = \{0, 1, \ldots, r\}\).</li>
+        <li>\(R\) là ma trận \((r+1) \times (N-r)\) chứa xác suất chuyển từ trạng thái không hấp thụ sang trạng thái hấp thụ.</li>
+        <li>\(I\) là ma trận đơn vị \((N-r) \times (N-r)\).</li>
+        <li>\(\mathbf{0}\) là ma trận không \((N-r) \times (r+1)\).</li>
+      </ul>
+
+      <p>Trong dạng ma trận, hệ phương trình cho xác suất chạm trở thành:</p>
+
+      {% include components/box-start.html type="formula" %}
+        <p><strong>Dạng ma trận:</strong></p>
+        \[
+          \mathbf{g}_l = Q\, \mathbf{g}_l + R\, \mathbf{e}_l,
+        \]
+        <p>trong đó \(\mathbf{g}_l = [g_l(0), g_l(1), \ldots, g_l(r)]^\top\) và \(\mathbf{e}_l\) là vectơ đơn vị
+        tương ứng với trạng thái \(l\) trong \(A\). Do đó:</p>
+        \[
+          \boxed{
+            \mathbf{g}_l = (I - Q)^{-1} R\, \mathbf{e}_l.
+          }
+        \]
+
+
+      {% include components/box-end.html %}
+
+      {% include components/review-start.html title="Ôn tập: Ma trận khối và ma trận cơ bản (Block Matrices & Fundamental Matrix)" %}
+        <h4>Tại sao cần?</h4>
+        <p>FSA cho dạng ma trận: \(\mathbf{g}_l = (I-Q)^{-1} R\, \mathbf{e}_l\).
+        Hiểu ma trận khối = hiểu cách chia bài toán lớn thành các phần nhỏ theo nhóm trạng thái.</p>
+
+        <h4>Ma trận khối <em>(Block Matrix)</em></h4>
+        <p><strong>Ý tưởng:</strong> Chia ma trận lớn thành "ô" nhỏ theo nhóm trạng thái.</p>
+        <p><strong>Ví dụ:</strong> Ma trận \(P\) kích thước \(4 \times 4\) với \(A = \{0, 3\}\) hấp thụ.
+        Nhóm trạng thái không hấp thụ: \(\{1, 2\}\). Ta chia:</p>
+        \[
+          P = \begin{bmatrix} Q & R \\ \mathbf{0} & I \end{bmatrix},
+        \]
+        <ul>
+          <li>\(Q\) (\(2 \times 2\)): xác suất chuyển giữa \(\{1, 2\}\) (ở lại vùng chưa bị hấp thụ).</li>
+          <li>\(R\) (\(2 \times 2\)): xác suất chuyển từ \(\{1, 2\}\) sang \(\{0, 3\}\) (rơi vào hấp thụ).</li>
+          <li>\(\mathbf{0}\): không thể thoát ra từ tập hấp thụ.</li>
+          <li>\(I\): ở lại tập hấp thụ mãi mãi.</li>
+        </ul>
+        <p>Nhân ma trận khối: giống nhân ma trận thường nhưng mỗi "phần tử" là một khối.</p>
+
+        <h4>Tại sao \((I - Q)^{-1}\) tồn tại?</h4>
+        <p>\(Q\) là ma trận chuyển giữa các trạng thái KHÔNG hấp thụ. Tổng hàng của \(Q < 1\)
+        (vì có xác suất dương rơi vào tập hấp thụ). Do đó:</p>
+        <ul>
+          <li>Chuỗi \(I + Q + Q^2 + Q^3 + \cdots\) hội tụ → chính là \((I - Q)^{-1}\).</li>
+          <li><strong>Trực giác:</strong> \(\bigl[(I-Q)^{-1}\bigr]_{i,j}\) = kỳ vọng số lần thăm \(j\) trước khi bị hấp thụ, xuất phát từ \(i\).</li>
+        </ul>
+
+        <h4>Ví dụ: Tính \((I - Q)^{-1}\) cho ma trận \(2 \times 2\)</h4>
+        <p>Cho \(Q = \begin{bmatrix} 0 & 0.5 \\ 0.3 & 0.1 \end{bmatrix}\).</p>
+        <p><strong>Bước 1:</strong> \(I - Q = \begin{bmatrix} 1 & -0.5 \\ -0.3 & 0.9 \end{bmatrix}\).</p>
+        <p><strong>Bước 2:</strong> \(\det(I - Q) = 1 \times 0.9 - (-0.5)(-0.3) = 0.9 - 0.15 = 0.75\).</p>
+        <p><strong>Bước 3:</strong> \((I - Q)^{-1} = \dfrac{1}{0.75} \begin{bmatrix} 0.9 & 0.5 \\ 0.3 & 1 \end{bmatrix}
+        = \begin{bmatrix} 1.2 & 0.667 \\ 0.4 & 1.333 \end{bmatrix}\).</p>
+        <p><strong>Kiểm tra:</strong> Từ trạng thái 1, kỳ vọng số lần thăm trạng thái 1 = 1.2 (bao gồm lần đầu),
+        kỳ vọng số lần thăm trạng thái 2 = 0.667.</p>
+
+        <div class="try-it">
+          <p><strong>Thử ngay:</strong> Cho \(Q = \begin{bmatrix} 0 & 1/2 \\ 1/3 & 0 \end{bmatrix}\). Tính \((I - Q)^{-1}\).</p>
+          <p><em>Đáp án:</em> \(I - Q = \begin{bmatrix} 1 & -1/2 \\ -1/3 & 1 \end{bmatrix}\),
+          \(\det = 1 - 1/6 = 5/6\).
+          \((I-Q)^{-1} = \dfrac{6}{5}\begin{bmatrix} 1 & 1/2 \\ 1/3 & 1 \end{bmatrix}
+          = \begin{bmatrix} 6/5 & 3/5 \\ 2/5 & 6/5 \end{bmatrix}\).</p>
+        </div>
+      {% include components/review-end.html %}
+
+      <p>Ngoài ra, tổng xác suất chạm tất cả các trạng thái trong \(A\) thỏa mãn:</p>
+      \begin{equation}\label{eq:total-hitting}
+        1 = \PP(T_A = +\infty \mid Z_0 = k) + \sum_{l \in A} g_l(k), \qquad k \in S.
+      \end{equation}
+      <p>Khi \(A\) là tập hấp thụ và chuỗi chắc chắn bị hấp thụ, thì \(\PP(T_A = +\infty \mid Z_0 = k) = 0\)
+      và \(\sum_{l \in A} g_l(k) = 1\) với mọi \(k \in S\).</p>
+
+      {% include components/example-start.html title='Ví dụ: Chuỗi 4 trạng thái / (<em>4-state chain</em>)' %}
+        <p>Xét chuỗi Markov trên \(S = \{0, 1, 2, 3\}\) với các trạng thái hấp thụ \(A = \{0, 3\}\).
+        Ma trận chuyển có dạng:</p>
+        \[
+          P = \begin{bmatrix}
+            1 & 0 & 0 & 0 \\
+            P_{1,0} & P_{1,1} & P_{1,2} & P_{1,3} \\
+            P_{2,0} & P_{2,1} & P_{2,2} & P_{2,3} \\
+            0 & 0 & 0 & 1
+          \end{bmatrix}.
+        \]
+        <p>Ta cần tính \(g_0(1)\), \(g_0(2)\): xác suất bị hấp thụ vào trạng thái \(0\), xuất phát từ \(1\) hoặc \(2\).</p>
+        <p>Áp dụng phân tích bước đầu tiên:</p>
+        \[
+          \begin{cases}
+            g_0(1) = P_{1,0} \cdot 1 + P_{1,1}\, g_0(1) + P_{1,2}\, g_0(2) + P_{1,3} \cdot 0,\\
+            g_0(2) = P_{2,0} \cdot 1 + P_{2,1}\, g_0(1) + P_{2,2}\, g_0(2) + P_{2,3} \cdot 0,
+          \end{cases}
+        \]
+        <p>với điều kiện biên \(g_0(0) = 1\) và \(g_0(3) = 0\).</p>
+        <p>Đây là hệ hai phương trình tuyến tính hai ẩn, có thể giải trực tiếp.</p>
+        <p>Ví dụ cụ thể, nếu:</p>
+        \[
+          P = \begin{bmatrix}
+            1 & 0 & 0 & 0 \\
+            1/4 & 1/4 & 1/4 & 1/4 \\
+            1/4 & 1/4 & 1/4 & 1/4 \\
+            0 & 0 & 0 & 1
+          \end{bmatrix},
+        \]
+        <p>thì hệ trở thành:</p>
+        \[
+          \begin{cases}
+            g_0(1) = \frac{1}{4} + \frac{1}{4}\, g_0(1) + \frac{1}{4}\, g_0(2),\\
+            g_0(2) = \frac{1}{4} + \frac{1}{4}\, g_0(1) + \frac{1}{4}\, g_0(2).
+          \end{cases}
+        \]
+        <p>Từ tính đối xứng \(g_0(1) = g_0(2)\), ta suy ra:</p>
+        \[
+          g_0(1) = \frac{1}{4} + \frac{1}{2}\, g_0(1)
+          \quad\Longrightarrow\quad
+          g_0(1) = g_0(2) = \frac{1}{2}.
+        \]
+
+
+      {% include components/example-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="sec-mean-hitting">2. Thời gian chạm và hấp thụ trung bình <small>(Mean Hitting and Absorption Times)</small></h2>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Thời gian chạm trung bình / <em>Mean hitting time</em>)' %}
+        <p>Cho \(A \subseteq S\). <strong>Thời gian chạm trung bình</strong> tập \(A\) xuất phát từ \(k\) là:</p>
+        \[
+          h_A(k) := \E[T_A \mid Z_0 = k], \qquad k \in S.
+        \]
+
+
+      {% include components/box-end.html %}
+
+      <p>Áp dụng phân tích bước đầu tiên tương tự như phần trước, nhưng lần này ta điều kiện hóa
+      kỳ vọng thay vì xác suất:</p>
+
+      \begin{align*}
+        h_A(k) &= \E[T_A \mid Z_0 = k]\\
+        &= \E[1 + T_A \circ \theta_1 \mid Z_0 = k]\\
+        &= 1 + \sum_{l \in S} P_{k,l}\, h_A(l), \qquad k \in S \setminus A,
+      \end{align*}
+
+      <p>trong đó \(\theta_1\) là toán tử dịch chuyển thời gian <em>(time shift operator)</em>.</p>
+
+      <p>Điều kiện biên: \(h_A(l) = 0\) với mọi \(l \in A\) (nếu đã ở trong \(A\) thì không cần thời gian nào).</p>
+
+      {% include components/box-start.html type="formula" %}
+        <p><strong>Hệ phương trình phân tích bước đầu tiên cho thời gian chạm trung bình:</strong></p>
+        \[
+          \boxed{
+            h_A(k) = 1 + \sum_{l \in S} P_{k,l}\, h_A(l), \qquad k \in S \setminus A,
+          }
+        \]
+        <p>với điều kiện biên \(h_A(l) = 0\) khi \(l \in A\).</p>
+
+
+      {% include components/box-end.html %}
+
+      <p>Trong dạng ma trận, với \(\mathbf{h}_A = [h_A(0), \ldots, h_A(r)]^\top\) chỉ chứa các trạng thái
+      không hấp thụ:</p>
+      \begin{equation}\label{eq:mean-hitting-matrix}
+        \mathbf{h}_A = \mathbf{1} + Q\, \mathbf{h}_A
+        \quad\Longrightarrow\quad
+        \boxed{
+          \mathbf{h}_A = (I - Q)^{-1}\, \mathbf{1},
+        }
+      \end{equation}
+      <p>trong đó \(\mathbf{1}\) là vectơ toàn \(1\).</p>
+
+      {% include components/box-start.html type="summary" title='Tóm tắt' %}
+        <p>Thời gian chạm trung bình thỏa mãn hệ phương trình tuyến tính tương tự xác suất chạm,
+        chỉ khác ở vế phải: thêm \(+1\) (đếm một bước) và điều kiện biên bằng \(0\) tại \(A\).
+        Ma trận \((I - Q)^{-1}\) được gọi là <strong>ma trận cơ bản</strong> <em>(fundamental matrix)</em> của chuỗi Markov hấp thụ.</p>
+
+
+      {% include components/box-end.html %}
+
+      {% include components/example-start.html title='Ví dụ: Chuỗi hai trạng thái / (<em>Two-state chain</em>)' %}
+        <p>Xét chuỗi Markov hai trạng thái \(S = \{0, 1\}\) với ma trận chuyển:</p>
+        \[
+          P = \begin{bmatrix} 1-a & a \\ b & 1-b \end{bmatrix}.
+        \]
+        <p><strong>Tính \(h_{\{0\}}(1)\):</strong> Thời gian trung bình để đến trạng thái \(0\) từ trạng thái \(1\).</p>
+        <p>Áp dụng phân tích bước đầu tiên với \(A = \{0\}\):</p>
+        \[
+          h_{\{0\}}(1) = 1 + P_{1,0}\, h_{\{0\}}(0) + P_{1,1}\, h_{\{0\}}(1)
+          = 1 + b \cdot 0 + (1-b)\, h_{\{0\}}(1).
+        \]
+        <p>Giải ra:</p>
+        \[
+          b\, h_{\{0\}}(1) = 1 \quad\Longrightarrow\quad h_{\{0\}}(1) = \frac{1}{b}.
+        \]
+        <p>Tương tự, \(h_{\{1\}}(0) = \dfrac{1}{a}\).</p>
+
+
+      {% include components/example-end.html %}
+
+      {% include components/example-start.html title='Ví dụ: Chuỗi với tham số \(\alpha\), \(\beta\) / (<em>Chain with parameters \(\alpha\), \(\beta\)</em>)' %}
+        <p>Xét chuỗi Markov trên \(S = \{0, 1, 2, 3\}\) với trạng thái hấp thụ \(A = \{3\}\) và ma trận chuyển:</p>
+        \[
+          P = \begin{bmatrix}
+            1 - \beta & \beta & 0 & 0\\
+            0 & 1 - \beta & \beta & 0\\
+            0 & 0 & 1 - \beta & \beta\\
+            0 & 0 & 0 & 1
+          \end{bmatrix}.
+        \]
+        <p>Ta cần tính thời gian trung bình để đến trạng thái \(3\).</p>
+        <p>Hệ phương trình phân tích bước đầu tiên:</p>
+        \[
+          \begin{cases}
+            h_3(0) = 1 + (1-\beta)\, h_3(0) + \beta\, h_3(1),\\
+            h_3(1) = 1 + (1-\beta)\, h_3(1) + \beta\, h_3(2),\\
+            h_3(2) = 1 + (1-\beta)\, h_3(2) + \beta \cdot 0.
+          \end{cases}
+        \]
+        <p>Từ phương trình thứ ba: \(\beta\, h_3(2) = 1\), suy ra \(h_3(2) = \dfrac{1}{\beta}\).</p>
+        <p>Thay vào phương trình thứ hai:
+        \(\beta\, h_3(1) = 1 + \beta \cdot \dfrac{1}{\beta} = 2\), suy ra \(h_3(1) = \dfrac{2}{\beta}\).</p>
+        <p>Thay vào phương trình thứ nhất:
+        \(\beta\, h_3(0) = 1 + \beta \cdot \dfrac{2}{\beta} = 3\), suy ra \(h_3(0) = \dfrac{3}{\beta}\).</p>
+        <p>Tổng quát hơn, với chuỗi "sinh--tử" <em>(birth chain)</em> tuyến tính đi từ \(0\) đến \(N\),
+        ta có \(h_{\{N\}}(k) = \dfrac{N - k}{\beta}\).</p>
+
+
+      {% include components/example-end.html %}
+
+      <h3 id="sec-generalization">2.1 Tổng quát hóa <small>(Generalization)</small></h3>
+
+      <p>Phương pháp phân tích bước đầu tiên có thể mở rộng để tính:</p>
+      \[
+        h_A(k) = \E\!\left[\sum_{i=0}^{T_A - 1} f(X_i) \;\middle|\; X_0 = k\right],
+      \]
+      <p>trong đó \(f : S \to \R\) là một hàm cho trước. Khi \(f \equiv 1\), ta thu được thời gian chạm trung bình.</p>
+
+      <p>Hệ phương trình tương ứng:</p>
+      \begin{equation}\label{eq:generalized-hitting}
+        h_A(k) = f(k) + \sum_{l \in S} P_{k,l}\, h_A(l), \qquad k \in S \setminus A,
+      \end{equation}
+      <p>với điều kiện biên \(h_A(l) = 0\) khi \(l \in A\).</p>
+
+      <p>Trường hợp đặc biệt khi \(A = \{m\}\) chỉ gồm một trạng thái:</p>
+      \[
+        h_{\{m\}}(k) = 1 + \sum_{l \neq m} P_{k,l}\, h_{\{m\}}(l), \qquad k \neq m.
+      \]
+
+      <!-- ================================================================ -->
+      <h2 id="sec-first-return">3. Thời gian quay lại lần đầu <small>(First Return Times)</small></h2>
+
+      <p>Có sự khác biệt quan trọng giữa <strong>thời gian chạm</strong> và <strong>thời gian quay lại lần đầu</strong>:
+      thời gian chạm cho phép \(n = 0\) (tức nếu đã ở \(j\) thì \(T_{\{j\}} = 0\)),
+      còn thời gian quay lại yêu cầu \(n \geq 1\) (phải rời khỏi rồi quay lại).</p>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Thời gian quay lại lần đầu / <em>First return time</em>)' %}
+        <p><strong>Thời gian quay lại lần đầu</strong> trạng thái \(j\) là:</p>
+        \[
+          \tau_j := \inf\{n \geq 1 : X_n = j\}.
+        \]
+        <p>Lưu ý: \(n \geq 1\), không phải \(n \geq 0\).</p>
+
+
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Xác suất quay lại / <em>Return probability</em>)' %}
+        <p><strong>Xác suất quay lại</strong> trạng thái \(j\) từ trạng thái \(i\) là:</p>
+        \[
+          p_{ij} := \PP(\tau_j < \infty \mid X_0 = i).
+        \]
+        <p>Khi \(i = j\), đại lượng \(p_{jj}\) là xác suất quay lại chính trạng thái \(j\).</p>
+
+
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Phân phối thời gian quay lại / <em>First return distribution</em>)' %}
+        <p>Xác suất quay lại trạng thái \(j\) sau đúng \(n\) bước là:</p>
+        \[
+          f_{ij}^{(n)} := \PP(\tau_j = n \mid X_0 = i), \qquad n \geq 1.
+        \]
+
+
+      {% include components/box-end.html %}
+
+      <p>Tổng xác suất quay lại: \(p_{ij} = \sum_{n=1}^{\infty} f_{ij}^{(n)}\).</p>
+
+      {% include components/box-start.html type="theorem" title='Định lý (Quan hệ giữa \(P_{i,i}^n\) và \(f_{ii}^{(n)}\))' %}
+        <p>Xác suất chuyển \(n\) bước quay lại trạng thái \(i\) có thể phân tách theo thời gian quay lại lần đầu:</p>
+        \begin{equation}\label{eq:Pn-fn}
+          P_{i,i}^{(n)} = \sum_{k=1}^{n} f_{ii}^{(k)}\, P_{i,i}^{(n-k)}, \qquad n \geq 1,
+        \end{equation}
+        <p>với quy ước \(P_{i,i}^{(0)} = 1\).</p>
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Chứng minh.</strong>
+      Ta phân hoạch sự kiện \(\{X_n = i\}\) theo thời điểm quay lại lần đầu \(\tau_i = k\):</p>
+      \begin{align*}
+        \PP(X_n = i \mid X_0 = i)
+        &= \sum_{k=1}^{n} \PP(X_n = i \mid \tau_i = k,\; X_0 = i)\,\PP(\tau_i = k \mid X_0 = i)\\
+        &= \sum_{k=1}^{n} P_{i,i}^{(n-k)}\, f_{ii}^{(k)}.
+      \end{align*}
+      \(\square\)
+
+      <h3 id="sec-mean-return">3.1 Thời gian quay lại trung bình <small>(Mean Return Time)</small></h3>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Thời gian quay lại trung bình / <em>Mean return time</em>)' %}
+        \[
+          \mu_j(i) := \E[\tau_j \mid X_0 = i].
+        \]
+        <p>Khi \(i = j\), ta ký hiệu \(\mu_j := \mu_j(j) = \E[\tau_j \mid X_0 = j]\).</p>
+
+
+      {% include components/box-end.html %}
+
+      <p>Áp dụng phân tích bước đầu tiên:</p>
+
+      {% include components/box-start.html type="formula" %}
+        <p><strong>Thời gian quay lại trung bình:</strong></p>
+        \[
+          \boxed{
+            \mu_j(i) = 1 + \sum_{l \neq j} P_{i,l}\, \mu_j(l), \qquad i \in S.
+          }
+        \]
+
+
+      {% include components/box-end.html %}
+
+      {% include components/example-start.html title='Ví dụ: Chuỗi hai trạng thái / thời gian quay lại' %}
+        <p>Với chuỗi hai trạng thái \(S = \{0,1\}\) và ma trận chuyển
+        \(P = \begin{bmatrix} 1-a & a \\ b & 1-b \end{bmatrix}\):</p>
+
+        <p><strong>Tính \(\mu_0(0)\):</strong> Thời gian quay lại trung bình trạng thái \(0\), xuất phát từ \(0\).</p>
+        \[
+          \mu_0(0) = 1 + P_{0,1}\, \mu_0(1) = 1 + a\, \mu_0(1).
+        \]
+        <p>Tiếp tục:</p>
+        \[
+          \mu_0(1) = 1 + P_{1,1}\, \mu_0(1) = 1 + (1-b)\, \mu_0(1)
+          \quad\Longrightarrow\quad
+          \mu_0(1) = \frac{1}{b}.
+        \]
+        <p>Do đó:</p>
+        \[
+          \mu_0(0) = 1 + \frac{a}{b} = \frac{a + b}{b}.
+        \]
+        <p>Tương tự:</p>
+        \[
+          \mu_1(1) = \frac{a + b}{a}, \qquad
+          \mu_1(0) = \frac{1}{a}, \qquad
+          \mu_0(1) = \frac{1}{b}.
+        \]
+
+        {% include components/box-start.html type="summary" title='Tóm tắt' %}
+          <p>Lưu ý mối liên hệ với phân phối giới hạn (Chương 1):</p>
+          \[
+            \pi_0 = \frac{b}{a+b} = \frac{1}{\mu_0(0)}, \qquad
+            \pi_1 = \frac{a}{a+b} = \frac{1}{\mu_1(1)}.
+          \]
+          <p>Đây không phải sự trùng hợp! Với chuỗi Markov <strong>ergodic</strong>, phân phối dừng
+          thỏa mãn \(\pi_j = 1/\mu_j\) <em>(ergodic theorem)</em>.</p>
+
+
+        {% include components/box-end.html %}
+
+
+      {% include components/example-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="sec-number-returns">4. Số lần quay lại <small>(Number of Returns)</small></h2>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Số lần thăm / <em>Number of visits</em>)' %}
+        <p>Số lần chuỗi Markov thăm trạng thái \(i\) (không kể thời điểm \(n=0\)) là:</p>
+        \[
+          R_i := \sum_{n=1}^{\infty} \ind_{\{X_n = i\}}.
+        \]
+
+
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="theorem" title='Định lý (Phân phối số lần thăm)' %}
+        <p>Với \(m \geq 1\):</p>
+        \begin{equation}\label{eq:num-visits}
+          \PP(R_j = m \mid X_0 = i) = p_{ij}(1 - p_{jj})(p_{jj})^{m-1},
+        \end{equation}
+        <p>và:</p>
+        \[
+          \PP(R_j = 0 \mid X_0 = i) = 1 - p_{ij}.
+        \]
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Chứng minh.</strong>
+      Để thăm trạng thái \(j\) đúng \(m\) lần:</p>
+      <ol>
+        <li>Trước tiên, chuỗi phải đến \(j\) lần đầu (xác suất \(p_{ij}\)).</li>
+        <li>Sau đó, quay lại \(j\) thêm \(m-1\) lần nữa (mỗi lần xác suất \(p_{jj}\)).</li>
+        <li>Cuối cùng, không quay lại \(j\) nữa (xác suất \(1 - p_{jj}\)).</li>
+      </ol>
+      <p>Do tính Markov, các sự kiện này độc lập, nên:</p>
+      \[
+        \PP(R_j = m \mid X_0 = i) = p_{ij} \cdot (p_{jj})^{m-1} \cdot (1 - p_{jj}).
+      \]
+      \(\square\)
+
+      <p>Đây chính là <strong>phân phối hình học</strong> <em>(geometric distribution)</em> trên \(\{0, 1, 2, \ldots\}\).</p>
+
+      {% include components/review-start.html title="Ôn tập: Chuỗi hình học (Geometric Series)" %}
+        <h4>Tại sao cần?</h4>
+        <p>Số lần thăm \(R_j\) có phân phối hình học → kỳ vọng dùng chuỗi hình học.
+        Chuỗi hình học cũng xuất hiện khi tính \((I-Q)^{-1} = I + Q + Q^2 + \cdots\)</p>
+
+        <h4>Chuỗi hình học hữu hạn</h4>
+        <p><strong>Công thức:</strong></p>
+        \[
+          1 + r + r^2 + \cdots + r^{n-1} = \frac{1 - r^n}{1 - r}, \qquad r \neq 1.
+        \]
+        <p><strong>Ví dụ:</strong>
+        \(1 + 0.5 + 0.25 + 0.125 = \dfrac{1 - 0.5^4}{1 - 0.5} = \dfrac{0.9375}{0.5} = 1.875\).</p>
+
+        <h4>Chuỗi hình học vô hạn</h4>
+        <p>Khi \(|r| < 1\):</p>
+        \[
+          \sum_{n=0}^{\infty} r^n = \frac{1}{1 - r}.
+        \]
+        <p><strong>Ví dụ:</strong>
+        \(1 + 0.3 + 0.09 + 0.027 + \cdots = \dfrac{1}{1 - 0.3} = \dfrac{10}{7} \approx 1.4286\).</p>
+        <p>Khi \(|r| \geq 1\): chuỗi <strong>phân kỳ</strong> (tổng = \(+\infty\)).</p>
+
+        <h4>Kỳ vọng phân phối hình học</h4>
+        <p>Nếu \(X \sim \text{Geometric}(p)\): \(\PP(X = k) = (1-p)^{k-1} p\), \(k = 1, 2, \ldots\)</p>
+        \[
+          \E[X] = \frac{1}{p}.
+        \]
+        <p><strong>Ví dụ:</strong> Gieo đồng xu cho đến khi được mặt ngửa (\(p = 0.5\)):
+        \(\E[X] = 1/0.5 = 2\) lần gieo.</p>
+        <p><strong>Kết nối:</strong> Số lần thăm trạng thái \(j\) có dạng hình học với
+        "xác suất dừng" = \(1 - p_{jj}\). Nên \(\E[R_j \mid X_0 = j] = \frac{1}{1 - p_{jj}}\)
+        (không tính lần thăm đầu), và công thức tổng quát từ \(i\):
+        \(\E[R_j \mid X_0 = i] = \frac{p_{ij}}{1 - p_{jj}}\).</p>
+
+        <div class="try-it">
+          <p><strong>Thử ngay:</strong></p>
+          <ol>
+            <li>Tính \(\displaystyle\sum_{n=0}^{\infty} \left(\frac{2}{3}\right)^n\).</li>
+            <li>Tính \(\E[X]\) với \(X \sim \text{Geometric}(1/4)\).</li>
+          </ol>
+          <p><em>Đáp án:</em></p>
+          <ol>
+            <li>\(\dfrac{1}{1 - 2/3} = \dfrac{1}{1/3} = 3\).</li>
+            <li>\(\E[X] = \dfrac{1}{1/4} = 4\).</li>
+          </ol>
+        </div>
+      {% include components/review-end.html %}
+
+      {% include components/box-start.html type="theorem" title='Định lý (Trường hợp \(p_{jj} = 1\))' %}
+        <p>Nếu \(p_{jj} = 1\) (chuỗi chắc chắn quay lại \(j\)), thì:</p>
+        \[
+          \PP(R_j = \infty \mid X_0 = j) = 1.
+        \]
+        <p>Ngược lại, nếu \(p_{jj} < 1\), thì \(\PP(R_j < \infty \mid X_0 = j) = 1\).</p>
+
+
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="formula" %}
+        <p><strong>Kỳ vọng số lần thăm:</strong></p>
+        \[
+          \boxed{
+            \E[R_j \mid X_0 = i] = \frac{p_{ij}}{1 - p_{jj}},
+          }
+        \]
+        <p>khi \(p_{jj} < 1\).</p>
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Chứng minh.</strong></p>
+      \begin{align*}
+        \E[R_j \mid X_0 = i]
+        &= \sum_{m=1}^{\infty} m\, p_{ij}(1-p_{jj})(p_{jj})^{m-1}
+        = p_{ij}(1-p_{jj}) \sum_{m=1}^{\infty} m\, (p_{jj})^{m-1}\\
+        &= p_{ij}(1-p_{jj}) \cdot \frac{1}{(1-p_{jj})^2}
+        = \frac{p_{ij}}{1 - p_{jj}}.
+      \end{align*}
+      \(\square\)
+
+      {% include components/box-start.html type="summary" title='Tóm tắt' %}
+        <p>Nếu trạng thái \(j\) là <strong>thoáng qua</strong> <em>(transient)</em>, tức \(p_{jj} < 1\), thì số lần thăm
+        \(R_j\) là hữu hạn hầu chắc chắn và có phân phối hình học.
+        Nếu \(j\) là <strong>hồi quy</strong> <em>(recurrent)</em>, tức \(p_{jj} = 1\), thì chuỗi quay lại \(j\) vô hạn lần.</p>
+
+
+      {% include components/box-end.html %}
+
+      {% include components/example-start.html title='Ví dụ: Bài toán mê cung: Cá trong bể 9 ngăn / (<em>Maze problem: Fish in 9-compartment aquarium</em>)' %}
+        <p>Xét một con cá bơi trong bể có \(9\) ngăn xếp thành lưới \(3 \times 3\), đánh số từ \(1\) đến \(9\).
+        Tại mỗi bước, cá di chuyển ngẫu nhiên đều sang một ngăn kề (chia sẻ cạnh chung).</p>
+        <p>Đây là chuỗi Markov trên \(S = \{1, 2, \ldots, 9\}\). Ta có thể áp dụng phân tích bước đầu tiên
+        để tính:</p>
+        <ul>
+          <li>Xác suất cá đến ngăn thức ăn (ví dụ ngăn \(9\)) trước khi bị bắt (ví dụ ngăn \(1\)).</li>
+          <li>Thời gian trung bình để cá đến một ngăn cho trước.</li>
+          <li>Số lần trung bình cá thăm mỗi ngăn trước khi bị hấp thụ.</li>
+        </ul>
+        <p>Ví dụ, nếu ngăn \(1\) và ngăn \(9\) là hấp thụ, ta đặt \(A = \{1, 9\}\) và giải hệ phương trình
+        tuyến tính \(7 \times 7\) cho các trạng thái còn lại \(\{2, 3, 4, 5, 6, 7, 8\}\).</p>
+        <p>Ma trận chuyển được xây dựng từ cấu trúc kề của lưới: mỗi ngăn góc có \(2\) ngăn kề,
+        mỗi ngăn cạnh có \(3\) ngăn kề, và ngăn trung tâm có \(4\) ngăn kề.</p>
+
+
+      {% include components/example-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="sec-summary">5. Tổng kết chương <small>(Chapter Summary)</small></h2>
+
+      {% include components/box-start.html type="summary" title='Tóm tắt' %}
+        <p><strong>Phân tích bước đầu tiên</strong> <em>(first step analysis)</em> là kỹ thuật quan trọng nhất
+        để giải các bài toán về chuỗi Markov hữu hạn. Ý tưởng cốt lõi:
+        <em>điều kiện hóa theo bước đầu tiên \(Z_1\), rồi dùng tính Markov để quy về bài toán cùng dạng.</em></p>
+
+        <table style="width:100%; border-collapse:collapse; margin-top:1em;">
+          <thead>
+            <tr>
+              <th style="border:1px solid #ccc; padding:6px 10px; text-align:left;"><strong>Đại lượng</strong></th>
+              <th style="border:1px solid #ccc; padding:6px 10px; text-align:center;"><strong>Phương trình</strong></th>
+              <th style="border:1px solid #ccc; padding:6px 10px; text-align:center;"><strong>Điều kiện biên</strong></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border:1px solid #ccc; padding:6px 10px;">Xác suất chạm \(g_l(k)\)</td>
+              <td style="border:1px solid #ccc; padding:6px 10px; text-align:center;">\(g_l(k) = \displaystyle\sum_m P_{k,m}\, g_l(m)\)</td>
+              <td style="border:1px solid #ccc; padding:6px 10px; text-align:center;">\(g_l(k) = \ind_{\{k=l\}}\), \(k \in A\)</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid #ccc; padding:6px 10px;">Thời gian chạm TB \(h_A(k)\)</td>
+              <td style="border:1px solid #ccc; padding:6px 10px; text-align:center;">\(h_A(k) = 1 + \displaystyle\sum_l P_{k,l}\, h_A(l)\)</td>
+              <td style="border:1px solid #ccc; padding:6px 10px; text-align:center;">\(h_A(l) = 0\), \(l \in A\)</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid #ccc; padding:6px 10px;">Thời gian quay lại TB \(\mu_j(i)\)</td>
+              <td style="border:1px solid #ccc; padding:6px 10px; text-align:center;">\(\mu_j(i) = 1 + \displaystyle\sum_{l \neq j} P_{i,l}\, \mu_j(l)\)</td>
+              <td style="border:1px solid #ccc; padding:6px 10px; text-align:center;">---</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p style="margin-top:1em;">Dạng ma trận cho chuỗi hấp thụ \(P = \begin{bmatrix} Q & R \\ 0 & I \end{bmatrix}\):</p>
+        \[
+          \mathbf{g}_l = (I-Q)^{-1} R\, \mathbf{e}_l, \qquad
+          \mathbf{h}_A = (I-Q)^{-1}\, \mathbf{1}.
+        \]
+
+
+      {% include components/box-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="sec-gamblers-ruin">6. Bài toán con bạc -- Gambler's Ruin</h2>
+
+      <p><strong>Câu chuyện:</strong> Một người chơi bắt đầu với \(i\) đô la. Mỗi ván, anh ta thắng \$1 (xác suất \(p\))
+      hoặc thua \$1 (xác suất \(q = 1-p\)). Trò chơi dừng khi cháy túi (\(0\) đô la) hoặc đạt mục tiêu (\(N\) đô la).</p>
+
+      <p>Đây là bài toán kinh điển nhất của phân tích bước đầu tiên.</p>
+
+      <h3 id="sec-ruin-prob">6.1 Xác suất phá sản <small>(Ruin Probability)</small></h3>
+
+      <p>Đặt \(g(i) = \PP(\text{đến } N \text{ trước } 0 \mid Z_0 = i)\) = xác suất thắng.</p>
+
+      <p>Phân tích bước đầu tiên:</p>
+      \[
+        g(i) = p\, g(i+1) + q\, g(i-1), \qquad 1 \leq i \leq N-1,
+      \]
+      <p>với \(g(0) = 0\) (cháy túi = thua) và \(g(N) = 1\) (đạt mục tiêu = thắng).</p>
+
+      <p><strong>Giải phương trình:</strong> Viết lại: \(p[g(i+1) - g(i)] = q[g(i) - g(i-1)]\).</p>
+
+      <p>Đặt \(d_i = g(i) - g(i-1)\). Ta có \(d_{i+1} = (q/p)\, d_i\), suy ra:</p>
+      \[
+        d_k = d_1 \left(\frac{q}{p}\right)^{k-1}, \qquad k \geq 1.
+      \]
+
+      <p>Từ \(g(N) - g(0) = \sum_{k=1}^{N} d_k = 1\):</p>
+
+      {% include components/box-start.html type="formula" %}
+        <p><strong>Xác suất thắng trong bài toán con bạc:</strong></p>
+
+        <p><strong>Trường hợp \(p \neq q\)</strong> (đặt \(\rho = q/p\)):</p>
+        \begin{equation}\label{eq:gambler-win}
+          g(i) = \frac{1 - \rho^i}{1 - \rho^N}, \qquad 0 \leq i \leq N.
+        \end{equation}
+
+        <p><strong>Trường hợp \(p = q = 1/2\)</strong> (trò chơi "công bằng"):</p>
+        \begin{equation}\label{eq:gambler-fair}
+          g(i) = \frac{i}{N}.
+        \end{equation}
+
+
+      {% include components/box-end.html %}
+
+      {% include components/example-start.html title='Ví dụ: Con bạc với \$3, mục tiêu \$5' %}
+        <p>\(N = 5\), \(i = 3\), \(p = 0.4\) (bất lợi), \(\rho = q/p = 0.6/0.4 = 1.5\).</p>
+        \[
+          g(3) = \frac{1 - 1.5^3}{1 - 1.5^5} = \frac{1 - 3.375}{1 - 7.594} = \frac{-2.375}{-6.594} \approx 0.360.
+        \]
+        <p>Chỉ \(36\%\) cơ hội thắng! So với trò chơi công bằng: \(g(3) = 3/5 = 60\%\).</p>
+
+
+      {% include components/example-end.html %}
+
+      <h3 id="sec-expected-duration">6.2 Thời gian chơi trung bình <small>(Expected Duration)</small></h3>
+
+      <p>Đặt \(h(i) = \E[T \mid Z_0 = i]\) = thời gian trung bình cho đến khi dừng.</p>
+
+      <p>Phân tích bước đầu tiên:</p>
+      \[
+        h(i) = 1 + p\, h(i+1) + q\, h(i-1), \qquad 1 \leq i \leq N-1,
+      \]
+      <p>với \(h(0) = h(N) = 0\).</p>
+
+      <p><strong>Nghiệm cho \(p = q = 1/2\):</strong></p>
+      \begin{equation}\label{eq:gambler-time-fair}
+        h(i) = i(N - i).
+      \end{equation}
+
+      <p><strong>Nghiệm cho \(p \neq q\):</strong></p>
+      \begin{equation}\label{eq:gambler-time-biased}
+        h(i) = \frac{1}{q - p}\left[i - N \cdot \frac{1 - \rho^i}{1 - \rho^N}\right], \qquad \rho = q/p.
+      \end{equation}
+
+      {% include components/example-start.html title='Ví dụ: Thời gian chơi / trò chơi công bằng' %}
+        <p>\(N = 10\), \(p = q = 1/2\), xuất phát \(i = 5\):</p>
+        \[
+          h(5) = 5 \times (10 - 5) = 25 \text{ ván}.
+        \]
+        <p>Xuất phát \(i = 1\): \(h(1) = 1 \times 9 = 9\) ván.
+        Xuất phát \(i = 9\): \(h(9) = 9 \times 1 = 9\) ván.</p>
+        <p>Trò chơi kéo dài nhất khi xuất phát ở giữa!</p>
+
+
+      {% include components/example-end.html %}
+
+      {% include components/box-start.html type="summary" title='Tóm tắt' %}
+        <p>Bài toán con bạc cho thấy sức mạnh của phân tích bước đầu tiên:</p>
+        <ul>
+          <li>Xác suất thắng phụ thuộc vào \(\rho = q/p\) và vị trí ban đầu.</li>
+          <li>Nếu \(p &lt; 1/2\) (bất lợi), xác suất phá sản rất cao khi \(N\) lớn: \(g(i) \to 0\).</li>
+          <li>Trò chơi "công bằng" (\(p = 1/2\)): xác suất thắng tỷ lệ với vốn ban đầu.</li>
+          <li>Đây cũng là mô hình cho bước đi ngẫu nhiên với biên hấp thụ.</li>
+        </ul>
+
+
+      {% include components/box-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="sec-exercises">7. Bài tập <small>(Exercises)</small></h2>
+
+      {% include components/exercise-start.html title='Bài tập 1' %}
+        <p>Xét chuỗi Markov trên \(S = \{0, 1, 2, 3, 4\}\) với các trạng thái hấp thụ \(A = \{0, 4\}\)
+        và ma trận chuyển:</p>
+        \[
+          P = \begin{bmatrix}
+            1 & 0 & 0 & 0 & 0\\
+            1/3 & 0 & 2/3 & 0 & 0\\
+            0 & 1/2 & 0 & 1/2 & 0\\
+            0 & 0 & 1/3 & 0 & 2/3\\
+            0 & 0 & 0 & 0 & 1
+          \end{bmatrix}.
+        \]
+        <ol type="a">
+          <li>Tính xác suất bị hấp thụ vào trạng thái \(0\), xuất phát từ mỗi trạng thái \(k = 1, 2, 3\).</li>
+          <li>Tính thời gian hấp thụ trung bình \(h_A(k)\) với \(k = 1, 2, 3\).</li>
+        </ol>
+
+
+      {% include components/exercise-end.html %}
+
+      {% include components/exercise-start.html title='Bài tập 2' %}
+        <p>Cho chuỗi Markov hai trạng thái với ma trận chuyển
+        \(P = \begin{bmatrix} 1-a & a \\ b & 1-b \end{bmatrix}\),
+        trong đó \(a, b \in (0,1)\).</p>
+        <ol type="a">
+          <li>Chứng minh rằng \(\mu_0(0) = (a+b)/b\) và \(\mu_1(1) = (a+b)/a\).</li>
+          <li>Xác minh rằng \(\pi_j = 1/\mu_j(j)\) với phân phối dừng \(\pi\) đã tìm ở Chương 1.</li>
+        </ol>
+
+
+      {% include components/exercise-end.html %}
+
+      {% include components/exercise-start.html title='Bài tập 3' %}
+        <p>Một con chuột ở trong mê cung gồm \(5\) phòng \(\{1, 2, 3, 4, 5\}\), xếp thành hàng ngang.
+        Tại mỗi bước, chuột di chuyển sang phòng kề bên trái hoặc bên phải với xác suất bằng nhau.
+        Phòng \(1\) có phô mai và phòng \(5\) có bẫy (cả hai đều là trạng thái hấp thụ).</p>
+        <ol type="a">
+          <li>Viết ma trận chuyển.</li>
+          <li>Tính xác suất chuột đến phô mai trước bẫy, xuất phát từ phòng \(k = 2, 3, 4\).</li>
+          <li>Tính thời gian trung bình để chuột bị hấp thụ, xuất phát từ phòng \(3\).</li>
+        </ol>
+
+
+      {% include components/exercise-end.html %}
+
+      {% include components/exercise-start.html title='Bài tập 4' %}
+        <p>Cho chuỗi Markov trên \(S = \{0, 1, 2\}\) với ma trận chuyển:</p>
+        \[
+          P = \begin{bmatrix}
+            0 & 1 & 0\\
+            1/4 & 1/2 & 1/4\\
+            0 & 1 & 0
+          \end{bmatrix}.
+        \]
+        <ol type="a">
+          <li>Tính \(p_{00}\), \(p_{11}\), \(p_{22}\) (xác suất quay lại).</li>
+          <li>Tính \(\mu_0(0)\), \(\mu_1(1)\), \(\mu_2(2)\) (thời gian quay lại trung bình).</li>
+          <li>Tính \(\E[R_1 \mid X_0 = 0]\) (kỳ vọng số lần thăm trạng thái \(1\) xuất phát từ \(0\)).</li>
+        </ol>
+
+
+      {% include components/exercise-end.html %}
+
+      {% include components/exercise-start.html title='Bài tập 5' %}
+        <p>Chứng minh công thức \eqref{eq:Pn-fn}:</p>
+        \[
+          P_{i,i}^{(n)} = \sum_{k=1}^{n} f_{ii}^{(k)}\, P_{i,i}^{(n-k)}, \qquad n \geq 1,
+        \]
+        <p>bằng cách phân hoạch sự kiện \(\{X_n = i\}\) theo giá trị của \(\tau_i\).</p>
+
+
+      {% include components/exercise-end.html %}
+
+      {% include components/exercise-start.html title='Bài tập 6' %}
+        <p>Xét bể cá \(9\) ngăn (Ví dụ mê cung ở trên). Giả sử cá xuất phát ở ngăn \(5\) (trung tâm),
+        ngăn \(1\) có thức ăn (hấp thụ) và ngăn \(9\) là bẫy (hấp thụ).</p>
+        <ol type="a">
+          <li>Viết ma trận chuyển \(9 \times 9\).</li>
+          <li>Xác định ma trận \(Q\) (phần không hấp thụ) và \(R\).</li>
+          <li>Tính (hoặc thiết lập hệ phương trình) xác suất cá đến thức ăn trước bẫy.</li>
+        </ol>
+
+
+      {% include components/exercise-end.html %}

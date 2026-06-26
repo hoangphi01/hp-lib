@@ -1,0 +1,12 @@
+- slug: markov-chains
+  title_vi: "Chuỗi Markov"
+  title_en: "Markov Chains"
+  subtitle: "Tài liệu Song ngữ Việt-Anh"
+  source: "Privault (2011)"
+  status: active
+  chapters: 7
+  cover: /assets/covers/markov.png
+  url: /books/markov-chains/
+  description: "Lý thuyết chuỗi Markov với ví dụ chi tiết và bài tập song ngữ."
+  tags: [xác suất, ngẫu nhiên, markov]
+  data_key: markov

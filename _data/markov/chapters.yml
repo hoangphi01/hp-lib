@@ -1,0 +1,66 @@
+- slug: index
+  url: /books/markov-chains/
+  nav_title: "Trang chủ"
+
+- slug: intro
+  url: /books/markov-chains/intro.html
+  nav_title: "Giới thiệu"
+  heading: "Giới thiệu: Quá trình ngẫu nhiên & Bước đi ngẫu nhiên"
+  heading_en: "Introduction: Stochastic Processes & Random Walks"
+  description: "Quá trình ngẫu nhiên là gì, đường mẫu, hai họ Markov và Martingale, bước đi Bernoulli, trung bình, phương sai, phân phối, quay lại gốc lần đầu."
+  status: done
+  last_updated: 2026-06-15
+
+- slug: ch1
+  url: /books/markov-chains/ch1.html
+  nav_title: "Ch 1: Rời rạc"
+  heading: "Chương 1: Chuỗi Markov thời gian rời rạc"
+  heading_en: "Discrete-Time Markov Chains"
+  description: "Tính chất Markov, ma trận chuyển, phương trình Chapman-Kolmogorov, chuỗi hai trạng thái, chéo hóa, phân phối giới hạn, tốc độ hội tụ."
+  status: done
+  last_updated: 2026-06-10
+
+- slug: ch2
+  url: /books/markov-chains/ch2.html
+  nav_title: "Ch 2: Bước đầu tiên"
+  heading: "Chương 2: Phân tích bước đầu tiên"
+  heading_en: "First Step Analysis"
+  description: "Xác suất chạm, phương pháp FSA, tập hấp thụ và dạng ma trận, thời gian chạm trung bình, bài toán Con bạc (Gambler's Ruin), xác suất phá sản."
+  status: in-progress
+  last_updated: 2026-06-21
+
+- slug: ch3
+  url: /books/markov-chains/ch3.html
+  nav_title: "Ch 3: Phân loại"
+  heading: "Chương 3: Phân loại trạng thái"
+  heading_en: "Classification of States"
+  description: "Trạng thái hồi quy và chuyển tiếp, tiêu chí phân loại, chu kỳ, Định lý Polya cho bước đi ngẫu nhiên, lớp liên thông, cấu trúc chuỗi Markov."
+  status: in-progress
+  last_updated: 2026-06-18
+
+- slug: ch4
+  url: /books/markov-chains/ch4.html
+  nav_title: "Ch 4: Giới hạn"
+  heading: "Chương 4: Phân phối giới hạn và dừng"
+  heading_en: "Limiting and Stationary Distributions"
+  description: "Phân phối dừng, điều kiện tồn tại và duy nhất, Định lý Ergodic, cân bằng chi tiết, chuỗi thuận nghịch, tốc độ hội tụ và mixing time."
+  status: planned
+  last_updated:
+
+- slug: ch5
+  url: /books/markov-chains/ch5.html
+  nav_title: "Ch 5: Liên tục"
+  heading: "Chương 5: Chuỗi Markov thời gian liên tục"
+  heading_en: "Continuous-Time Markov Chains"
+  description: "Quá trình Poisson, ma trận tốc độ, phương trình Kolmogorov tiến/lùi, quá trình sinh-tử, hàng đợi M/M/1, xác suất hấp thụ, phân phối dừng liên tục."
+  status: planned
+  last_updated:
+
+- slug: appendix
+  url: /books/markov-chains/appendix.html
+  nav_title: "Phụ lục A"
+  heading: "Phụ lục A: Nền tảng Xác suất"
+  heading_en: "Probability Background"
+  description: "Không gian xác suất, biến ngẫu nhiên, kỳ vọng, phương sai, xác suất có điều kiện, phân phối kết hợp, các phân phối cơ bản."
+  status: done
+  last_updated: 2026-06-08

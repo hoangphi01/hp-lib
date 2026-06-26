@@ -1,0 +1,337 @@
+---
+layout: book-chapter
+slug: appendix
+book_key: markov
+sidebar_include: sidebars/markov/appendix.html
+title: "Phụ lục A"
+sections:
+  - id: prob-spaces
+    title: "A.1 Không gian xác suất"
+  - id: conditional
+    title: "A.2 Xác suất có điều kiện"
+  - id: random-variables
+    title: "A.3 Biến ngẫu nhiên"
+  - id: distributions
+    title: "A.4 Phân phối xác suất"
+  - id: expectation
+    title: "A.5 Kỳ vọng toán học"
+  - id: inequalities
+    title: "A.6 Bất đẳng thức"
+  - id: pgf
+    title: "A.7 Hàm sinh xác suất"
+  - id: cond-expectation
+    title: "A.8 Kỳ vọng có điều kiện"
+  - id: joint
+    title: "A.9 Phân phối đồng thời"
+  - id: summary
+    title: "A.10 Tổng kết"
+---
+
+      <p>Phụ lục này tóm tắt các kiến thức xác suất cần thiết cho việc nghiên cứu chuỗi Markov.</p>
+
+      <!-- ================================================================ -->
+      <h2 id="prob-spaces">A.1 Không gian xác suất <em>(Probability Spaces)</em></h2>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Không gian xác suất / <em>Probability space</em>)' %}
+        <p><strong>Không gian xác suất</strong> là bộ ba \((\Omega, \mathcal{F}, \mathbb{P})\) trong đó:</p>
+        <ul>
+          <li>\(\Omega\): <strong>không gian mẫu</strong> <em>(sample space)</em> / tập hợp tất cả các kết quả có thể.</li>
+          <li>\(\mathcal{F}\): <strong>sigma-đại số</strong> <em>(\(\sigma\)-algebra)</em> / tập các <strong>biến cố</strong> <em>(events)</em>.</li>
+          <li>\(\mathbb{P}\): <strong>độ đo xác suất</strong> <em>(probability measure)</em> / ánh xạ \(\mathbb{P}: \mathcal{F} \to [0,1]\).</li>
+        </ul>
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Ví dụ:</strong></p>
+      <ul>
+        <li>Tung đồng xu: \(\Omega = \{H, T\}\).</li>
+        <li>Gieo xúc xắc: \(\Omega = \{1, 2, 3, 4, 5, 6\}\).</li>
+        <li>Kết quả nguyên: \(\Omega = \mathbb{N}\).</li>
+        <li>Kết quả thực không âm: \(\Omega = \mathbb{R}_+\).</li>
+      </ul>
+
+      <p><strong>Độ đo xác suất</strong> \(\mathbb{P}: \mathcal{F} \to [0,1]\) thỏa mãn:</p>
+      <ol>
+        <li>\(\mathbb{P}(\Omega) = 1\).</li>
+        <li>\(\mathbb{P}\!\left(\bigcup_{n=1}^{\infty} A_n\right) = \sum_{n=1}^{\infty} \mathbb{P}(A_n)\) khi \(A_k \cap A_l = \emptyset\) với \(k \neq l\) (<strong>tính cộng đếm được</strong> / <em>countable additivity</em>).</li>
+      </ol>
+
+      <p>Tính chất quan trọng:</p>
+      \[
+        \mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B) - \mathbb{P}(A \cap B).
+      \]
+
+      <!-- ================================================================ -->
+      <h2 id="conditional">A.2 Xác suất có điều kiện và tính độc lập <em>(Conditional Probability and Independence)</em></h2>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Xác suất có điều kiện / <em>Conditional probability</em>)' %}
+        <p>Với hai biến cố \(A, B \subset \Omega\) và \(\mathbb{P}(B) \neq 0\):</p>
+        \[
+          \mathbb{P}(A \mid B) := \frac{\mathbb{P}(A \cap B)}{\mathbb{P}(B)}.
+        \]
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Quy tắc xác suất toàn phần</strong> <em>(law of total probability)</em>: Nếu \(\{A_n\}_{n\geq 1}\) là phân hoạch của \(\Omega\) với \(\mathbb{P}(A_n) > 0\):</p>
+      \[
+        \mathbb{P}(B) = \sum_{n=1}^{\infty} \mathbb{P}(B \mid A_n)\,\mathbb{P}(A_n) = \sum_{n=1}^{\infty} \mathbb{P}(B \cap A_n).
+      \]
+
+      <p><strong>Công thức Bayes</strong> <em>(Bayes' theorem)</em>:</p>
+      \[
+        \mathbb{P}(A_k \mid B) = \frac{\mathbb{P}(B \mid A_k)\,\mathbb{P}(A_k)}{\sum_{n} \mathbb{P}(B \mid A_n)\,\mathbb{P}(A_n)}.
+      \]
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Tính độc lập / <em>Independence</em>)' %}
+        <p>Hai biến cố \(A\) và \(B\) được gọi là <strong>độc lập</strong> <em>(independent)</em> nếu:</p>
+        \[
+          \mathbb{P}(A \cap B) = \mathbb{P}(A)\,\mathbb{P}(B).
+        \]
+        <p>Tương đương: \(\mathbb{P}(A \mid B) = \mathbb{P}(A)\) (biết \(B\) không ảnh hưởng đến \(A\)).</p>
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Độc lập nhiều biến cố:</strong> \(A_1, \ldots, A_n\) <strong>độc lập tương hỗ</strong> <em>(mutually independent)</em> nếu với mọi tập con \(I \subseteq \{1, \ldots, n\}\):</p>
+      \[
+        \mathbb{P}\!\left(\bigcap_{i \in I} A_i\right) = \prod_{i \in I} \mathbb{P}(A_i).
+      \]
+
+      <!-- ================================================================ -->
+      <h2 id="random-variables">A.3 Biến ngẫu nhiên <em>(Random Variables)</em></h2>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Biến ngẫu nhiên / <em>Random variable</em>)' %}
+        <p><strong>Biến ngẫu nhiên</strong> là ánh xạ \(X: \Omega \to \mathbb{R}\) xác định trên không gian xác suất \((\Omega, \mathcal{F}, \mathbb{P})\).</p>
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Hàm chỉ báo</strong> <em>(indicator function)</em> của biến cố \(A\):</p>
+      \[
+        \mathbf{1}_A(\omega) = \begin{cases} 1 & \text{nếu } \omega \in A, \\ 0 & \text{nếu } \omega \notin A. \end{cases}
+      \]
+
+      <p>Hai biến ngẫu nhiên \(X\) và \(Y\) được gọi là <strong>độc lập</strong> nếu:</p>
+      \[
+        \mathbb{P}(X \in A,\; Y \in B) = \mathbb{P}(X \in A)\,\mathbb{P}(Y \in B)
+      \]
+      <p>với mọi tập đo được \(A, B \subset \mathbb{R}\).</p>
+
+      <!-- ================================================================ -->
+      <h2 id="distributions">A.4 Phân phối xác suất <em>(Probability Distributions)</em></h2>
+
+      <h3 id="discrete-dist">Phân phối rời rạc <em>(Discrete Distributions)</em></h3>
+
+      <p>Biến ngẫu nhiên <strong>rời rạc</strong> <em>(discrete)</em> nhận giá trị đếm được. Phân phối được xác định bởi \(\mathbb{P}(X = k)\) với mọi \(k\).</p>
+
+      <p><strong>Các phân phối rời rạc quan trọng:</strong></p>
+      <ul>
+        <li><strong>Bernoulli</strong>\((p)\): \(\mathbb{P}(X = 1) = p\), \(\mathbb{P}(X = 0) = 1-p\). \(\mathbb{E}[X] = p\), \(\text{Var}(X) = p(1-p)\).</li>
+        <li><strong>Nhị thức</strong> <em>(Binomial)</em> \(B(n,p)\): \(\mathbb{P}(X = k) = \binom{n}{k} p^k (1-p)^{n-k}\). \(\mathbb{E}[X] = np\), \(\text{Var}(X) = np(1-p)\).</li>
+        <li><strong>Hình học</strong> <em>(Geometric)</em> \(\text{Geo}(p)\): \(\mathbb{P}(X = k) = (1-p)^k p\), \(k \in \mathbb{N}\). \(\mathbb{E}[X] = (1-p)/p\), \(\text{Var}(X) = (1-p)/p^2\).</li>
+        <li><strong>Poisson</strong>\((\lambda)\): \(\mathbb{P}(X = k) = e^{-\lambda} \frac{\lambda^k}{k!}\), \(k \in \mathbb{N}\). \(\mathbb{E}[X] = \lambda\), \(\text{Var}(X) = \lambda\).</li>
+      </ul>
+
+      <h3 id="continuous-dist">Phân phối liên tục <em>(Continuous Distributions)</em></h3>
+
+      <p>Biến ngẫu nhiên <strong>liên tục</strong> <em>(continuous)</em> có <strong>hàm mật độ</strong> <em>(density function)</em> \(f: \mathbb{R} \to \mathbb{R}_+\) sao cho:</p>
+      \[
+        \mathbb{P}(a \leq X \leq b) = \int_a^b f(x)\,dx, \qquad \int_{-\infty}^{\infty} f(x)\,dx = 1.
+      \]
+
+      <p><strong>Các phân phối liên tục quan trọng:</strong></p>
+      <ul>
+        <li><strong>Đều</strong> <em>(Uniform)</em> \(U(a,b)\): \(f(x) = \frac{1}{b-a}\) với \(x \in [a,b]\). \(\mathbb{E}[X] = (a+b)/2\).</li>
+        <li><strong>Chuẩn</strong> <em>(Gaussian/Normal)</em> \(\mathcal{N}(\mu, \sigma^2)\): \(f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-(x-\mu)^2/(2\sigma^2)}\).</li>
+        <li><strong>Mũ</strong> <em>(Exponential)</em> \(\text{Exp}(\lambda)\): \(f(x) = \lambda e^{-\lambda x}\) với \(x \geq 0\), và \(\mathbb{P}(X > t) = e^{-\lambda t}\). \(\mathbb{E}[X] = 1/\lambda\), \(\text{Var}(X) = 1/\lambda^2\).</li>
+        <li><strong>Gamma</strong> \(\Gamma(n, \lambda)\): \(f(x) = \frac{\lambda^n}{(n-1)!} x^{n-1} e^{-\lambda x}\) với \(x \geq 0\), \(n \in \mathbb{N}^*\). \(\mathbb{E}[X] = n/\lambda\).</li>
+      </ul>
+
+      {% include components/box-start.html type="formula" %}
+        <p><strong>Tính chất quan trọng của phân phối mũ:</strong></p>
+        <p>Nếu \(X_1, \ldots, X_n\) độc lập với \(X_i \sim \text{Exp}(\lambda_i)\), thì:</p>
+        \begin{equation}\label{eq:min-exp}
+          \min(X_1, \ldots, X_n) \sim \text{Exp}(\lambda_1 + \cdots + \lambda_n),
+        \end{equation}
+        <p>và:</p>
+        \begin{equation}\label{eq:compete-exp}
+          \mathbb{P}(X_1 < X_2) = \frac{\lambda_1}{\lambda_1 + \lambda_2}.
+        \end{equation}
+        <p>Hai tính chất này rất quan trọng trong chuỗi Markov thời gian liên tục (Chương 5).</p>
+        <p><strong>Tính "không nhớ"</strong> <em>(memoryless property)</em>: nếu \(X \sim \text{Exp}(\lambda)\):</p>
+        \[
+          \mathbb{P}(X > s + t \mid X > s) = \mathbb{P}(X > t), \qquad s, t \geq 0.
+        \]
+        <p>Đã đợi \(s\) rồi, thời gian đợi thêm vẫn có cùng phân phối / không "nhớ" đã đợi bao lâu.</p>
+
+
+      {% include components/box-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="expectation">A.5 Kỳ vọng toán học <em>(Mathematical Expectation)</em></h2>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Kỳ vọng / <em>Expectation</em>)' %}
+        <p><strong>Kỳ vọng</strong> <em>(expected value)</em> của biến ngẫu nhiên \(X\):</p>
+        <ul>
+          <li>Trường hợp rời rạc: \(\mathbb{E}[X] = \sum_{k} k \cdot \mathbb{P}(X = k)\).</li>
+          <li>Trường hợp liên tục: \(\mathbb{E}[X] = \int_{-\infty}^{\infty} x\, f(x)\,dx\).</li>
+        </ul>
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Tính chất:</strong></p>
+      <ul>
+        <li><strong>Tuyến tính</strong> <em>(linearity)</em>: \(\mathbb{E}[aX + bY] = a\mathbb{E}[X] + b\mathbb{E}[Y]\) (luôn đúng, kể cả khi không độc lập).</li>
+        <li>Nếu \(X, Y\) độc lập: \(\mathbb{E}[XY] = \mathbb{E}[X]\,\mathbb{E}[Y]\).</li>
+        <li>\(\mathbb{E}[g(X)] = \sum_k g(k)\,\mathbb{P}(X = k)\) (rời rạc) hoặc \(\int g(x) f(x)\,dx\) (liên tục).</li>
+        <li><strong>Đơn điệu</strong> <em>(monotonicity)</em>: nếu \(X \leq Y\) h.c.c., thì \(\mathbb{E}[X] \leq \mathbb{E}[Y]\).</li>
+      </ul>
+
+      <p><strong>Phương sai</strong> <em>(variance)</em>:</p>
+      \[
+        \text{Var}(X) = \mathbb{E}[(X - \mathbb{E}[X])^2] = \mathbb{E}[X^2] - (\mathbb{E}[X])^2.
+      \]
+
+      <p>Nếu \(X, Y\) độc lập: \(\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y)\).</p>
+
+      <!-- ================================================================ -->
+      <h2 id="inequalities">A.6 Bất đẳng thức quan trọng <em>(Important Inequalities)</em></h2>
+
+      {% include components/box-start.html type="theorem" title='Định lý (Bất đẳng thức Markov / <em>Markov&#39;s inequality</em>)' %}
+        <p>Nếu \(X \geq 0\) và \(a > 0\):</p>
+        \[
+          \mathbb{P}(X \geq a) \leq \frac{\mathbb{E}[X]}{a}.
+        \]
+
+
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="theorem" title='Định lý (Bất đẳng thức Chebyshev / <em>Chebyshev&#39;s inequality</em>)' %}
+        <p>Với mọi \(k > 0\):</p>
+        \[
+          \mathbb{P}(|X - \mathbb{E}[X]| \geq k) \leq \frac{\text{Var}(X)}{k^2}.
+        \]
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Ứng dụng:</strong> Bất đẳng thức Chebyshev cho ước lượng "nhanh" về xác suất biến ngẫu nhiên lệch xa kỳ vọng, mà không cần biết phân phối chính xác.</p>
+
+      <!-- ================================================================ -->
+      <h2 id="pgf">A.7 Hàm sinh xác suất <em>(Probability Generating Functions)</em></h2>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Hàm sinh xác suất / <em>Probability generating function</em>)' %}
+        <p>Cho biến ngẫu nhiên \(X\) nhận giá trị trong \(\mathbb{N}\). <strong>Hàm sinh xác suất</strong> <em>(p.g.f.)</em> của \(X\) là:</p>
+        \[
+          G_X(s) = \mathbb{E}[s^X] = \sum_{k=0}^{\infty} \mathbb{P}(X = k)\, s^k, \qquad |s| \leq 1.
+        \]
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Tính chất:</strong></p>
+      <ul>
+        <li>\(G_X(1) = 1\) (vì tổng xác suất bằng 1).</li>
+        <li>\(G_X'(1) = \mathbb{E}[X]\).</li>
+        <li>\(G_X''(1) = \mathbb{E}[X(X-1)]\), nên \(\text{Var}(X) = G_X''(1) + G_X'(1) - [G_X'(1)]^2\).</li>
+        <li>Nếu \(X, Y\) độc lập: \(G_{X+Y}(s) = G_X(s) \cdot G_Y(s)\).</li>
+        <li>\(\mathbb{P}(X = k) = \frac{G_X^{(k)}(0)}{k!}\) (khôi phục phân phối từ hàm sinh).</li>
+      </ul>
+
+      <p><strong>Ứng dụng trong chuỗi Markov:</strong> Hàm sinh rất hữu ích để phân tích:</p>
+      <ul>
+        <li>Phân phối thời gian quay lại (Chương 2): \(F(s) = \sum_{n=1}^{\infty} f_{ii}^{(n)} s^n\).</li>
+        <li>Quan hệ \(P(s) = F(s) \cdot P(s) + 1\) giữa hàm sinh của \(P_{ii}^{(n)}\) và \(f_{ii}^{(n)}\).</li>
+        <li>Số lần thăm trạng thái: phân phối hình học có \(G(s) = \frac{p\, s}{1 - (1-p)s}\).</li>
+      </ul>
+
+      {% include components/example-start.html title='Ví dụ: Hàm sinh của phân phối hình học' %}
+        <p>Nếu \(X \sim \text{Geo}(p)\) (tức \(\mathbb{P}(X = k) = (1-p)^k p\), \(k \geq 0\)):</p>
+        \[
+          G_X(s) = \sum_{k=0}^{\infty} (1-p)^k p\, s^k = \frac{p}{1 - (1-p)s}.
+        \]
+        <p>Kiểm tra: \(G_X'(1) = \frac{p(1-p)}{[1-(1-p)]^2} = \frac{1-p}{p} = \mathbb{E}[X]\). Đúng!</p>
+
+
+      {% include components/example-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="cond-expectation">A.8 Kỳ vọng có điều kiện <em>(Conditional Expectation)</em></h2>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Kỳ vọng có điều kiện / <em>Conditional expectation</em>)' %}
+        \[
+          \mathbb{E}[X \mid B] = \sum_k k\,\mathbb{P}(X = k \mid B), \qquad \text{khi } \mathbb{P}(B) > 0.
+        \]
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Quy tắc kỳ vọng lặp</strong> <em>(law of iterated expectations / tower property)</em>:</p>
+      \[
+        \mathbb{E}[X] = \sum_{n} \mathbb{E}[X \mid A_n]\,\mathbb{P}(A_n),
+      \]
+      <p>khi \(\{A_n\}\) là phân hoạch của \(\Omega\).</p>
+
+      <p>Tổng quát hơn, với hai biến ngẫu nhiên:</p>
+      \[
+        \mathbb{E}[X] = \mathbb{E}[\mathbb{E}[X \mid Y]] = \sum_y \mathbb{E}[X \mid Y = y]\,\mathbb{P}(Y = y).
+      \]
+
+      <p><strong>Ứng dụng quan trọng / Phân tích bước đầu tiên:</strong></p>
+      <p>Đặt \(h(i) = \mathbb{E}[T \mid X_0 = i]\) (thời gian chạm). Điều kiện hóa theo \(X_1\):</p>
+      \[
+        h(i) = \mathbb{E}[T \mid X_0 = i] = 1 + \sum_j P_{i,j}\, h(j).
+      \]
+      <p>Đây chính là kỹ thuật cốt lõi của Chương 2.</p>
+
+      <!-- ================================================================ -->
+      <h2 id="joint">A.9 Phân phối đồng thời và mật độ có điều kiện</h2>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Phân phối đồng thời / <em>Joint distribution</em>)' %}
+        <p><strong>Phân phối đồng thời</strong> của \((X, Y)\) rời rạc:</p>
+        \[
+          p_{X,Y}(x, y) = \mathbb{P}(X = x,\; Y = y).
+        \]
+        <p><strong>Phân phối biên</strong> <em>(marginal)</em>:</p>
+        \[
+          \mathbb{P}(X = x) = \sum_y p_{X,Y}(x, y), \qquad
+          \mathbb{P}(Y = y) = \sum_x p_{X,Y}(x, y).
+        \]
+
+
+      {% include components/box-end.html %}
+
+      <p>Trong trường hợp liên tục, <strong>mật độ đồng thời</strong> <em>(joint density)</em> \(f_{X,Y}(x,y)\) thỏa mãn:</p>
+      \[
+        \mathbb{P}(X \in A,\; Y \in B) = \int_A \int_B f_{X,Y}(x,y)\,dy\,dx.
+      \]
+
+      <p><strong>Mật độ có điều kiện</strong> <em>(conditional density)</em>:</p>
+      \[
+        f_{X|Y}(x \mid y) = \frac{f_{X,Y}(x,y)}{f_Y(y)}, \qquad f_Y(y) > 0.
+      \]
+
+      <p><strong>Kỳ vọng có điều kiện</strong> (trường hợp liên tục):</p>
+      \[
+        \mathbb{E}[X \mid Y = y] = \int_{-\infty}^{\infty} x\, f_{X|Y}(x \mid y)\,dx.
+      \]
+
+      <!-- ================================================================ -->
+      <h2 id="summary">A.10 Tổng kết <em>(Summary)</em></h2>
+
+      {% include components/box-start.html type="summary" title='Tóm tắt' %}
+        <p>Các công cụ xác suất chính dùng trong tài liệu:</p>
+        <ul>
+          <li><strong>Xác suất có điều kiện</strong> và <strong>quy tắc xác suất toàn phần</strong>: nền tảng cho phân tích bước đầu tiên (Chương 2).</li>
+          <li><strong>Tính độc lập</strong>: cần cho bước đi ngẫu nhiên và quá trình Poisson.</li>
+          <li><strong>Phân phối mũ</strong> và tính chất min/cạnh tranh: then chốt cho chuỗi Markov liên tục (Chương 5).</li>
+          <li><strong>Kỳ vọng có điều kiện</strong>: dùng để tính thời gian chạm và xác suất hấp thụ.</li>
+          <li><strong>Hàm sinh xác suất</strong>: công cụ đại số để phân tích phân phối thời gian quay lại.</li>
+          <li><strong>Bất đẳng thức Markov/Chebyshev</strong>: ước lượng xác suất không cần biết phân phối chính xác.</li>
+        </ul>
+
+
+      {% include components/box-end.html %}

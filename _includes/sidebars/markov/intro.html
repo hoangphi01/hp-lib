@@ -1,0 +1,33 @@
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">functions</span> Ký hiệu cơ bản</h4>
+  <h5>Quá trình ngẫu nhiên</h5>
+  <p>\(\{X_t : t \in T\}\)</p>
+  <p class="sidebar-tip">\(T\) = tập thời gian, \(S\) = không gian trạng thái. Mỗi thời điểm \(t\), hệ ở một trạng thái trong \(S\).</p>
+
+  <h5>Bước đi ngẫu nhiên</h5>
+  <p>\(S_n = X_1 + X_2 + \cdots + X_n\)</p>
+  <p class="sidebar-tip">Tổng cộng dồn các bước nhảy i.i.d., xuất phát \(S_0 = 0\).</p>
+</div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">casino</span> Bước đi Bernoulli</h4>
+  <p>Mỗi bước: \(+1\) (xác suất \(p\)) hoặc \(-1\) (xác suất \(q = 1-p\)).</p>
+  <h5>Trung bình</h5>
+  <p>\(\E[S_n] = n(p - q)\)</p>
+  <p class="sidebar-tip">Nếu \(p > q\): xu hướng đi lên. Nếu \(p = q\): trung bình = 0.</p>
+
+  <h5>Phương sai</h5>
+  <p>\(\operatorname{Var}[S_n] = 4npq\)</p>
+  <p class="sidebar-tip">Đo mức dao động quanh giá trị trung bình.</p>
+
+  <h5>Phân phối tại gốc</h5>
+  <p>\(\PP(S_{2n} = 0) \approx \dfrac{1}{\sqrt{\pi n}}\)</p>
+  <p class="sidebar-tip">Xấp xỉ Stirling khi \(p = q = 1/2\), \(n\) lớn. Xác suất quay lại gốc giảm dần nhưng không triệt tiêu.</p>
+</div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">replay</span> Quay lại gốc</h4>
+  <p>\(\PP(\tau_0 < \infty) = 2\min(p, q)\)</p>
+  <p class="sidebar-tip">Khi \(p = q = 1/2\): chắc chắn quay lại gốc, nhưng phải đợi rất lâu (\(\E[\tau_0] = +\infty\)).</p>
+  <p class="sidebar-tip">Khi \(p \neq q\): có xác suất dương không bao giờ quay lại.</p>
+</div>

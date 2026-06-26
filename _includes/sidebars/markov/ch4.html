@@ -1,0 +1,33 @@
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">balance</span> Phân phối dừng \(\pi\)</h4>
+  <p>\(\pi = \pi P\), kết hợp \(\sum_i \pi_i = 1\)</p>
+  <p class="sidebar-tip">\(\pi\) là trạng thái cân bằng: sau vô hạn bước, tỷ lệ thời gian ở mỗi trạng thái ổn định.</p>
+
+  <h5>Cách giải</h5>
+  <p>Giải \(\pi(P - I) = 0\) rồi chuẩn hóa \(\sum \pi_i = 1\).</p>
+  <p class="sidebar-tip">Thực tế: bỏ 1 phương trình (dư thừa), thay bằng điều kiện chuẩn hóa.</p>
+
+  <h5>Nghịch đảo thời gian hồi quy</h5>
+  <p>\(\pi_j = \dfrac{1}{\mu_j(j)}\)</p>
+  <p class="sidebar-tip">Trạng thái quay lại nhanh &rarr; chiếm tỷ lệ cao trong phân phối dừng.</p>
+</div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">sync_alt</span> Cân bằng chi tiết</h4>
+  <p>\(\pi_i P_{i,j} = \pi_j P_{j,i}\)</p>
+  <p class="sidebar-tip">Dòng xác suất từ \(i \to j\) bằng dòng ngược \(j \to i\). Như hai đường phố có lưu lượng xe bằng nhau.</p>
+
+  <h5>Khi nào dùng?</h5>
+  <p class="sidebar-tip">Kiểm tra cân bằng chi tiết dễ hơn giải hệ \(\pi P = \pi\). Nếu thỏa &rArr; \(\pi\) là phân phối dừng.</p>
+  <p class="sidebar-tip"><strong>Lưu ý:</strong> Cân bằng chi tiết &rArr; phân phối dừng, nhưng chiều ngược <em>không</em> đúng.</p>
+</div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">speed</span> Tốc độ hội tụ</h4>
+  <p>\(|P^n_{i,j} - \pi_j| \leq C\,|\lambda_2|^n\)</p>
+  <p class="sidebar-tip">\(\lambda_2\) = trị riêng lớn thứ hai. Càng gần 0 &rarr; hội tụ càng nhanh.</p>
+
+  <h5>Khoảng cách phổ \(\gamma\)</h5>
+  <p>\(\gamma = 1 - |\lambda_2|\)</p>
+  <p class="sidebar-tip">\(\gamma\) lớn &rarr; hội tụ nhanh. Số bước cần xấp xỉ \(\approx 1/\gamma\).</p>
+</div>

@@ -1,0 +1,538 @@
+---
+layout: book-chapter
+slug: intro
+book_key: markov
+sidebar_include: sidebars/markov/intro.html
+title: "Giới thiệu"
+sections:
+  - id: qua-trinh-ngau-nhien
+    title: "1. Quá trình ngẫu nhiên là gì?"
+  - id: hai-ho-lon
+    title: "2. Hai họ lớn: Markov và Martingale"
+  - id: buoc-di-ngau-nhien
+    title: "3. Bước đi ngẫu nhiên"
+  - id: trung-binh-phuong-sai
+    title: "3.1. Trung bình và phương sai"
+  - id: phan-phoi
+    title: "3.2. Phân phối"
+  - id: quay-lai-goc
+    title: "3.3. Quay lại gốc lần đầu"
+  - id: tu-rw-den-mc
+    title: "4. Từ bước đi ngẫu nhiên đến chuỗi Markov"
+  - id: bai-tap
+    title: "5. Bài tập"
+---
+
+      <!-- ================================================================ -->
+      <h2 id="qua-trinh-ngau-nhien">1. Quá trình ngẫu nhiên là gì? <small>(What is a Stochastic Process?)</small></h2>
+
+      <p><strong>Câu chuyện:</strong> Hãy tưởng tượng bạn đang đứng trên cầu nhìn xuống một chiếc lá trôi trên dòng sông.
+      Vị trí chiếc lá thay đổi theo thời gian, nhưng bạn không thể dự đoán chính xác nó sẽ ở đâu ---
+      dòng nước, gió, và xoáy nước đều tạo ra sự ngẫu nhiên.
+      Nếu ta ghi lại vị trí chiếc lá tại mỗi thời điểm, ta có một <strong>quá trình ngẫu nhiên</strong> <em>(stochastic process)</em>.</p>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Quá trình ngẫu nhiên / <em>Stochastic process</em>)' %}
+        <p>Một <strong>quá trình ngẫu nhiên</strong> <em>(stochastic process)</em> là một họ các biến ngẫu nhiên
+        \[
+          \{X_t : t \in T\}
+        \]
+        được định nghĩa trên cùng một không gian xác suất \((\Omega, \mathcal{F}, \PP)\),
+        trong đó \(T\) là <strong>tập chỉ số thời gian</strong> <em>(index set)</em> và mỗi \(X_t\) nhận giá trị trong
+        một <strong>không gian trạng thái</strong> <em>(state space)</em> \(S\).</p>
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="summary" title='Tóm tắt' %}
+        <p>Nói đơn giản: một quá trình ngẫu nhiên là một "đại lượng thay đổi theo thời gian một cách ngẫu nhiên".
+        Tại mỗi thời điểm \(t\), ta có một biến ngẫu nhiên \(X_t\) --- và tập hợp tất cả chúng tạo thành quá trình.</p>
+      {% include components/box-end.html %}
+
+      <p><strong>Hai loại thời gian:</strong></p>
+      <ul>
+        <li><strong>Thời gian rời rạc</strong> <em>(discrete-time)</em>: \(T = \{0, 1, 2, \ldots\} = \N\).
+          Ví dụ: giá cổ phiếu đóng cửa mỗi ngày, số khách hàng mỗi giờ.</li>
+        <li><strong>Thời gian liên tục</strong> <em>(continuous-time)</em>: \(T = [0, +\infty)\).
+          Ví dụ: nhiệt độ tại một địa điểm, mực nước sông theo thời gian thực.</li>
+      </ul>
+
+      <p><strong>Ba loại không gian trạng thái:</strong></p>
+      <ul>
+        <li><strong>Hữu hạn</strong> <em>(finite)</em>: \(S = \{1, 2, \ldots, N\}\).
+          Ví dụ: thời tiết \(\in \{\text{nắng, mưa, mây}\}\).</li>
+        <li><strong>Đếm được</strong> <em>(countable)</em>: \(S = \Z\) hoặc \(S = \N\).
+          Ví dụ: số khách trong hàng đợi, vị trí bước đi ngẫu nhiên.</li>
+        <li><strong>Không đếm được</strong> <em>(uncountable)</em>: \(S = \R\) hoặc \(S = \R^d\).
+          Ví dụ: giá cổ phiếu, nhiệt độ.</li>
+      </ul>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Đường mẫu / <em>Sample path</em>)' %}
+        <p>Cho một kết quả cố định \(\omega \in \Omega\), ánh xạ
+        \[
+          t \mapsto X_t(\omega)
+        \]
+        được gọi là một <strong>đường mẫu</strong> <em>(sample path)</em> hay <strong>quỹ đạo</strong> <em>(trajectory)</em> của quá trình.
+        Mỗi đường mẫu là một "kịch bản" cụ thể --- một lần "chạy" của quá trình.</p>
+      {% include components/box-end.html %}
+
+      {% include components/example-start.html title='Ví dụ: Các ví dụ thực tế' %}
+        <ol>
+          <li><strong>Giá cổ phiếu:</strong> \(X_n\) = giá đóng cửa ngày thứ \(n\). Thời gian rời rạc, không gian trạng thái liên tục.</li>
+          <li><strong>Thời tiết:</strong> \(X_n \in \{\text{nắng, mưa}\}\). Thời gian rời rạc, không gian trạng thái hữu hạn.</li>
+          <li><strong>Hàng đợi:</strong> \(X_t\) = số khách hàng trong hệ thống tại thời điểm \(t\). Thời gian liên tục, không gian trạng thái đếm được.</li>
+          <li><strong>DNA:</strong> Dãy nucleotide \(X_1, X_2, \ldots \in \{A, T, G, C\}\). Chỉ số là vị trí, không gian trạng thái hữu hạn.</li>
+        </ol>
+      {% include components/example-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="hai-ho-lon">2. Hai họ lớn: Markov và Martingale <small>(Two Big Families)</small></h2>
+
+      <p>Trong thế giới các quá trình ngẫu nhiên, hai họ quan trọng nhất là:</p>
+
+      <p><strong>1. Quá trình Markov</strong> <em>(Markov process)</em>: Tương lai chỉ phụ thuộc hiện tại, không phụ thuộc quá khứ.
+      \[
+        \PP(X_{n+1} = j \mid X_n = i, X_{n-1}, \ldots, X_0) = \PP(X_{n+1} = j \mid X_n = i).
+      \]
+      Đây là tính chất "không nhớ" <em>(memoryless)</em>. Khi không gian trạng thái là rời rạc,
+      ta gọi đây là <strong>chuỗi Markov</strong> <em>(Markov chain)</em> --- chủ đề chính của tài liệu này.
+      Ta sẽ nghiên cứu chi tiết từ Chương 1.</p>
+
+      <p><strong>2. Martingale:</strong> Quá trình "trò chơi công bằng" --- kỳ vọng của giá trị tương lai,
+      khi biết quá khứ, đúng bằng giá trị hiện tại:
+      \[
+        \E[X_{n+1} \mid X_n, X_{n-1}, \ldots, X_0] = X_n.
+      \]
+      Ý nghĩa: không có lợi thế hay bất lợi trong dài hạn. Ví dụ: tổng tiền thắng/thua trong một trò chơi công bằng.</p>
+
+      {% include components/box-start.html type="summary" title='Tóm tắt: Hai họ lớn' %}
+        <table>
+          <thead>
+            <tr><th>Họ</th><th>Ý tưởng chính</th><th>Ứng dụng</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Markov</td><td>"Không nhớ"</td><td>Chuỗi DNA, PageRank, hàng đợi</td></tr>
+            <tr><td>Martingale</td><td>"Trò chơi công bằng"</td><td>Tài chính, lý thuyết cờ bạc</td></tr>
+          </tbody>
+        </table>
+        <p>Tài liệu này tập trung vào <strong>chuỗi Markov</strong>. Martingale chỉ xuất hiện ngắn gọn khi cần.</p>
+      {% include components/box-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="buoc-di-ngau-nhien">3. Bước đi ngẫu nhiên <small>(Random Walks)</small></h2>
+
+      <p>Bước đi ngẫu nhiên là ví dụ đơn giản nhất --- và quan trọng nhất --- của cả quá trình Markov lẫn martingale.
+      Nó là "Hello World" của quá trình ngẫu nhiên.</p>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Bước đi ngẫu nhiên / <em>Random walk</em>)' %}
+        <p>Cho \((X_k)_{k \geq 1}\) là dãy các biến ngẫu nhiên <strong>độc lập và cùng phân phối</strong> <em>(i.i.d.)</em>.
+        <strong>Bước đi ngẫu nhiên</strong> <em>(random walk)</em> được định nghĩa bởi \(S_0 = 0\) và
+        \[
+          S_n = X_1 + X_2 + \cdots + X_n, \qquad n \geq 1.
+        \]</p>
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Bước đi Bernoulli / <em>Bernoulli random walk</em>)' %}
+        <p>Khi mỗi bước \(X_k\) chỉ nhận hai giá trị \(\{+1, -1\}\) với
+        \[
+          \PP(X_k = +1) = p, \qquad \PP(X_k = -1) = q = 1 - p,
+        \]
+        ta gọi \((S_n)_{n \geq 0}\) là <strong>bước đi Bernoulli</strong> <em>(Bernoulli random walk)</em>.</p>
+        <p>Khi \(p = q = 1/2\), ta gọi đây là bước đi <strong>đối xứng</strong> <em>(symmetric random walk)</em>.</p>
+      {% include components/box-end.html %}
+
+      {% include components/example-start.html title='Ví dụ: Người say rượu (<em>Drunkard&rsquo;s walk</em>)' %}
+        <p>Một người say rượu đứng tại gốc tọa độ trên một con đường thẳng.
+        Mỗi bước, anh ta bước sang phải (\(+1\)) hoặc sang trái (\(-1\)) với xác suất bằng nhau \(p = q = 1/2\).
+        Sau \(n\) bước, vị trí của anh ta là \(S_n\).</p>
+        <p>Câu hỏi tự nhiên: anh ta có quay lại gốc không? Đi xa bao nhiêu? Ta sẽ trả lời trong các mục tiếp theo.</p>
+      {% include components/example-end.html %}
+
+      <!-- ================================================================ -->
+      <h3 id="trung-binh-phuong-sai">3.1. Trung bình và phương sai <small>(Mean and Variance)</small></h3>
+
+      <p>Ta tính kỳ vọng và phương sai của \(S_n\) cho bước đi Bernoulli.</p>
+
+      <p>Kỳ vọng của mỗi bước:
+      \[
+        \E[X_k] = (+1) \cdot p + (-1) \cdot q = p - q.
+      \]</p>
+
+      <p>Do đó, bằng tính tuyến tính của kỳ vọng:
+      \[
+        \E[S_n] = n\,\E[X_1] = n(p - q).
+      \]</p>
+
+      <p>Phương sai của mỗi bước:
+      \[
+        \operatorname{Var}[X_k] = \E[X_k^2] - (\E[X_k])^2
+        = 1 - (2p-1)^2 = 4pq = 4p(1-p).
+      \]</p>
+
+      <p>Do các \(X_k\) độc lập:
+      \[
+        \operatorname{Var}[S_n] = n\,\operatorname{Var}[X_1] = 4npq.
+      \]</p>
+
+      {% include components/box-start.html type="formula" title='Trung bình và phương sai của bước đi Bernoulli' %}
+        <p>\[
+          \E[S_n] = n(p - q), \qquad \operatorname{Var}[S_n] = 4npq.
+        \]</p>
+        <ul>
+          <li>Khi \(p > q\): bước đi "lệch phải" <em>(positive drift)</em>, \(\E[S_n] > 0\).</li>
+          <li>Khi \(p < q\): bước đi "lệch trái" <em>(negative drift)</em>, \(\E[S_n] < 0\).</li>
+          <li>Khi \(p = q = 1/2\): bước đi đối xứng, \(\E[S_n] = 0\), \(\operatorname{Var}[S_n] = n\).
+            Trung bình bằng \(0\) nhưng phương sai tăng tuyến tính --- bước đi "lang thang" ngày càng xa gốc.</li>
+        </ul>
+      {% include components/box-end.html %}
+
+      {% include components/review-start.html title="Ôn tập: Trung bình, Trung vị, Kỳ vọng và Phương sai" %}
+        <h4>Tại sao cần?</h4>
+        <p>Phần trên dùng \(\E[X]\) và \(\operatorname{Var}[X]\) để tính trung bình và độ phân tán của bước đi ngẫu nhiên.
+        Trước khi hiểu kỳ vọng (khái niệm trừu tượng), ta cần nắm vững trung bình cộng (khái niệm cụ thể) — rồi mới thấy kỳ vọng chỉ là "trung bình cộng dùng xác suất thay cho tần suất".</p>
+
+        <h4>Trung bình cộng <em>(Arithmetic Mean)</em></h4>
+        <p><strong>Định nghĩa đời thường:</strong> Cộng tất cả các giá trị, chia cho số phần tử:
+        \[
+          \bar{x} = \frac{x_1 + x_2 + \cdots + x_n}{n}.
+        \]</p>
+        <p><strong>Ví dụ:</strong> Điểm 5 bài kiểm tra: 7, 8, 6, 9, 5.</p>
+        <ul>
+          <li>Bước 1: Tổng = \(7 + 8 + 6 + 9 + 5 = 35\).</li>
+          <li>Bước 2: \(\bar{x} = 35 / 5 = 7.0\).</li>
+        </ul>
+        <p>Nhấn mạnh: mỗi giá trị "nặng" như nhau — đóng góp \(1/n\) vào trung bình.</p>
+
+        <h4>Trung vị <em>(Median)</em></h4>
+        <p><strong>Định nghĩa:</strong> Giá trị ở <strong>giữa</strong> khi sắp xếp dữ liệu từ nhỏ đến lớn.</p>
+        <p><strong>Ví dụ (lẻ phần tử):</strong> Sắp xếp [5, 6, 7, 8, 9] → trung vị = 7 (phần tử thứ 3).</p>
+        <p><strong>Ví dụ (chẵn phần tử):</strong> [5, 6, 8, 9] → trung vị = \((6 + 8)/2 = 7\).</p>
+        <p><strong>So sánh với trung bình:</strong> Dữ liệu [1, 2, 3, 4, 100]:
+        trung bình = 22, trung vị = 3.
+        Trung vị không bị kéo lệch bởi giá trị ngoại lai <em>(outlier)</em>.</p>
+
+        <h4>Mốt <em>(Mode)</em></h4>
+        <p><strong>Định nghĩa:</strong> Giá trị xuất hiện <strong>nhiều nhất</strong>.</p>
+        <p><strong>Ví dụ:</strong> [7, 8, 8, 6, 9] → Mốt = 8 (xuất hiện 2 lần).</p>
+        <p><strong>Lưu ý:</strong> Có thể có nhiều mốt (ví dụ [1, 1, 2, 2] có 2 mốt) hoặc không có mốt (mọi giá trị đều xuất hiện 1 lần).</p>
+
+        <h4>Từ "Trung bình" đến "Kỳ vọng" / bước nhảy quan trọng</h4>
+        <p><strong>Trung bình cộng:</strong> dùng cho <strong>dữ liệu đã có</strong> — đếm rồi chia.</p>
+        <p><strong>Kỳ vọng:</strong> dùng cho <strong>biến ngẫu nhiên</strong> — chưa thí nghiệm, nhưng đã biết xác suất.</p>
+        <p><strong>Kết nối:</strong> Gieo xúc xắc 6000 lần → mỗi mặt xuất hiện khoảng 1000 lần.
+        \[
+          \bar{x} \approx 1 \times \frac{1000}{6000} + 2 \times \frac{1000}{6000} + \cdots + 6 \times \frac{1000}{6000}
+          = \sum_{x=1}^{6} x \cdot \frac{1}{6} = \sum_{x} x \cdot \PP(X = x).
+        \]</p>
+        <p>Kỳ vọng = trung bình cộng, nhưng dùng <strong>xác suất</strong> thay cho <strong>tần suất</strong>.</p>
+
+        <h4>Kỳ vọng <em>(Expectation)</em></h4>
+        <p><strong>Công thức:</strong>
+        \[
+          \E[X] = \sum_{x} x \cdot \PP(X = x).
+        \]</p>
+        <p><strong>Ví dụ:</strong> Gieo xúc xắc 6 mặt, \(X\) = số chấm.
+        \[
+          \E[X] = 1 \cdot \frac{1}{6} + 2 \cdot \frac{1}{6} + \cdots + 6 \cdot \frac{1}{6} = \frac{21}{6} = 3.5.
+        \]</p>
+        <p><strong>Tính chất tuyến tính:</strong> \(\E[aX + bY] = a\E[X] + b\E[Y]\) (luôn đúng, không cần độc lập).</p>
+
+        <h4>Phương sai / Đo "độ lan tỏa" <em>(Variance)</em></h4>
+        <p><strong>Trực giác:</strong> Hai lớp cùng trung bình 7 điểm, nhưng lớp A: [6, 7, 7, 8], lớp B: [2, 5, 9, 12].
+        Lớp nào "đều" hơn? → Phương sai đo điều này.</p>
+        <p><strong>Tại sao bình phương?</strong> Vì khoảng cách \((x_i - \mu)\) có thể dương hoặc âm → triệt tiêu nhau.
+        Bình phương → luôn dương → đo đúng khoảng cách.</p>
+        <p><strong>Xây dựng từng bước:</strong></p>
+        <ul>
+          <li>Bước 1: Khoảng cách từ trung bình: \((x_i - \mu)\).</li>
+          <li>Bước 2: Bình phương: \((x_i - \mu)^2\).</li>
+          <li>Bước 3: Trung bình các bình phương: \(\operatorname{Var}[X] = \E[(X - \mu)^2]\).</li>
+        </ul>
+        <p><strong>Công thức tắt:</strong>
+        \[
+          \operatorname{Var}[X] = \E[X^2] - (\E[X])^2.
+        \]</p>
+        <p><strong>Ví dụ:</strong> Cho \(X \sim \text{Bernoulli}(p)\), tức \(\PP(X=1) = p\), \(\PP(X=0) = 1-p\).</p>
+        <ul>
+          <li>Bước 1: \(\E[X] = 0 \cdot (1-p) + 1 \cdot p = p\).</li>
+          <li>Bước 2: \(\E[X^2] = 0^2 \cdot (1-p) + 1^2 \cdot p = p\).</li>
+          <li>Bước 3: \(\operatorname{Var}[X] = p - p^2 = p(1-p)\).</li>
+        </ul>
+        <p>Với \(p = 0.5\): \(\operatorname{Var}[X] = 0.25\). Với \(p = 0.9\): \(\operatorname{Var}[X] = 0.09\) (ít phân tán hơn vì kết quả gần như chắc chắn).</p>
+        <p><strong>Tính chất:</strong></p>
+        <ul>
+          <li>\(\operatorname{Var}[aX + b] = a^2 \operatorname{Var}[X]\) (hằng số cộng không ảnh hưởng, hệ số nhân bình phương).</li>
+          <li>Nếu \(X, Y\) <strong>độc lập</strong>: \(\operatorname{Var}[X + Y] = \operatorname{Var}[X] + \operatorname{Var}[Y]\).</li>
+        </ul>
+
+        <div class="try-it">
+          <p><strong>Thử ngay:</strong></p>
+          <ol>
+            <li>Cho dữ liệu [3, 5, 5, 7, 10]. Tính trung bình cộng, trung vị, và mốt.</li>
+            <li>Cho \(X\) với \(\PP(X = +1) = 0.6\), \(\PP(X = -1) = 0.4\). Tính \(\E[X]\) và \(\operatorname{Var}[X]\).</li>
+          </ol>
+          <p><em>Đáp án:</em></p>
+          <ol>
+            <li>\(\bar{x} = 30/5 = 6\). Trung vị = 5 (phần tử thứ 3). Mốt = 5 (xuất hiện 2 lần).</li>
+            <li>\(\E[X] = 0.6 - 0.4 = 0.2\). \(\E[X^2] = 0.6 \cdot 1 + 0.4 \cdot 1 = 1\). \(\operatorname{Var}[X] = 1 - 0.04 = 0.96\).</li>
+          </ol>
+        </div>
+      {% include components/review-end.html %}
+
+      <!-- ================================================================ -->
+      <h3 id="phan-phoi">3.2. Phân phối <small>(Distribution)</small></h3>
+
+      <p>Ta muốn tính \(\PP(S_n = k)\) cho bước đi Bernoulli.</p>
+
+      <p>Nhận xét quan trọng: \(S_n\) chỉ có thể nhận các giá trị cùng tính chẵn lẻ với \(n\).
+      Cụ thể, \(S_{2n}\) chỉ có thể nhận giá trị chẵn, và \(S_{2n+1}\) chỉ nhận giá trị lẻ.</p>
+
+      <p>Nếu \(S_{2n} = 2k\), tức là trong \(2n\) bước có \(n+k\) bước đi lên và \(n-k\) bước đi xuống.
+      Xác suất của một đường đi cụ thể là \(p^{n+k}q^{n-k}\),
+      và số cách chọn là \(\binom{2n}{n+k}\).</p>
+
+      {% include components/box-start.html type="theorem" title='Định lý (Phân phối của \(S_{2n}\))' %}
+        <p>\[
+          \PP(S_{2n} = 2k) = \binom{2n}{n+k} p^{n+k}\,q^{n-k}, \qquad -n \leq k \leq n.
+        \]</p>
+      {% include components/box-end.html %}
+
+      {% include components/review-start.html title="Ôn tập: Tổ hợp và hệ số nhị thức (Combinations & Binomial Coefficients)" %}
+        <h4>Tại sao cần?</h4>
+        <p>Công thức trên dùng \(\binom{2n}{n+k}\) — ký hiệu tổ hợp. Đây là cách đếm số đường đi có thể.</p>
+
+        <h4>Công thức tổ hợp</h4>
+        <p><strong>Quy tắc:</strong> "Chọn \(k\) phần tử từ \(n\) phần tử" (không phân biệt thứ tự):
+        \[
+          \binom{n}{k} = C(n,k) = \frac{n!}{k!\,(n-k)!}.
+        \]</p>
+
+        <p><strong>Ví dụ:</strong> Tính \(\binom{6}{3}\) (chọn 3 từ 6):</p>
+        <ul>
+          <li>Bước 1: \(6! = 720\).</li>
+          <li>Bước 2: \(3! = 6\), \((6-3)! = 3! = 6\).</li>
+          <li>Bước 3: \(\binom{6}{3} = \frac{720}{6 \times 6} = \frac{720}{36} = 20\).</li>
+        </ul>
+
+        <h4>Tam giác Pascal <em>(Pascal's triangle)</em></h4>
+        <p>Mỗi hệ số bằng tổng hai hệ số phía trên: \(\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}\).</p>
+        <pre>
+         1
+        1 1
+       1 2 1
+      1 3 3 1
+     1 4 6 4 1
+    1 5 10 10 5 1
+        </pre>
+
+        <h4>Ý nghĩa trong bước đi ngẫu nhiên</h4>
+        <p>Trong \(2n\) bước, nếu có \(n+k\) bước lên và \(n-k\) bước xuống, số cách sắp xếp các bước đó chính là \(\binom{2n}{n+k}\).</p>
+
+        <div class="try-it">
+          <p><strong>Thử ngay:</strong> Tính \(\binom{4}{2}\) và \(\binom{5}{3}\).</p>
+          <p><em>Đáp án:</em> \(\binom{4}{2} = \frac{24}{2 \times 2} = 6\). \(\binom{5}{3} = \frac{120}{6 \times 2} = 10\).</p>
+        </div>
+      {% include components/review-end.html %}
+
+      <p>Đặc biệt, xác suất quay lại gốc tại thời điểm \(2n\) là:
+      \[
+        \PP(S_{2n} = 0) = \binom{2n}{n} p^n\,q^n = \binom{2n}{n}(pq)^n.
+      \]</p>
+
+      {% include components/example-start.html title='Ví dụ: Bước đi đối xứng \(p = q = 1/2\)' %}
+        <p>Khi \(p = q = 1/2\):
+        \[
+          \PP(S_{2n} = 0) = \binom{2n}{n}\frac{1}{4^n}.
+        \]
+        Sử dụng <strong>xấp xỉ Stirling</strong> <em>(Stirling's approximation)</em> \(n! \approx \sqrt{2\pi n}\,(n/e)^n\):
+        \[
+          \PP(S_{2n} = 0) \approx \frac{1}{\sqrt{\pi n}}, \qquad n \to \infty.
+        \]
+        Xác suất này tiến về \(0\) khi \(n \to \infty\), nhưng rất chậm (tỉ lệ \(1/\sqrt{n}\)).</p>
+      {% include components/example-end.html %}
+
+      {% include components/review-start.html title="Ôn tập: Xấp xỉ Stirling (Stirling's Approximation)" %}
+        <h4>Tại sao cần?</h4>
+        <p>Công thức \(\binom{2n}{n}\) chứa giai thừa rất lớn. Xấp xỉ Stirling cho phép ước lượng mà không cần tính chính xác \(n!\).</p>
+
+        <h4>Công thức</h4>
+        <p>\[
+          n! \approx \sqrt{2\pi n}\left(\frac{n}{e}\right)^n.
+        \]</p>
+
+        <h4>Ví dụ: Tính \(10!\) bằng xấp xỉ Stirling</h4>
+        <ul>
+          <li>Bước 1: \(\sqrt{2\pi \cdot 10} = \sqrt{62.83} \approx 7.926\).</li>
+          <li>Bước 2: \((10/e)^{10} = (3.6788)^{10} \approx 45\,259.3\) (dùng máy tính).</li>
+          <li>Bước 3 (dùng logarithm): \(\ln(10!) \approx \frac{1}{2}\ln(20\pi) + 10\ln(10) - 10 \approx 15.096\).</li>
+          <li>Kết quả: \(10! \approx 7.926 \times 45\,259.3 \approx 3\,598\,695\).</li>
+          <li>Giá trị chính xác: \(10! = 3\,628\,800\). Sai số \(\approx 0.8\%\)!</li>
+        </ul>
+
+        <h4>Khi nào dùng?</h4>
+        <p>Khi \(n\) lớn (thường \(n \geq 10\)), xấp xỉ Stirling rất chính xác. Đặc biệt hữu ích khi cần đánh giá tỷ lệ tăng/giảm của \(\binom{2n}{n}\) khi \(n \to \infty\).</p>
+
+        <h4>Ứng dụng: \(\binom{2n}{n}\) khi \(n\) lớn</h4>
+        <p>Áp dụng Stirling:
+        \[
+          \binom{2n}{n} = \frac{(2n)!}{(n!)^2} \approx \frac{\sqrt{4\pi n}(2n/e)^{2n}}{2\pi n (n/e)^{2n}} = \frac{4^n}{\sqrt{\pi n}}.
+        \]
+        Do đó \(\PP(S_{2n}=0) = \binom{2n}{n}/4^n \approx 1/\sqrt{\pi n}\).</p>
+
+        <div class="try-it">
+          <p><strong>Thử ngay:</strong> Dùng Stirling ước lượng \(5! \approx ?\). So sánh với \(5! = 120\).</p>
+          <p><em>Đáp án:</em> \(\sqrt{10\pi}(5/e)^5 \approx 5.605 \times 21.05 \approx 118.0\). Sai số \(\approx 1.7\%\).</p>
+        </div>
+      {% include components/review-end.html %}
+
+      <!-- ================================================================ -->
+      <h3 id="quay-lai-goc">3.3. Quay lại gốc lần đầu <small>(First Returns to Zero)</small></h3>
+
+      <p>Đặt
+      \[
+        \tau_0 = \inf\{n \geq 1 : S_n = 0\}
+      \]
+      là <strong>thời gian quay lại gốc lần đầu</strong> <em>(first return time to zero)</em>.</p>
+
+      {% include components/box-start.html type="theorem" title='Định lý (Xác suất quay lại gốc)' %}
+        <p>Xác suất mà bước đi quay lại gốc trong thời gian hữu hạn là:
+        \[
+          \PP(\tau_0 < \infty) = 2\min(p, q).
+        \]</p>
+        <ul>
+          <li>Khi \(p = q = 1/2\) (đối xứng): \(\PP(\tau_0 < \infty) = 1\).
+            Bước đi <strong>chắc chắn</strong> quay lại gốc.</li>
+          <li>Khi \(p \neq q\): \(\PP(\tau_0 < \infty) < 1\).
+            Có xác suất dương rằng bước đi <strong>không bao giờ</strong> quay lại gốc.</li>
+        </ul>
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="summary" title='Tóm tắt: Kết quả bất ngờ' %}
+        <p>Bước đi đối xứng luôn quay lại gốc (xác suất 1),
+        nhưng <strong>thời gian chờ trung bình</strong> là vô hạn!</p>
+        <p>\[
+          p = q = 1/2 \implies \PP(\tau_0 < \infty) = 1, \quad \text{nhưng} \quad \E[\tau_0] = +\infty.
+        \]</p>
+        <p>Kết quả này liên quan trực tiếp đến <strong>tính hồi quy</strong> <em>(recurrence)</em> của bước đi ngẫu nhiên 1 chiều,
+        mà ta sẽ gặp lại dưới dạng Định lý Polya trong Chương 3.</p>
+      {% include components/box-end.html %}
+
+      {% include components/review-start.html title="Ôn tập: Xác suất có điều kiện (Conditional Probability)" %}
+        <h4>Tại sao cần?</h4>
+        <p>Phần "quay lại gốc" dùng khái niệm \(\PP(\tau_0 < \infty)\) — xác suất một sự kiện xảy ra. Tính chất Markov (Chương 1) dựa hoàn toàn trên xác suất có điều kiện.</p>
+
+        <h4>Công thức</h4>
+        <p>\[
+          \PP(A \mid B) = \frac{\PP(A \cap B)}{\PP(B)}, \qquad \PP(B) > 0.
+        \]</p>
+        <p><strong>Ý nghĩa:</strong> "Biết rằng \(B\) đã xảy ra, xác suất để \(A\) cũng xảy ra là bao nhiêu?"</p>
+
+        <h4>Ví dụ: Gieo xúc xắc</h4>
+        <p>Gieo 1 xúc xắc. Biết kết quả là số chẵn (\(B = \{2,4,6\}\)). Tính xác suất kết quả \(\geq 4\) (\(A = \{4,5,6\}\)).</p>
+        <ul>
+          <li>Bước 1: \(A \cap B = \{4, 6\}\), nên \(\PP(A \cap B) = 2/6 = 1/3\).</li>
+          <li>Bước 2: \(\PP(B) = 3/6 = 1/2\).</li>
+          <li>Bước 3: \(\PP(A \mid B) = \frac{1/3}{1/2} = \frac{2}{3}\).</li>
+        </ul>
+        <p>Trực quan: trong 3 kết quả chẵn \(\{2,4,6\}\), có 2 kết quả \(\geq 4\). Vậy \(2/3\).</p>
+
+        <h4>Liên hệ với chuỗi Markov</h4>
+        <p>Tính chất Markov nói rằng:
+        \[
+          \PP(X_{n+1} = j \mid X_n = i, X_{n-1} = i_{n-1}, \ldots) = \PP(X_{n+1} = j \mid X_n = i).
+        \]
+        Nghĩa là: "biết thêm quá khứ" không thay đổi xác suất tương lai — chỉ cần biết hiện tại.</p>
+
+        <div class="try-it">
+          <p><strong>Thử ngay:</strong> Rút 1 lá bài từ bộ 52 lá. Biết lá bài màu đỏ (\(B\)). Tính xác suất lá bài là Át <em>(Ace)</em> (\(A\)).</p>
+          <p><em>Đáp án:</em> \(A \cap B = \{\text{Át cơ, Át rô}\}\), \(\PP(A \cap B) = 2/52\), \(\PP(B) = 26/52\). Vậy \(\PP(A|B) = 2/26 = 1/13\).</p>
+        </div>
+      {% include components/review-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="tu-rw-den-mc">4. Từ bước đi ngẫu nhiên đến chuỗi Markov <small>(From Random Walks to Markov Chains)</small></h2>
+
+      <p>Bước đi ngẫu nhiên là một chuỗi Markov! Ta kiểm tra tính chất Markov:
+      do các \(X_k\) độc lập, giá trị \(S_{n+1} = S_n + X_{n+1}\) chỉ phụ thuộc vào \(S_n\) và \(X_{n+1}\),
+      không phụ thuộc vào \(S_0, S_1, \ldots, S_{n-1}\):</p>
+      <p>\[
+        \PP(S_{n+1} = j \mid S_n = i, S_{n-1}, \ldots, S_0) = \PP(S_{n+1} = j \mid S_n = i).
+      \]</p>
+
+      <p>Tuy nhiên, chuỗi Markov tổng quát hơn nhiều: xác suất chuyển \(\PP(X_{n+1} = j \mid X_n = i)\)
+      có thể là <strong>bất kỳ giá trị nào</strong> trong \([0,1]\) (miễn là tổng hàng bằng 1),
+      không nhất thiết phải đối xứng hay đồng nhất.</p>
+
+      {% include components/box-start.html type="formula" title='Bản đồ các chương' %}
+        <table>
+          <thead>
+            <tr><th>Chương</th><th>Nội dung</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>0 (đây)</td><td>Quá trình ngẫu nhiên, bước đi ngẫu nhiên</td></tr>
+            <tr><td>1</td><td>Chuỗi Markov thời gian rời rạc, ma trận chuyển</td></tr>
+            <tr><td>2</td><td>Phân tích bước đầu tiên: xác suất chạm, thời gian chạm</td></tr>
+            <tr><td>3</td><td>Phân loại trạng thái: hồi quy, tạm thời, tuần hoàn</td></tr>
+            <tr><td>4</td><td>Phân phối dừng và giới hạn</td></tr>
+            <tr><td>5</td><td>Chuỗi Markov thời gian liên tục</td></tr>
+            <tr><td>A</td><td>Phụ lục: nền tảng xác suất</td></tr>
+          </tbody>
+        </table>
+      {% include components/box-end.html %}
+
+      <p><strong>Câu chuyện cầu nối:</strong> Hãy tưởng tượng một con kiến trên bàn cờ \(3 \times 3\).
+      Mỗi bước, con kiến chọn ngẫu nhiên một ô kề cạnh để di chuyển.
+      Nếu bàn cờ chỉ có 1 chiều (một đường thẳng), con kiến thực hiện <em>bước đi ngẫu nhiên</em>.
+      Nhưng trên bàn cờ 2 chiều, xác suất chuyển phụ thuộc vào vị trí
+      (ô góc có 2 hàng xóm, ô cạnh có 3, ô giữa có 4) --- đây là chuỗi Markov tổng quát.
+      Chương 1 sẽ khám phá thế giới này.</p>
+
+      <!-- ================================================================ -->
+      <h2 id="bai-tap">5. Bài tập <small>(Exercises)</small></h2>
+
+      {% include components/exercise-start.html title='Bài tập 0.1: Đường mẫu' %}
+        <p>Xét bước đi Bernoulli đối xứng (\(p = q = 1/2\)) với \(n = 6\) bước.</p>
+        <ol>
+          <li>Có bao nhiêu đường mẫu có thể? (Gợi ý: mỗi bước có 2 lựa chọn.)</li>
+          <li>Liệt kê tất cả các đường mẫu kết thúc tại \(S_6 = 2\).</li>
+          <li>Tính \(\PP(S_6 = 2)\) bằng hai cách: đếm trực tiếp và dùng công thức phân phối.</li>
+        </ol>
+      {% include components/exercise-end.html %}
+
+      {% include components/exercise-start.html title='Bài tập 0.2: Phân phối \(S_4\) / <em>Adapted from Privault, Exercise 3.1</em>' %}
+        <p>Xét bước đi Bernoulli \((S_n)_{n \in \N}\) với \(S_0 = 0\), xác suất tiến \(p\) và xác suất lùi \(1-p\).</p>
+        <ol>
+          <li>Liệt kê tất cả các đường đi có thể dẫn đến \(S_4 = 2\).</li>
+          <li>Chứng minh rằng \(\PP(S_4 = 2) = \binom{4}{3}p^3(1-p)\).</li>
+          <li>Chứng minh công thức tổng quát: nếu \(n+k\) chẵn và \(|k| \leq n\),
+            \[
+              \PP(S_n = k) = \binom{n}{(n+k)/2} p^{(n+k)/2}\,(1-p)^{(n-k)/2}.
+            \]</li>
+        </ol>
+      {% include components/exercise-end.html %}
+
+      {% include components/exercise-start.html title='Bài tập 0.3: Trung bình và phương sai' %}
+        <p>Xét bước đi ngẫu nhiên \(S_n = X_1 + \cdots + X_n\) với \(\PP(X_k = +1) = 0.6\), \(\PP(X_k = -1) = 0.4\).</p>
+        <ol>
+          <li>Tính \(\E[S_{100}]\) và \(\operatorname{Var}[S_{100}]\).</li>
+          <li>Sử dụng bất đẳng thức Chebyshev, tìm cận trên cho \(\PP(|S_{100} - 20| \geq 30)\).</li>
+          <li>Giải thích trực quan tại sao phương sai tăng theo \(n\).</li>
+        </ol>
+      {% include components/exercise-end.html %}
+
+      {% include components/exercise-start.html title='Bài tập 0.4: Quay lại gốc' %}
+        <p>Cho bước đi Bernoulli đối xứng (\(p = q = 1/2\)).</p>
+        <ol>
+          <li>Tính \(\PP(S_2 = 0)\), \(\PP(S_4 = 0)\), \(\PP(S_6 = 0)\) bằng công thức phân phối.</li>
+          <li>Kiểm tra rằng các giá trị trên phù hợp với xấp xỉ Stirling \(\PP(S_{2n} = 0) \approx 1/\sqrt{\pi n}\).</li>
+          <li>Giải thích tại sao \(\PP(S_{2n+1} = 0) = 0\) cho mọi \(n\).</li>
+        </ol>
+      {% include components/exercise-end.html %}
+
+      {% include components/exercise-start.html title='Bài tập 0.5: Tính chất Markov của bước đi ngẫu nhiên' %}
+        <p>Cho bước đi Bernoulli \(S_n = X_1 + \cdots + X_n\) với các \(X_k\) i.i.d.</p>
+        <ol>
+          <li>Chứng minh rằng \((S_n)_{n \geq 0}\) có tính chất Markov.
+            <br><em>Gợi ý:</em> Sử dụng tính độc lập của \(X_{n+1}\) với \((X_1, \ldots, X_n)\).</li>
+          <li>Viết ma trận chuyển \(P\) cho bước đi Bernoulli trên không gian trạng thái \(\Z\).
+            Hàng \(i\), cột \(j\): \(P_{i,j} = ?\)</li>
+          <li>Bước đi đối xứng (\(p = 1/2\)) có phải martingale không? Kiểm tra \(\E[S_{n+1} \mid S_n] = S_n\).</li>
+        </ol>
+      {% include components/exercise-end.html %}

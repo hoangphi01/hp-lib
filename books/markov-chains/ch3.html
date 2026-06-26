@@ -1,0 +1,732 @@
+---
+layout: book-chapter
+slug: ch3
+book_key: markov
+sidebar_include: sidebars/markov/ch3.html
+title: "Ch 3: Phân loại"
+sections:
+  - id: communicating-states
+    title: "1. Trạng thái liên thông"
+  - id: communicating-class
+    title: "2. Lớp liên thông"
+  - id: recurrent-states
+    title: "3. Trạng thái hồi quy"
+  - id: transient-states
+    title: "4. Trạng thái tạm thời"
+  - id: pos-null-recurrence
+    title: "5. Hồi quy dương/không"
+  - id: periodicity
+    title: "6. Tính tuần hoàn"
+  - id: ch6-exercises
+    title: "7. Bài tập"
+---
+
+      <p><strong>Câu chuyện:</strong> Hãy tưởng tượng bạn đi du lịch giữa các thành phố.
+      Có những thành phố bạn chắc chắn sẽ quay lại (quán café quen / &ldquo;hồi quy&rdquo;),
+      và có những thành phố bạn chỉ ghé qua một lần rồi không bao giờ quay lại (&ldquo;tạm thời&rdquo;).
+      Chương này giúp phân loại: trạng thái nào &ldquo;quen&rdquo; (hồi quy), trạng thái nào &ldquo;lạ&rdquo; (tạm thời)?</p>
+
+      <!-- ================================================================ -->
+      <h2 id="communicating-states">1. Trạng thái liên thông <em>(Communicating States)</em></h2>
+
+      <p><strong>Câu chuyện:</strong> Hãy tưởng tượng bạn đang ở thành phố \(i\). Câu hỏi đặt ra:
+      &ldquo;Liệu bạn có thể đi đến thành phố \(j\) được không?&rdquo;
+      Nếu có một con đường (dù phải đi qua nhiều thành phố trung gian),
+      tức là tồn tại số bước \(n\) sao cho \(P_{i,j}^{(n)} > 0\),
+      thì ta nói \(j\) <strong>có thể đạt đến</strong> từ \(i\).</p>
+
+      <p>Ví dụ đời thường: Từ Hà Nội bạn có thể bay đến Tokyo (qua Seoul chuyển tiếp)
+      / vậy Tokyo &ldquo;có thể đạt đến&rdquo; từ Hà Nội.</p>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Trạng thái có thể đạt đến / <em>Accessible state</em>)' %}
+        <p>Cho chuỗi Markov \((X_n)_{n \in \N}\) với không gian trạng thái \(S\) và ma trận chuyển \(P\).
+        Trạng thái \(j\) được gọi là <strong>có thể đạt đến</strong> <em>(accessible)</em> từ trạng thái \(i\),
+        ký hiệu \(i \to j\), nếu tồn tại \(n \geq 0\) sao cho:</p>
+        \[
+          P_{i,j}^{(n)} := \PP(X_n = j \mid X_0 = i) > 0.
+        \]
+        <p>Nói cách khác, xuất phát từ \(i\), chuỗi Markov có xác suất dương để đến được \(j\)
+        sau một số bước hữu hạn nào đó.</p>
+
+
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Trạng thái liên thông / <em>Communicating states</em>)' %}
+        <p>Hai trạng thái \(i\) và \(j\) được gọi là <strong>liên thông</strong> <em>(communicate)</em>,
+        ký hiệu \(i \leftrightarrow j\), nếu \(i \to j\) và \(j \to i\), tức là:</p>
+        \[
+          \exists\, a \geq 0: \; P_{i,j}^{(a)} > 0
+          \qquad \text{và} \qquad
+          \exists\, b \geq 0: \; P_{j,i}^{(b)} > 0.
+        \]
+
+
+      {% include components/box-end.html %}
+
+      <p>Ví dụ: Hà Nội và Tokyo &ldquo;liên thông&rdquo; vì bạn có thể bay đi lẫn bay về.
+      Nhưng nếu đảo \(X\) chỉ có chuyến bay đến mà không có chuyến bay đi,
+      thì \(X\) &ldquo;có thể đạt đến&rdquo; nhưng không &ldquo;liên thông&rdquo; với các thành phố khác.</p>
+
+      <p>Quan hệ &ldquo;liên thông&rdquo; \(\leftrightarrow\) là một <strong>quan hệ tương đương</strong> <em>(equivalence relation)</em>
+      trên \(S\), vì nó thỏa mãn ba tính chất:</p>
+
+      <ul>
+        <li><strong>Phản xạ</strong> <em>(Reflexive)</em>: \(i \leftrightarrow i\) vì \(P_{i,i}^{(0)} = 1 > 0\).</li>
+        <li><strong>Đối xứng</strong> <em>(Symmetric)</em>: \(i \leftrightarrow j \Rightarrow j \leftrightarrow i\) (theo định nghĩa).</li>
+        <li><strong>Bắc cầu</strong> <em>(Transitive)</em>: Nếu \(i \leftrightarrow j\) và \(j \leftrightarrow k\) thì \(i \leftrightarrow k\).
+          Thật vậy, nếu \(P_{i,j}^{(a)} > 0\) và \(P_{j,k}^{(b)} > 0\) thì theo phương trình Chapman&ndash;Kolmogorov:
+          \[
+            P_{i,k}^{(a+b)} = \sum_{l \in S} P_{i,l}^{(a)} P_{l,k}^{(b)}
+            \geq P_{i,j}^{(a)} P_{j,k}^{(b)} > 0.
+          \]
+        </li>
+      </ul>
+
+      <p>Vì \(\leftrightarrow\) là quan hệ tương đương, nó <strong>phân hoạch</strong> <em>(partition)</em> không gian trạng thái
+      \(S\) thành các <strong>lớp tương đương</strong> <em>(equivalence classes)</em>, gọi là <strong>lớp liên thông</strong>
+      <em>(communicating classes)</em>:</p>
+      \begin{equation}\label{eq:partition}
+        S = A_1 \cup A_2 \cup \cdots \cup A_M,
+        \qquad A_k \cap A_l = \emptyset \;\text{với}\; k \neq l.
+      \end{equation}
+
+      {% include components/box-start.html type="summary" title='Tóm tắt' %}
+        <p>Quan hệ \(\leftrightarrow\) phân chia không gian trạng thái \(S\) thành các lớp liên thông rời nhau.
+        Bên trong mỗi lớp, mọi cặp trạng thái đều có thể đạt đến nhau.
+        Giữa các lớp khác nhau, việc chuyển đổi có thể chỉ xảy ra theo một chiều hoặc không xảy ra.</p>
+        <p>Ví dụ: trong mạng lưới giao thông, các thành phố trong cùng khu vực đều liên thông.
+        Nhưng &ldquo;vùng hấp thụ&rdquo; (ví dụ: hố đen) chỉ có đường vào mà không có đường ra.</p>
+
+
+      {% include components/box-end.html %}
+
+      {% include components/review-start.html title="Ôn tập: Quan hệ tương đương (Equivalence Relations)" %}
+        <h4>Tại sao cần?</h4>
+        <p>"Liên thông" (\(i \leftrightarrow j\)) là quan hệ tương đương → chia \(S\) thành các lớp không giao nhau.
+        Hiểu quan hệ tương đương = hiểu TẠI SAO chuỗi Markov tự động "chia nhóm".</p>
+
+        <h4>Ba tính chất</h4>
+        <ul>
+          <li><strong>Phản xạ:</strong> \(a \sim a\) (mọi phần tử liên hệ với chính nó).</li>
+          <li><strong>Đối xứng:</strong> \(a \sim b \Rightarrow b \sim a\).</li>
+          <li><strong>Bắc cầu:</strong> \(a \sim b\) và \(b \sim c \Rightarrow a \sim c\).</li>
+        </ul>
+        <p><strong>Ví dụ đời thường:</strong> "Cùng thành phố" là quan hệ tương đương.</p>
+        <ul>
+          <li>Bạn ở cùng TP với chính mình (phản xạ).</li>
+          <li>Bạn ở cùng TP với tôi ⟹ tôi cũng ở cùng TP với bạn (đối xứng).</li>
+          <li>Bạn cùng TP với A, A cùng TP với B ⟹ bạn cùng TP với B (bắc cầu).</li>
+        </ul>
+
+        <h4>Phân hoạch <em>(Partition)</em></h4>
+        <p>Quan hệ tương đương chia tập hợp thành các <strong>lớp</strong> không giao nhau, phủ toàn bộ.</p>
+        <p><strong>Ví dụ:</strong> Chia \(\Z\) thành \(\{\text{chẵn}\}\) và \(\{\text{lẻ}\}\)
+        (quan hệ tương đương "cùng tính chẵn lẻ").</p>
+
+        <h4>Áp dụng cho chuỗi Markov</h4>
+        <p>\(i \leftrightarrow j\) (liên thông) thỏa 3 tính chất → \(S\) chia thành các <strong>lớp liên thông</strong>.</p>
+        <ul>
+          <li>Mỗi lớp là "cộng đồng" khép kín (closed) hoặc mở.</li>
+          <li>Tính chất (hồi quy, tuần hoàn) là "tính chất lớp" — cùng lớp thì cùng tính chất.</li>
+        </ul>
+
+        <div class="try-it">
+          <p><strong>Thử ngay:</strong> Cho \(S = \{a, b, c, d, e\}\) với \(a \leftrightarrow b\),
+          \(b \leftrightarrow c\), \(d \leftrightarrow e\), không liên hệ khác. Có bao nhiêu lớp liên thông?</p>
+          <p><em>Đáp án:</em> 2 lớp: \(\{a, b, c\}\) (bắc cầu: \(a \leftrightarrow b\) và \(b \leftrightarrow c\) → \(a \leftrightarrow c\)) và \(\{d, e\}\).</p>
+        </div>
+      {% include components/review-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="communicating-class">2. Lớp liên thông <em>(Communicating Class)</em></h2>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Chuỗi bất khả quy / <em>Irreducible chain</em>)' %}
+        <p>Một chuỗi Markov được gọi là <strong>bất khả quy</strong> <em>(irreducible)</em> nếu toàn bộ không gian
+        trạng thái \(S\) chỉ gồm duy nhất một lớp liên thông, tức là mọi cặp trạng thái \(i, j \in S\)
+        đều liên thông: \(i \leftrightarrow j\).</p>
+        <p>Ngược lại, nếu \(S\) có ít nhất hai lớp liên thông thì chuỗi được gọi là
+        <strong>khả quy</strong> <em>(reducible)</em>.</p>
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Ví dụ trực quan:</strong></p>
+      <ul>
+        <li><strong>Bất khả quy:</strong> Bạn có thể đi từ bất kỳ thành phố nào đến bất kỳ thành phố nào (dù qua trung chuyển).</li>
+        <li><strong>Khả quy:</strong> Có &ldquo;vùng cấm&rdquo; / một khi vào rồi, không ra được.</li>
+      </ul>
+
+      {% include components/example-start.html title='Ví dụ: Chuỗi khả quy / <em>Reducible chain</em>' %}
+        <p>Xét chuỗi Markov trên \(S = \{0, 1, 2, 3\}\) với ma trận chuyển:</p>
+        \begin{equation}\label{eq:reducible-matrix}
+          P = \begin{bmatrix}
+            0   & 0.2 & 0.8 & 0   \\
+            0.3 & 0.1 & 0   & 0.6 \\
+            0.5 & 0   & 0   & 0.5 \\
+            0   & 0   & 0   & 1
+          \end{bmatrix}.
+        \end{equation}
+        <p><strong>Phân tích:</strong></p>
+        <ul>
+          <li>Từ trạng thái \(0\): có thể đi đến \(1\) (qua \(P_{0,1} = 0.2\)) và đến \(2\) (qua \(P_{0,2} = 0.8\)).</li>
+          <li>Từ trạng thái \(1\): có thể đi đến \(0\) (qua \(P_{1,0} = 0.3\)) và đến \(3\) (qua \(P_{1,3} = 0.6\)).</li>
+          <li>Từ trạng thái \(2\): có thể đi đến \(0\) (qua \(P_{2,0} = 0.5\)) và đến \(3\) (qua \(P_{2,3} = 0.5\)).</li>
+          <li>Từ trạng thái \(3\): \(P_{3,3} = 1\), trạng thái \(3\) là <strong>hấp thụ</strong> <em>(absorbing)</em>.</li>
+        </ul>
+        <p>Các trạng thái \(0, 1, 2\) liên thông với nhau, nhưng từ \(3\) không thể quay lại \(0, 1, 2\).
+        Do đó chuỗi có hai lớp liên thông:</p>
+        \[
+          A_1 = \{0, 1, 2\}, \qquad A_2 = \{3\}.
+        \]
+        <p>Chuỗi này là <strong>khả quy</strong> <em>(reducible)</em>.</p>
+
+
+      {% include components/example-end.html %}
+
+      {% include components/box-start.html type="summary" title='Tóm tắt' %}
+        <p>Chuỗi <strong>bất khả quy</strong>: chỉ có một lớp liên thông, mọi trạng thái đều đạt đến được từ bất kỳ
+        trạng thái nào khác.</p>
+        <p>Chuỗi <strong>khả quy</strong>: có nhiều lớp liên thông; một khi vào một lớp &ldquo;đóng&rdquo; <em>(closed class)</em>,
+        chuỗi không thể thoát ra.</p>
+
+
+      {% include components/box-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="recurrent-states">3. Trạng thái hồi quy <em>(Recurrent States)</em></h2>
+
+      <p><strong>Câu chuyện:</strong> Quán café quen là &ldquo;hồi quy&rdquo; / dù bạn đi đâu, chắc chắn một ngày sẽ quay lại.
+      Quán ghé qua lần đầu ở thành phố lạ là &ldquo;tạm thời&rdquo; / có thể bạn không bao giờ quay lại nữa.</p>
+
+      <p>Nhớ lại từ Chương 2, <strong>thời gian quay lại lần đầu</strong> <em>(first return time)</em> trạng thái \(i\)
+      được định nghĩa là:</p>
+      \[
+        \tau_i := \inf\{n \geq 1 : X_n = i\},
+      \]
+      <p>và <strong>xác suất quay lại</strong> <em>(return probability)</em>:</p>
+      \[
+        p_{ii} := \PP(\tau_i < \infty \mid X_0 = i).
+      \]
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Trạng thái hồi quy / <em>Recurrent state</em>)' %}
+        <p>Trạng thái \(i \in S\) được gọi là <strong>hồi quy</strong> <em>(recurrent)</em> nếu:</p>
+        \begin{equation}\label{eq:recurrent-def}
+          p_{ii} = \PP(\tau_i < \infty \mid X_0 = i) = 1.
+        \end{equation}
+        <p>Tức là, xuất phát từ \(i\), chuỗi Markov <em>chắc chắn</em> sẽ quay lại \(i\).</p>
+
+
+      {% include components/box-end.html %}
+
+      <p>Tính hồi quy có thể được đặc trưng bằng các điều kiện tương đương sau.</p>
+
+      {% include components/box-start.html type="theorem" title='Định lý (Đặc trưng của trạng thái hồi quy)' %}
+        <p>Các mệnh đề sau là tương đương:</p>
+        <ol type="i">
+          <li>\(i\) là trạng thái hồi quy, tức \(p_{ii} = 1\).</li>
+          <li><strong>Số lần quay lại trung bình</strong> <em>(expected number of returns)</em> là vô hạn:
+            \begin{equation}\label{eq:recurrent-Ri}
+              \E[R_i \mid X_0 = i] = +\infty,
+            \end{equation}
+            trong đó \(R_i = \sum_{n=1}^{\infty} \ind_{\{X_n = i\}}\) là tổng số lần chuỗi thăm \(i\).
+          </li>
+          <li>\(\PP(R_i = +\infty \mid X_0 = i) = 1\), tức chuỗi quay lại \(i\) <em>vô hạn lần</em> với xác suất \(1\).</li>
+          <li>Chuỗi các xác suất quay lại phân kỳ:
+            \begin{equation}\label{eq:recurrent-series}
+              \sum_{n=0}^{\infty} P_{i,i}^{(n)} = +\infty.
+            \end{equation}
+          </li>
+        </ol>
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Trực giác: Tại sao 4 điều kiện tương đương?</strong></p>
+      <ul>
+        <li><strong>(i) → (iii):</strong> Nếu chắc chắn quay lại (\(p_{ii} = 1\)), thì mỗi lần quay lại,
+        chuỗi "reset" và lại chắc chắn quay lại tiếp → vô hạn lần.</li>
+        <li><strong>(iii) → (iv):</strong> Quay lại vô hạn lần → mỗi lần thăm đóng góp vào tổng
+        \(\sum P_{i,i}^{(n)}\) → tổng = \(+\infty\).</li>
+        <li><strong>(iv) → (ii):</strong> Tổng xác suất \(= +\infty\) → kỳ vọng số lần thăm \(= +\infty\).</li>
+      </ul>
+      <p>Nói gọn: "Nếu bạn CHẮC CHẮN sẽ quay lại, thì bạn sẽ quay lại LẦN NỮA, rồi LẦN NỮA... vô hạn lần."</p>
+
+      {% include components/review-start.html title="Ôn tập: Chuỗi số / Hội tụ và Phân kỳ (Series Convergence & Divergence)" %}
+        <h4>Tại sao cần?</h4>
+        <p>Tiêu chuẩn hồi quy: trạng thái \(i\) hồi quy ⟺ \(\sum P_{i,i}^{(n)} = +\infty\).
+        Cần biết ĐÁNH GIÁ chuỗi: hội tụ hay phân kỳ?</p>
+
+        <h4>Chuỗi hội tụ <em>(Convergent Series)</em></h4>
+        <p>\(\sum a_n < \infty\) khi các số hạng giảm "đủ nhanh".</p>
+        <ul>
+          <li><strong>Chuỗi hình học:</strong> \(\displaystyle\sum_{n=0}^{\infty} (1/2)^n = 2\) (vì \(|r| = 1/2 < 1\)).</li>
+          <li><strong>Chuỗi \(p\):</strong> \(\displaystyle\sum_{n=1}^{\infty} 1/n^2 = \pi^2/6 \approx 1.645\) (vì \(p = 2 > 1\)).</li>
+        </ul>
+
+        <h4>Chuỗi phân kỳ <em>(Divergent Series)</em></h4>
+        <p>\(\sum a_n = +\infty\) khi các số hạng giảm "quá chậm".</p>
+        <ul>
+          <li><strong>Chuỗi điều hòa:</strong> \(\displaystyle\sum_{n=1}^{\infty} 1/n = +\infty\) (giảm nhưng chậm!).</li>
+          <li><strong>Chuỗi \(p\) với \(p \leq 1\):</strong> \(\displaystyle\sum_{n=1}^{\infty} 1/\sqrt{n} = +\infty\) (vì \(p = 1/2 < 1\)).</li>
+        </ul>
+
+        <h4>Tiêu chuẩn so sánh <em>(Comparison Test)</em></h4>
+        <ul>
+          <li>Nếu \(0 \leq a_n \leq b_n\) và \(\sum b_n < \infty\) → \(\sum a_n < \infty\).</li>
+          <li>Nếu \(a_n \geq b_n \geq 0\) và \(\sum b_n = +\infty\) → \(\sum a_n = +\infty\).</li>
+        </ul>
+
+        <h4>Áp dụng cho chuỗi Markov</h4>
+        <ul>
+          <li><strong>Bước đi đối xứng</strong> (\(p = q = 1/2\)):
+            \(P_{0,0}^{(2k)} \sim 1/\sqrt{\pi k}\).
+            Vì \(\sum 1/\sqrt{k} = +\infty\) → <strong>HỒI QUY</strong>.</li>
+          <li><strong>Bước đi lệch</strong> (\(p \neq q\)):
+            \(P_{0,0}^{(2k)} \sim C \cdot (4pq)^k\) với \(4pq < 1\).
+            Vì \(\sum r^k < \infty\) khi \(r < 1\) → <strong>TẠM THỜI</strong>.</li>
+        </ul>
+
+        <div class="try-it">
+          <p><strong>Thử ngay:</strong> Chuỗi \(\displaystyle\sum_{n=1}^{\infty} \frac{1}{n^{3/2}}\)
+          hội tụ hay phân kỳ? Còn \(\displaystyle\sum_{n=1}^{\infty} \frac{1}{\sqrt{n^3}}\)?</p>
+          <p><em>Đáp án:</em> Cả hai là cùng một chuỗi (vì \(1/\sqrt{n^3} = 1/n^{3/2}\))!
+          Hội tụ vì đây là chuỗi \(p\) với \(p = 3/2 > 1\).</p>
+        </div>
+      {% include components/review-end.html %}
+
+      {% include components/box-start.html type="formula" %}
+        <p><strong>Tiêu chuẩn hồi quy (bằng chuỗi):</strong></p>
+        \[
+          i \text{ hồi quy} \quad\Longleftrightarrow\quad
+          \sum_{n=0}^{\infty} P_{i,i}^{(n)} = +\infty.
+        \]
+        <p>Trực quan: nếu &ldquo;tổng xác suất quay lại&rdquo; phân kỳ, thì chuỗi quay lại vô hạn lần.</p>
+
+
+      {% include components/box-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="transient-states">4. Trạng thái tạm thời <em>(Transient States)</em></h2>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Trạng thái tạm thời / <em>Transient state</em>)' %}
+        <p>Trạng thái \(i \in S\) được gọi là <strong>tạm thời</strong> <em>(transient)</em> nếu:</p>
+        \begin{equation}\label{eq:transient-def}
+          \PP(R_i = +\infty \mid X_0 = i) < 1,
+        \end{equation}
+        <p>hay tương đương, \(p_{ii} < 1\).</p>
+
+
+      {% include components/box-end.html %}
+
+      <p>Đối với trạng thái tạm thời:</p>
+      <ul>
+        <li>\(\E[R_i \mid X_0 = i] = \dfrac{p_{ii}}{1 - p_{ii}} < +\infty\): số lần quay lại trung bình là hữu hạn.</li>
+        <li>\(\displaystyle\sum_{n=0}^{\infty} P_{i,i}^{(n)} < +\infty\): chuỗi các xác suất quay lại hội tụ.</li>
+        <li>Với xác suất \(1 - p_{ii} > 0\), chuỗi sẽ <em>rời khỏi</em> \(i\) và không bao giờ quay lại.</li>
+      </ul>
+
+      {% include components/box-start.html type="summary" title='Tóm tắt' %}
+        <table style="width:100%;">
+          <thead>
+            <tr>
+              <th>Tính chất</th>
+              <th>Hồi quy <em>(Recurrent)</em></th>
+              <th>Tạm thời <em>(Transient)</em></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>\(p_{ii}\)</td>
+              <td>\(= 1\)</td>
+              <td>\(< 1\)</td>
+            </tr>
+            <tr>
+              <td>\(\E[R_i \mid X_0 = i]\)</td>
+              <td>\(= +\infty\)</td>
+              <td>\(< +\infty\)</td>
+            </tr>
+            <tr>
+              <td>\(\sum_n P_{i,i}^{(n)}\)</td>
+              <td>\(= +\infty\)</td>
+              <td>\(< +\infty\)</td>
+            </tr>
+            <tr>
+              <td>Số lần thăm \(i\)</td>
+              <td>Vô hạn lần (h.c.c.)</td>
+              <td>Hữu hạn lần (h.c.c.)</td>
+            </tr>
+            <tr>
+              <td>Ví dụ đời thường</td>
+              <td>Quán café quen</td>
+              <td>Quán ghé qua khi du lịch</td>
+            </tr>
+          </tbody>
+        </table>
+
+
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="theorem" title='Hệ quả (Hồi quy là tính chất lớp / <em>Recurrence is a class property</em>)' %}
+        <p>Nếu trạng thái \(i\) là hồi quy và \(j\) liên thông với \(i\) (tức \(i \leftrightarrow j\)),
+        thì \(j\) cũng là hồi quy.</p>
+
+
+      {% include components/box-end.html %}
+
+      <div class="proof">
+        Vì \(i \leftrightarrow j\), tồn tại \(a, b \geq 0\) sao cho \(P_{j,i}^{(a)} > 0\) và \(P_{i,j}^{(b)} > 0\).
+        Theo phương trình Chapman&ndash;Kolmogorov, với mọi \(n \geq 0\):
+        \[
+          P_{j,j}^{(a+n+b)} \geq P_{j,i}^{(a)} \, P_{i,i}^{(n)} \, P_{i,j}^{(b)}.
+        \]
+        Do đó:
+        \[
+          \sum_{m=0}^{\infty} P_{j,j}^{(m)}
+          \geq P_{j,i}^{(a)} \, P_{i,j}^{(b)} \sum_{n=0}^{\infty} P_{i,i}^{(n)}
+          = +\infty,
+        \]
+        vì \(i\) là hồi quy nên \(\sum_n P_{i,i}^{(n)} = +\infty\), và \(P_{j,i}^{(a)} P_{i,j}^{(b)} > 0\).
+        Vậy \(j\) cũng là hồi quy.
+      </div>
+
+      <p><strong>Hệ quả:</strong> Tạm thời cũng là tính chất lớp. Nếu \(i\) là tạm thời và \(i \leftrightarrow j\),
+      thì \(j\) cũng là tạm thời.</p>
+
+      {% include components/example-start.html title='Ví dụ: Bước đi ngẫu nhiên đơn giản trên \(\Z\) / <em>Simple random walk on \(\Z\)</em>' %}
+        <p>Xét bước đi ngẫu nhiên \((S_n)_{n \geq 0}\) trên \(\Z\) với \(S_0 = 0\),
+        \(\PP(X_k = +1) = p\) và \(\PP(X_k = -1) = q = 1-p\).</p>
+        <p>Xác suất trở về gốc tại thời điểm chẵn \(n = 2k\):</p>
+        \[
+          P_{0,0}^{(2k)} = \binom{2k}{k} p^k q^k, \qquad P_{0,0}^{(2k+1)} = 0.
+        \]
+        <p><strong>Trường hợp \(p = q = 1/2\):</strong> \(4pq = 1\), suy ra \(P_{0,0}^{(2k)} \sim \frac{1}{\sqrt{\pi k}}\) và:</p>
+        \[
+          \sum_{k=0}^{\infty} P_{0,0}^{(2k)} = +\infty
+          \qquad \Longrightarrow \qquad
+          \text{trạng thái } 0 \text{ là \textbf{hồi quy}.}
+        \]
+        <p><strong>Trường hợp \(p \neq q\):</strong> \(4pq < 1\), suy ra chuỗi hội tụ:</p>
+        \[
+          \sum_{k=0}^{\infty} P_{0,0}^{(2k)} < +\infty
+          \qquad \Longrightarrow \qquad
+          \text{trạng thái } 0 \text{ là \textbf{tạm thời}.}
+        \]
+        <p>Trực quan: với \(p \neq q\), bước đi ngẫu nhiên có &ldquo;xu hướng&rdquo; đi về một phía,
+        nên càng lúc càng xa gốc và khó quay lại.</p>
+
+
+      {% include components/example-end.html %}
+
+      {% include components/box-start.html type="formula" %}
+        <p><strong>Bước đi ngẫu nhiên đơn giản trên \(\Z\):</strong></p>
+        \[
+          \text{Hồi quy} \;\Longleftrightarrow\; p = q = \frac{1}{2}.
+        \]
+
+
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="theorem" title='Định lý (Định lý Polya về hồi quy / <em>Polya&#39;s recurrence theorem</em>)' %}
+        <p>Bước đi ngẫu nhiên đơn giản đối xứng (\(p = 1/2\) mỗi chiều) trên mạng lưới \(\Z^d\):</p>
+        <ul>
+          <li>\(d = 1\): <strong>hồi quy</strong> (chắc chắn quay lại gốc).</li>
+          <li>\(d = 2\): <strong>hồi quy</strong> (&ldquo;A drunk man will find his way home&rdquo; / Polya).</li>
+          <li>\(d \geq 3\): <strong>tạm thời</strong> (&ldquo;A drunk bird will NOT find its way home&rdquo;).</li>
+        </ul>
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Trực giác: Tại sao 2D hồi quy nhưng 3D tạm thời?</strong></p>
+      <ul>
+        <li><strong>1D:</strong> Chỉ có 2 hướng (trái/phải) → buộc phải "chạm mặt" gốc.</li>
+        <li><strong>2D:</strong> Nhiều hướng hơn nhưng vẫn "chật" → người say cuối cùng vẫn tìm về nhà.</li>
+        <li><strong>3D:</strong> Quá nhiều hướng → "không gian rộng quá", xác suất thoát ra xa > 0.</li>
+      </ul>
+      <p><strong>Định lượng:</strong> \(P_{0,0}^{(2k)} \sim C/k^{d/2}\).
+      Chuỗi \(\sum 1/k^{d/2}\) hội tụ khi \(d/2 > 1\), tức \(d \geq 3\).
+      Vì vậy: \(d = 1, 2\) → phân kỳ → hồi quy; \(d \geq 3\) → hội tụ → tạm thời.</p>
+
+      {% include components/box-start.html type="theorem" title='Định lý (Tồn tại trạng thái hồi quy trong chuỗi hữu hạn)' %}
+        <p>Mọi chuỗi Markov với không gian trạng thái hữu hạn \(S\) có ít nhất một trạng thái hồi quy.</p>
+
+
+      {% include components/box-end.html %}
+
+      <div class="proof">
+        Giả sử bằng phản chứng rằng <em>tất cả</em> trạng thái đều tạm thời.
+        Khi đó, với mọi \(j \in S\):
+        \[
+          \sum_{n=0}^{\infty} P_{i,j}^{(n)} < +\infty
+          \qquad \Longrightarrow \qquad
+          \lim_{n \to \infty} P_{i,j}^{(n)} = 0.
+        \]
+        Lấy tổng theo \(j\) trên \(S\) hữu hạn:
+        \[
+          \lim_{n \to \infty} \sum_{j \in S} P_{i,j}^{(n)}
+          = \sum_{j \in S} \lim_{n \to \infty} P_{i,j}^{(n)} = 0.
+        \]
+        Nhưng \(\sum_{j \in S} P_{i,j}^{(n)} = 1\) với mọi \(n\), nên giới hạn phải bằng \(1 \neq 0\).
+        Mâu thuẫn. Vậy phải tồn tại ít nhất một trạng thái hồi quy.
+      </div>
+
+      <!-- ================================================================ -->
+      <h2 id="pos-null-recurrence">5. Hồi quy dương và hồi quy không <em>(Positive and Null Recurrence)</em></h2>
+
+      <p><strong>Câu chuyện:</strong> Biết rằng bạn chắc chắn quay lại quán café quen / nhưng MẤT BAO LÂU?</p>
+      <ul>
+        <li><strong>Hồi quy dương:</strong> Thời gian quay lại trung bình hữu hạn (ví dụ: trung bình 5 ngày quay lại quán).</li>
+        <li><strong>Hồi quy không:</strong> Chắc chắn quay lại, nhưng thời gian trung bình vô hạn (&ldquo;chờ mãi mãi&rdquo;).</li>
+      </ul>
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Thời gian quay lại trung bình / <em>Mean recurrence time</em>)' %}
+        \[
+          \mu_i(i) := \E[\tau_i \mid X_0 = i].
+        \]
+
+
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Hồi quy dương và hồi quy không)' %}
+        <p>Cho trạng thái \(i\) là hồi quy (\(p_{ii} = 1\)).</p>
+        <ul>
+          <li>\(i\) là <strong>hồi quy dương</strong> <em>(positive recurrent)</em> nếu \(\mu_i(i) < +\infty\).</li>
+          <li>\(i\) là <strong>hồi quy không</strong> <em>(null recurrent)</em> nếu \(\mu_i(i) = +\infty\).</li>
+        </ul>
+
+
+      {% include components/box-end.html %}
+
+      {% include components/example-start.html title='Ví dụ: Bước đi ngẫu nhiên đối xứng là hồi quy không' %}
+        <p>Bước đi ngẫu nhiên đơn giản trên \(\Z\) với \(p = q = 1/2\) là <strong>hồi quy không</strong>.
+        Thời gian quay lại trung bình \(\mu_0(0) = +\infty\).</p>
+        <p>Trực quan: bạn <em>chắc chắn</em> quay lại gốc, nhưng không ai biết &ldquo;trung bình bao lâu&rdquo; /
+        có thể mất 2 bước, có thể mất 2 triệu bước.</p>
+
+
+      {% include components/example-end.html %}
+
+      {% include components/box-start.html type="theorem" title='Định lý (Chuỗi hữu hạn và hồi quy dương)' %}
+        <p>Trong chuỗi Markov với không gian trạng thái hữu hạn, mọi trạng thái hồi quy đều là
+        <strong>hồi quy dương</strong>.</p>
+
+
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="theorem" title='Hệ quả (Chuỗi bất khả quy hữu hạn)' %}
+        <p>Nếu chuỗi Markov là <strong>bất khả quy</strong> và có không gian trạng thái hữu hạn,
+        thì <em>tất cả</em> các trạng thái đều là <strong>hồi quy dương</strong>.</p>
+
+
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="summary" title='Tóm tắt' %}
+        <table style="width:100%;">
+          <thead>
+            <tr>
+              <th>Tính chất</th>
+              <th>Tạm thời</th>
+              <th>Hồi quy không</th>
+              <th>Hồi quy dương</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>\(p_{ii}\)</td>
+              <td>\(< 1\)</td>
+              <td>\(= 1\)</td>
+              <td>\(= 1\)</td>
+            </tr>
+            <tr>
+              <td>Quay lại?</td>
+              <td>Không chắc</td>
+              <td>Chắc chắn</td>
+              <td>Chắc chắn</td>
+            </tr>
+            <tr>
+              <td>\(\mu_i(i)\)</td>
+              <td>---</td>
+              <td>\(= +\infty\)</td>
+              <td>\(< +\infty\)</td>
+            </tr>
+            <tr>
+              <td>Ví dụ</td>
+              <td>RW trên \(\Z\), \(p \neq q\)</td>
+              <td>RW trên \(\Z\), \(p = 1/2\)</td>
+              <td>Chuỗi hữu hạn</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="margin-top:10px;"><strong>Quy tắc nhớ:</strong> Chuỗi Markov hữu hạn bất khả quy \(\Rightarrow\) mọi trạng thái hồi quy dương.
+        Hồi quy không chỉ xảy ra khi không gian trạng thái vô hạn.</p>
+
+
+      {% include components/box-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="periodicity">6. Tính tuần hoàn và phi tuần hoàn <em>(Periodicity and Aperiodicity)</em></h2>
+
+      <p><strong>Câu chuyện:</strong> Một số chuỗi Markov &ldquo;dao động&rdquo; có quy luật. Ví dụ: nếu bạn ở ô trắng trên bàn cờ,
+      sau 1 bước chắc chắn ở ô đen, sau 2 bước lại ở ô trắng. Chuỗi này có &ldquo;nhịp&rdquo; (chu kỳ) = 2.
+      Chuỗi tuần hoàn không hội tụ vì nó cứ &ldquo;dao động&rdquo; mãi.</p>
+
+      {% include components/review-start.html title="Ôn tập: Ước chung lớn nhất (Greatest Common Divisor / GCD)" %}
+        <h4>Tại sao cần?</h4>
+        <p>Chu kỳ \(d(i) = \gcd\) của TẬP HỢP các thời điểm có thể quay lại.
+        GCD cho biết "nhịp" của chuỗi — bước đi chỉ quay lại tại thời điểm là bội của \(d\).</p>
+
+        <h4>GCD của hai số</h4>
+        <p>\(\gcd(a, b)\) = số lớn nhất chia hết cả \(a\) và \(b\).</p>
+        <p><strong>Ví dụ:</strong> \(\gcd(12, 8) = 4\) (vì \(12 = 4 \times 3\), \(8 = 4 \times 2\)).</p>
+        <p><strong>Thuật toán Euclid:</strong>
+        \(\gcd(12, 8) = \gcd(8, 4) = \gcd(4, 0) = 4\).</p>
+
+        <h4>GCD của tập hợp</h4>
+        <p>\(\gcd(a, b, c) = \gcd(\gcd(a, b),\; c)\).</p>
+        <p><strong>Ví dụ:</strong> \(\gcd(6, 10, 15) = \gcd(\gcd(6, 10),\; 15) = \gcd(2, 15) = 1\).</p>
+        <p><strong>Quan trọng:</strong> Nếu \(\gcd = 1\), tập hợp "đủ đa dạng" để tạo mọi số đủ lớn.</p>
+
+        <h4>Áp dụng cho chu kỳ Markov</h4>
+        <ul>
+          <li>Nếu chuỗi quay lại trạng thái \(i\) tại \(n = 2, 4, 6, 8, \ldots\) →
+          \(\gcd\{2, 4, 6, \ldots\} = 2\) → \(d(i) = 2\).</li>
+          <li>Nếu quay lại tại \(n = 3, 5, 6, 8, 9, \ldots\) →
+          \(\gcd\{3, 5, 6, 8, 9, \ldots\} = 1\) → \(d(i) = 1\) (phi tuần hoàn!).</li>
+          <li><strong>Mẹo:</strong> Nếu \(P_{i,i} > 0\) (vòng lặp tại \(i\)), thì \(1\) thuộc tập
+          → \(\gcd = 1\) → luôn phi tuần hoàn.</li>
+        </ul>
+
+        <div class="try-it">
+          <p><strong>Thử ngay:</strong> Chuỗi quay lại trạng thái \(0\) tại \(n = 4, 6, 10\). Tính \(d(0)\).</p>
+          <p><em>Đáp án:</em> \(\gcd(4, 6, 10) = \gcd(\gcd(4, 6),\; 10) = \gcd(2, 10) = 2\).
+          Chu kỳ \(d(0) = 2\).</p>
+        </div>
+      {% include components/review-end.html %}
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Chu kỳ của trạng thái / <em>Period of a state</em>)' %}
+        <p><strong>Chu kỳ</strong> <em>(period)</em> của trạng thái \(i\) được định nghĩa là:</p>
+        \begin{equation}\label{eq:period}
+          d(i) := \gcd\{n \geq 1 : P_{i,i}^{(n)} > 0\}.
+        \end{equation}
+
+
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Phi tuần hoàn / <em>Aperiodic</em>)' %}
+        <p>Trạng thái \(i\) được gọi là <strong>phi tuần hoàn</strong> <em>(aperiodic)</em> nếu \(d(i) = 1\).</p>
+        <p>Một chuỗi Markov được gọi là <strong>phi tuần hoàn</strong> nếu <em>tất cả</em> các trạng thái đều phi tuần hoàn.</p>
+
+
+      {% include components/box-end.html %}
+
+      <p><strong>Nhận xét:</strong></p>
+      <ul>
+        <li>Nếu \(P_{i,i} > 0\) thì \(d(i) = 1\), tức trạng thái \(i\) phi tuần hoàn.
+          (Mẹo: thêm &ldquo;vòng lặp&rdquo; tại \(i\) là phá vỡ tuần hoàn!)</li>
+        <li><strong>Trạng thái hấp thụ</strong> (\(P_{k,k} = 1\)) là đồng thời phi tuần hoàn và hồi quy.</li>
+        <li>Chu kỳ là tính chất lớp: nếu \(i \leftrightarrow j\) thì \(d(i) = d(j)\).</li>
+      </ul>
+
+      {% include components/example-start.html title='Ví dụ: Chuỗi có chu kỳ 2' %}
+        <p>Chuỗi Markov trên \(S = \{0, 1\}\) với \(P = \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}\)
+        có \(d(0) = d(1) = 2\): chuỗi &ldquo;dao động&rdquo; giữa \(0\) và \(1\).</p>
+        <p>\(P_{0,0}^{(n)} > 0\) chỉ khi \(n\) chẵn, nên \(\gcd\{2, 4, 6, \ldots\} = 2\).</p>
+
+
+      {% include components/example-end.html %}
+
+      {% include components/example-start.html title='Ví dụ: Chuỗi có chu kỳ 3' %}
+        <p>Trên \(S = \{0, 1, 2\}\) với \(P = \begin{bmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ 1 & 0 & 0 \end{bmatrix}\).
+        Chuỗi quay vòng: \(0 \to 1 \to 2 \to 0 \to \cdots\), chu kỳ \(d = 3\).</p>
+
+
+      {% include components/example-end.html %}
+
+      {% include components/box-start.html type="definition" title='Định nghĩa (Trạng thái ergodic / <em>Ergodic state</em>)' %}
+        <p>Trạng thái \(i\) được gọi là <strong>ergodic</strong> nếu nó đồng thời:</p>
+        <ol type="i">
+          <li><strong>Hồi quy dương</strong>: \(p_{ii} = 1\) và \(\mu_i(i) < +\infty\).</li>
+          <li><strong>Phi tuần hoàn</strong>: \(d(i) = 1\).</li>
+        </ol>
+
+
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="summary" title='Tóm tắt' %}
+        <p>Tính ergodic là điều kiện then chốt để chuỗi Markov hội tụ đến phân phối dừng (Chương 4).</p>
+        \[
+          \boxed{\text{Ergodic} = \text{Hồi quy dương} + \text{Phi tuần hoàn}}
+        \]
+        <p>Chuỗi Markov bất khả quy, hữu hạn và phi tuần hoàn luôn là ergodic.</p>
+        <p><strong>Checklist để kiểm tra hội tụ:</strong></p>
+        <ol>
+          <li>Bất khả quy? (Mọi trạng thái liên thông?)</li>
+          <li>Phi tuần hoàn? (Có \(P_{i,i} > 0\) cho trạng thái nào đó?)</li>
+          <li>Hữu hạn? (Nếu có \(\Rightarrow\) tự động hồi quy dương.)</li>
+        </ol>
+        <p>Nếu cả 3: phân phối dừng tồn tại, duy nhất, và bằng phân phối giới hạn.</p>
+
+
+      {% include components/box-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="ch6-exercises">7. Bài tập <em>(Exercises)</em></h2>
+
+      {% include components/exercise-start.html title='Bài tập 1' %}
+        <p>Xét chuỗi Markov trên \(S = \{0, 1, 2, 3\}\) với ma trận chuyển:</p>
+        \[
+          P = \begin{bmatrix}
+            1/3 & 1/3 & 1/3 & 0 \\
+            0   & 0   & 0   & 1 \\
+            0   & 1   & 0   & 0 \\
+            0   & 0   & 1   & 0
+          \end{bmatrix}.
+        \]
+        <ol type="a">
+          <li>Tìm các lớp liên thông.</li>
+          <li>Tìm chu kỳ của mỗi trạng thái.</li>
+          <li>Xác định trạng thái nào hồi quy, tạm thời, hấp thụ.</li>
+          <li>Chuỗi có bất khả quy không?</li>
+        </ol>
+
+
+      {% include components/exercise-end.html %}
+
+      {% include components/exercise-start.html title='Bài tập 2' %}
+        <p>Chứng minh rằng chu kỳ là tính chất lớp: nếu \(i \leftrightarrow j\) thì \(d(i) = d(j)\).</p>
+        <p>(Gợi ý: nếu \(P_{i,j}^{(a)} > 0\) và \(P_{j,i}^{(b)} > 0\), thì \(P_{i,i}^{(a+b)} > 0\),
+        nên \(d(i)\) chia hết \(a + b\). Dùng điều này để chỉ \(d(i) \mid d(j)\) và ngược lại.)</p>
+
+
+      {% include components/exercise-end.html %}
+
+      {% include components/exercise-start.html title='Bài tập 3' %}
+        <p>Xét chuỗi Markov trên \(S = \{0, 1, 2, 3, 4\}\) với ma trận chuyển:</p>
+        \[
+          P = \begin{bmatrix}
+            0 & 1 & 0 & 0 & 0 \\
+            0 & 0 & 1 & 0 & 0 \\
+            1/2 & 0 & 0 & 1/2 & 0 \\
+            0 & 0 & 0 & 0 & 1 \\
+            0 & 0 & 0 & 1 & 0
+          \end{bmatrix}.
+        \]
+        <ol type="a">
+          <li>Tìm các lớp liên thông và xác định lớp nào đóng.</li>
+          <li>Phân loại mỗi trạng thái (hồi quy/tạm thời, tuần hoàn/phi tuần hoàn).</li>
+          <li>Từ trạng thái 0, chuỗi sẽ kết thúc ở lớp nào?</li>
+        </ol>
+
+
+      {% include components/exercise-end.html %}
+
+      {% include components/exercise-start.html title='Bài tập 4' %}
+        <p>Cho chuỗi Markov bất khả quy trên không gian trạng thái hữu hạn \(S\) với \(|S| = N\).</p>
+        <ol type="a">
+          <li>Chứng minh rằng mọi trạng thái đều hồi quy.</li>
+          <li>Chứng minh rằng mọi trạng thái đều hồi quy dương. (Gợi ý: dùng Định lý về chuỗi hữu hạn và hồi quy dương.)</li>
+          <li>Nếu thêm điều kiện phi tuần hoàn, kết luận gì về sự tồn tại phân phối giới hạn?</li>
+        </ol>
+
+
+      {% include components/exercise-end.html %}

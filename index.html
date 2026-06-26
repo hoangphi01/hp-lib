@@ -1,0 +1,39 @@
+---
+layout: default
+title: "Thư viện Nghiên cứu"
+---
+<div class="library-container">
+  <header class="library-header">
+    <h1>HP Library</h1>
+    <p class="library-subtitle">Thư viện tài liệu nghiên cứu PhD - Đại học Debrecen</p>
+  </header>
+
+  <div class="book-grid">
+    {% for book in site.data.books %}
+    <a href="{{ book.url | relative_url }}" class="book-card">
+      <div class="book-cover">
+        <span class="material-icons-outlined book-cover-icon">menu_book</span>
+      </div>
+      <div class="book-info">
+        <h2>{{ book.title_vi }}</h2>
+        <p class="book-en">{{ book.title_en }}</p>
+        <p class="book-subtitle">{{ book.subtitle }}</p>
+        <p class="book-desc">{{ book.description }}</p>
+        <div class="book-meta">
+          <span class="book-source">{{ book.source }}</span>
+          <span class="badge badge-{{ book.status }}">
+            {% if book.status == "active" %}Đang viết
+            {% elsif book.status == "draft" %}Bản nháp
+            {% elsif book.status == "planned" %}Kế hoạch
+            {% endif %}
+          </span>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
+  <footer class="library-footer">
+    <p>Hoang Phi &mdash; PhD Candidate, University of Debrecen</p>
+  </footer>
+</div>

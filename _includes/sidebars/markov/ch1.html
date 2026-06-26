@@ -1,0 +1,34 @@
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">grid_on</span> Ma trận chuyển P</h4>
+  <p>\(P_{i,j} = \PP(Z_{n+1} = j \mid Z_n = i)\)</p>
+  <p class="sidebar-tip">Hàng \(i\) = trạng thái hiện tại, cột \(j\) = trạng thái kế tiếp. Đọc theo hàng để biết "từ \(i\) đi đâu".</p>
+
+  <h5>Tổng hàng = 1</h5>
+  <p>\(\sum_{j} P_{i,j} = 1\)</p>
+  <p class="sidebar-tip">Xác suất phải phân bổ hết / từ trạng thái \(i\), chắc chắn phải đi đâu đó.</p>
+
+  <h5>Lũy thừa ma trận</h5>
+  <p>\(P^k_{i,j} = \PP(Z_{n+k} = j \mid Z_n = i)\)</p>
+  <p class="sidebar-tip">Nhân \(P\) với chính nó \(k\) lần để biết xác suất chuyển sau \(k\) bước.</p>
+
+  <h5>Chapman&ndash;Kolmogorov</h5>
+  <p>\(P^{m+n} = P^m \cdot P^n\)</p>
+  <p class="sidebar-tip">Chia hành trình thành hai phần: đi \(m\) bước rồi đi thêm \(n\) bước.</p>
+</div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">swap_horiz</span> Chuỗi 2 trạng thái</h4>
+  <p>\(P = \begin{bmatrix} 1-a & a \\ b & 1-b \end{bmatrix}\)</p>
+  <p class="sidebar-tip">\(a\) = xác suất rời trạng thái 0, \(b\) = xác suất rời trạng thái 1.</p>
+
+  <h5>Trị riêng</h5>
+  <p>\(\lambda_1 = 1\), \(\lambda_2 = 1 - a - b\)</p>
+
+  <h5>Phân phối giới hạn</h5>
+  <p>\(\pi_0 = \dfrac{b}{a+b}\), \(\pi_1 = \dfrac{a}{a+b}\)</p>
+  <p class="sidebar-tip">Trạng thái nào khó rời (\(a\) hoặc \(b\) nhỏ) thì chiếm tỷ lệ cao hơn khi ổn định.</p>
+
+  <h5>Tốc độ hội tụ</h5>
+  <p>\(\sim |\lambda_2|^n = |1 - a - b|^n\)</p>
+  <p class="sidebar-tip">\(|1 - a - b|\) nhỏ &rarr; hội tụ nhanh. Khi \(a + b = 1\): hội tụ ngay lập tức.</p>
+</div>

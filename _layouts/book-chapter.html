@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% comment %}Resolve book data from page.book_key{% endcomment %}
+  {% assign book_key = page.book_key %}
+  {% assign book_data = nil %}
+  {% for book in site.data.books %}
+    {% if book.data_key == book_key %}{% assign book_data = book %}{% endif %}
+  {% endfor %}
+  {% assign chapters = site.data[book_key].chapters %}
+  {% assign ch_data = nil %}
+  {% assign prev_ch = nil %}
+  {% assign next_ch = nil %}
+  {% for ch in chapters %}
+    {% if ch.slug == page.slug %}
+      {% assign ch_data = ch %}
+      {% assign ch_index = forloop.index0 %}
+    {% endif %}
+  {% endfor %}
+  {% if ch_index > 0 %}
+    {% assign prev_index = ch_index | minus: 1 %}
+    {% assign prev_ch = chapters[prev_index] %}
+  {% endif %}
+  {% assign next_index = ch_index | plus: 1 %}
+  {% if next_index < chapters.size %}
+    {% assign next_ch = chapters[next_index] %}
+  {% endif %}
+  {% if ch_data and ch_data.heading %}
+    {% assign og_title = ch_data.heading | append: " — " | append: ch_data.heading_en %}
+  {% elsif page.title %}
+    {% assign og_title = page.title %}
+  {% else %}
+    {% assign og_title = book_data.title_vi | default: site.title %}
+  {% endif %}
+  {% assign og_desc = ch_data.description | default: book_data.description | default: site.description %}
+  <title>{{ og_title }} - {{ book_data.title_vi | default: site.title }}</title>
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="{{ og_title }}">
+  <meta property="og:description" content="{{ og_desc }}">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <meta property="og:site_name" content="{{ site.title }}">
+  <meta property="og:locale" content="vi_VN">
+  <meta name="description" content="{{ og_desc }}">
+  <!-- Prevent flash: apply saved theme/font before render -->
+  <script>
+    (function(){
+      var t=localStorage.getItem('theme')||'original';
+      var f=localStorage.getItem('fontSize')||'3';
+      document.documentElement.setAttribute('data-theme',t);
+      document.documentElement.setAttribute('data-fontsize',f);
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Literata:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <link rel="stylesheet" href="{{ '/css/framework.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/css/themes/markov.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/css/themes/markov-themes.css' | relative_url }}">
+  {% include mathjax.html %}
+</head>
+<body>
+  <div class="page-wrapper">
+    <!-- LEFT: TOC -->
+    <nav class="toc">
+      {% include book-nav.html book_key=page.book_key %}
+      {% if page.sections %}
+      <h3>Mục này</h3>
+      <ul class="section-list">
+        {% for sec in page.sections %}
+        <li><a href="#{{ sec.id }}">{{ sec.title }}</a></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </nav>
+
+    <!-- CENTER: Content -->
+    <main class="content">
+      <h1>{{ ch_data.heading }}<br><small>{{ ch_data.heading_en }}</small></h1>
+
+      {{ content }}
+
+      <div class="chapter-nav">
+        {% if prev_ch %}
+          <a href="{{ prev_ch.url | relative_url }}">&larr; {{ prev_ch.nav_title }}</a>
+        {% else %}
+          <span></span>
+        {% endif %}
+        {% if next_ch %}
+          <a href="{{ next_ch.url | relative_url }}">{{ next_ch.nav_title }} &rarr;</a>
+        {% else %}
+          <span></span>
+        {% endif %}
+      </div>
+    </main>
+
+    <!-- RIGHT: Sidebar -->
+    <aside class="sidebar">
+      {% if page.sidebar_include %}
+        {% include {{ page.sidebar_include }} %}
+      {% endif %}
+    </aside>
+  </div>
+
+  <!-- Floating buttons (bottom-right) -->
+  <div class="floating-buttons">
+    <button id="back-to-top" class="floating-btn back-to-top" aria-label="Quay lên đầu trang">
+      <span class="material-icons-outlined" style="font-size:22px">vertical_align_top</span>
+    </button>
+    <button id="settings-btn" class="floating-btn" aria-label="Cài đặt giao diện" aria-expanded="false" aria-controls="settings-panel">
+      <span class="material-icons-outlined" style="font-size:22px">text_fields</span>
+    </button>
+  </div>
+
+  <!-- Settings panel -->
+  <div id="settings-panel" class="settings-panel" role="dialog" aria-label="Giao diện đọc">
+    <h3>Giao diện đọc</h3>
+
+    <!-- Font size -->
+    <div class="font-size-controls">
+      <button id="font-decrease" aria-label="Giảm cỡ chữ" style="font-size:14px">A</button>
+      <div class="font-size-bar">
+        <div class="font-size-bar-fill" id="font-bar-fill"></div>
+      </div>
+      <span class="font-size-label" id="font-size-label">18px</span>
+      <button id="font-increase" aria-label="Tăng cỡ chữ" style="font-size:20px">A</button>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <!-- Theme grid -->
+    <div class="theme-grid">
+      <button class="theme-card" data-theme="original">
+        <div class="theme-card-swatch"></div>
+        Original
+      </button>
+      <button class="theme-card" data-theme="quiet">
+        <div class="theme-card-swatch"></div>
+        Quiet
+      </button>
+      <button class="theme-card" data-theme="paper">
+        <div class="theme-card-swatch"></div>
+        Paper
+      </button>
+      <button class="theme-card" data-theme="bold">
+        <div class="theme-card-swatch"></div>
+        Bold
+      </button>
+      <button class="theme-card" data-theme="calm">
+        <div class="theme-card-swatch"></div>
+        Calm
+      </button>
+      <button class="theme-card" data-theme="focus">
+        <div class="theme-card-swatch"></div>
+        Focus
+      </button>
+      <button class="theme-card" data-theme="dark">
+        <div class="theme-card-swatch"></div>
+        Dark
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile overlay -->
+  <div id="settings-overlay" class="settings-overlay"></div>
+
+  <script src="{{ '/js/nav.js' | relative_url }}"></script>
+  <script src="{{ '/js/settings.js' | relative_url }}"></script>
+</body>
+</html>

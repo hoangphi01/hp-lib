@@ -1,0 +1,15 @@
+{% assign book_key = include.book_key %}
+{% assign book_data = nil %}
+{% for book in site.data.books %}
+  {% if book.data_key == book_key %}{% assign book_data = book %}{% endif %}
+{% endfor %}
+{% assign chapters = site.data[book_key].chapters %}
+<h3><a href="{{ book_data.url | relative_url }}" style="text-decoration:none;color:inherit">{{ book_data.title_vi }}</a></h3>
+<ul class="chapter-list">
+  {% for ch in chapters %}
+  <li><a href="{{ ch.url | relative_url }}" {% if page.slug == ch.slug %}class="current"{% endif %}>{{ ch.nav_title }}</a></li>
+  {% endfor %}
+</ul>
+<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border-color, #d8cdb5)">
+  <a href="{{ '/' | relative_url }}" style="font-size:13px;text-decoration:none;color:var(--text-muted, #888)">&larr; Thư viện</a>
+</div>
