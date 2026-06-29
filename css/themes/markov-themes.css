@@ -295,6 +295,34 @@ html[data-theme="dark"] mjx-container {
   pointer-events: auto;
 }
 
+/* Share button: always visible */
+.share-btn {
+  opacity: 1;
+}
+
+/* Share toast notification */
+.share-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--text-body, #3b3530);
+  color: var(--bg-card, #faf6ed);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 2000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.share-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 .settings-panel {
   position: fixed;
   bottom: 76px;

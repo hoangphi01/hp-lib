@@ -121,3 +121,118 @@ Browser print → PDF từ progress page, hoặc LaTeX report riêng.
 | P3 | Comments | Không | Giscus (GitHub-backed) |
 | P3 | Analytics | Không | Plausible Cloud |
 | P4 | Bookmarks/Notes | Supabase | Chỉ khi cần |
+
+---
+
+## Multi-Format Strategy
+
+Thư viện hỗ trợ nhiều định dạng sách — không phải sách nào cũng cần convert sang HTML thủ công.
+
+Học từ: arXiv (PDF + HTML song song), HathiTrust (YAML metadata), Project Gutenberg (multi-format, master + auto-generated).
+
+### Book Format Tiers (3 cấp)
+
+| Tier | Tên | Khi nào dùng | Công sức |
+|------|-----|-------------|----------|
+| **Tier 1: Full HTML** | Sách đang viết/dịch cho PhD, cần song ngữ, MathJax, component boxes | Nhiều (thủ công) |
+| **Tier 2: PDF Embedded** | Sách có PDF (LaTeX output hoặc tài liệu tham khảo), xem trực tiếp trong browser | Ít (upload PDF + YAML) |
+| **Tier 3: Reference Card** | Sách/paper chỉ tham khảo, link ngoài | Không (chỉ YAML) |
+
+**Quy tắc quyết định:**
+
+1. Viết bilingual + math pedagogy? → **Tier 1**
+2. Có PDF, muốn đọc in-browser? → **Tier 2**
+3. Chỉ catalog/tham khảo? → **Tier 3**
+
+Sách có thể promote: Tier 3 → 2 → 1. Không bao giờ cần downgrade.
+
+### Rules thêm sách mới (theo Tier)
+
+**Tier 1 (Full HTML):** Giống Markov hiện tại
+
+- `books/slug/` + chapter HTML files
+- `_data/bookkey/chapters.yml` + `weekly.yml`
+- `_includes/sidebars/bookkey/`
+- Entry trong `books.yml` với `format: html`
+
+**Tier 2 (PDF Embedded):** Tối giản
+
+- PDF vào `assets/books/slug.pdf`
+- `books/slug/index.html` với `layout: book-pdf`
+- Entry trong `books.yml` với `format: pdf`, `pdf_url`
+- XONG. Không cần `chapters.yml`, sidebars, theme CSS.
+
+**Tier 3 (Reference):** Chỉ YAML
+
+- Entry trong `books.yml` với `format: reference`, `external_url`
+- Không cần thư mục `books/` gì cả.
+
+### Updated Data Model (`books.yml`)
+
+Fields mới (backward-compatible với entry Markov hiện tại):
+
+```yaml
+# Tier 1 — Full HTML (như Markov)
+- slug: markov-chains
+  title_vi: "Chuỗi Markov"
+  title_en: "Markov Chains"
+  format: html              # MỚI
+  data_key: markov
+  url: /books/markov-chains/
+  status: in-progress
+
+# Tier 2 — PDF Embedded
+- slug: probability-essentials
+  title_vi: "Xác suất Cơ bản"
+  title_en: "Probability Essentials"
+  format: pdf                # MỚI
+  pdf_url: /assets/books/probability-essentials.pdf   # MỚI
+  pdf_pages: 280             # MỚI (optional)
+  url: /books/probability-essentials/
+  status: reference
+
+# Tier 3 — Reference Card
+- slug: privault-notes
+  title_vi: "Notes on Markov Chains"
+  title_en: "Notes on Markov Chains"
+  format: reference          # MỚI
+  external_url: https://example.com/book   # MỚI
+  status: reference
+```
+
+### PDF Viewer Strategy
+
+- **PDF.js** (Mozilla) — self-hosted trong `assets/pdfjs/` (~2MB, một lần)
+- Layout mới `_layouts/book-pdf.html` — full-width viewer, không 3 cột
+- PDF.js có sẵn: search, bookmark, zoom, print, dark mode
+- Chỉ cần download + extract một lần, không có dependency nào khác
+
+### Storage Strategy
+
+| Kích thước PDF | Lưu ở đâu |
+|---------------|-----------|
+| < 10 MB | `assets/books/` trong Git repo (đơn giản nhất) |
+| 10–25 MB | Git LFS |
+| 25–50 MB | Supabase Storage (1GB free, CDN) |
+| > 50 MB | Link ngoài (Tier 3) |
+
+Thực tế: hầu hết PDF LaTeX = 1–5 MB → Git repo là đủ.
+
+### Pandoc Pipeline (tương lai xa)
+
+KHÔNG đầu tư bây giờ. Chỉ xem xét khi cần convert 3+ sách sang HTML.
+
+```bash
+pandoc input.tex -o output.html --mathjax
+# + post-process thêm front matter, component includes
+```
+
+### Implementation Roadmap
+
+| Phase | Việc | Files |
+|-------|------|-------|
+| 1 | Thêm `format: html` vào Markov entry | `_data/books.yml` |
+| 2 | Tạo `book-pdf.html` layout + download PDF.js | `_layouts/book-pdf.html`, `assets/pdfjs/` |
+| 3 | Thêm sách Tier 2 đầu tiên | `assets/books/`, `books/slug/index.html` |
+| 4 | Update landing page hiển thị theo format | `index.html` |
+| 5 | Thêm Tier 3 reference support | `index.html` |
