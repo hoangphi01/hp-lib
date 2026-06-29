@@ -18,6 +18,27 @@
   <link rel="stylesheet" href="{{ '/css/library.css' | relative_url }}">
 </head>
 <body>
+
+  <nav class="lib-navbar">
+    <div class="lib-navbar__inner">
+      <a href="{{ '/' | relative_url }}" class="lib-navbar__brand">
+        <span class="material-icons-outlined">local_library</span>
+        HP Library
+      </a>
+      <ul class="lib-navbar__links">
+        <li><a href="{{ '/' | relative_url }}">Thư viện</a></li>
+        <li><a href="{{ '/' | relative_url }}#books">Tiến độ</a></li>
+      </ul>
+      <button class="lib-navbar__hamburger material-icons-outlined" aria-label="Menu">menu</button>
+    </div>
+  </nav>
+
   {{ content }}
+
+  <footer class="lib-footer">
+    <span class="lib-footer__brand">HP Library</span> &mdash; Hoang Phi, Nghiên cứu sinh, Đại học Debrecen
+  </footer>
+
+  <script src="{{ '/js/library.js' | relative_url }}"></script>
 </body>
 </html>
