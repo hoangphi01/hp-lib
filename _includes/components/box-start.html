@@ -1,3 +1,3 @@
-<div class="box {{ include.type }}">
-{% if include.title %}<p class="box-title"><span class="box-icon material-icons-outlined">{% if include.type == 'definition' %}menu_book{% elsif include.type == 'theorem' %}verified{% elsif include.type == 'formula' %}functions{% elsif include.type == 'summary' %}lightbulb{% else %}info{% endif %}</span>{{ include.title }}</p>{% endif %}
+<div class="box {{ include.type }}"{% if include.id %} id="{{ include.id }}"{% endif %}>
+{% if include.title %}<p class="box-title"><span class="box-icon material-icons-outlined">{% if include.type == 'definition' %}menu_book{% elsif include.type == 'theorem' %}verified{% elsif include.type == 'formula' %}functions{% elsif include.type == 'summary' %}lightbulb{% else %}info{% endif %}</span>{{ include.title }}{% if include.title_en %} <span class="box-title-en">{{ include.title_en }}</span>{% endif %}</p>{% endif %}
 <div class="box-body">

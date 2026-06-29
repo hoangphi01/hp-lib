@@ -50,7 +50,7 @@ sections:
       Nó không nhớ đã đi qua bao nhiêu ô, cũng không nhớ con đường đã đi.
       Quyết định bước tiếp theo chỉ dựa vào vị trí hiện tại --- đây là "con kiến Markov".</p>
 
-      {% include components/box-start.html type="definition" title='Định nghĩa (Tính chất Markov / <em>Markov property</em>)' %}
+      {% include components/box-start.html type="definition" id="def-markov-property" title='Định nghĩa (Tính chất Markov / <em>Markov property</em>)' %}
         <p>Một <strong>quá trình ngẫu nhiên</strong> <em>(stochastic process)</em> \((Z_n)_{n\in\mathbb{N}}\) nhận giá trị trong \(\mathbb{Z}\)
         được gọi là <strong>Markov</strong>, hay có <strong>tính chất Markov</strong>, nếu với mọi \(n \geq 1\),
         phân phối xác suất của \(Z_{n+1}\) chỉ được xác định bởi trạng thái \(Z_n\) tại thời điểm \(n\),
@@ -95,7 +95,7 @@ sections:
         \PP(Z_1 = i) = \sum_{j \in \mathbb{Z}} \PP(Z_1 = i \mid Z_0 = j)\,\PP(Z_0 = j), \qquad i \in \mathbb{Z}.
       \end{equation}</p>
 
-      {% include components/example-start.html title='Ví dụ: Bước đi ngẫu nhiên / <em>Random walk</em>' %}
+      {% include components/example-start.html id="ex-random-walk" title='Ví dụ: Bước đi ngẫu nhiên / <em>Random walk</em>' %}
         <p>Bước đi ngẫu nhiên <em>(random walk)</em>:
         \begin{equation}\label{eq:random-walk}
           S_n = X_1 + \cdots + X_n, \qquad n \in \mathbb{N},
@@ -131,7 +131,7 @@ sections:
       trong đó ta giả sử xác suất \(\PP(Z_{n+1} = j \mid Z_n = i)\) không phụ thuộc vào \(n \in \mathbb{N}\).
       Khi đó chuỗi Markov \((Z_n)_{n\in\mathbb{N}}\) được gọi là <strong>đồng nhất theo thời gian</strong> <em>(time homogeneous)</em>.</p>
 
-      {% include components/box-start.html type="definition" title='Định nghĩa (Ma trận chuyển / <em>Transition matrix</em>)' %}
+      {% include components/box-start.html type="definition" id="def-transition-matrix" title='Định nghĩa (Ma trận chuyển / <em>Transition matrix</em>)' %}
         <p>Dữ liệu trên được mã hóa thành một ma trận, gọi là <strong>ma trận chuyển</strong> <em>(transition matrix)</em> của chuỗi Markov:
         \[
           [P_{i,j}]_{i,j\in\mathbb{Z}} = [\PP(Z_{n+1} = j \mid Z_n = i)]_{i,j\in\mathbb{Z}}.
@@ -169,7 +169,7 @@ sections:
       <div id="ex:gambler">
 
 
-      {% include components/example-start.html title='Ví dụ: Quá trình cờ bạc / <em>Gambling process</em>' %}
+      {% include components/example-start.html id="ex-gambling" title='Ví dụ: Quá trình cờ bạc / <em>Gambling process</em>' %}
         <p>Một người chơi bắt đầu với \(i\) đô la. Mỗi ván, anh ta thắng \(1\) đô la (xác suất \(p\))
         hoặc thua \(1\) đô la (xác suất \(q = 1-p\)). Trò chơi dừng khi cháy túi (\(0\) đô la) hoặc đạt mục tiêu (\(N\) đô la).</p>
         <p>Ma trận chuyển trên \(\{0, 1, \ldots, N\}\) với các trạng thái hấp thụ \(0\) và \(N\):
@@ -247,7 +247,7 @@ sections:
 
       {% include components/example-end.html %}
 
-      {% include components/review-start.html title="Ôn tập: Nhân ma trận (Matrix Multiplication)" %}
+      {% include components/review-start.html id="review-matrix-mult" title="Ôn tập: Nhân ma trận (Matrix Multiplication)" %}
         <h4>Tại sao cần?</h4>
         <p>Phần tiếp theo tính \(P^2 = P \cdot P\) — lũy thừa ma trận. Muốn hiểu, bạn cần biết cách nhân hai ma trận.</p>
 

@@ -1,2 +1,2 @@
-<div class="example">
+<div class="example"{% if include.id %} id="{{ include.id }}"{% endif %}>
 {% if include.title %}<p class="example-title"><span class="box-icon material-icons-outlined">edit_note</span>{{ include.title }}</p>{% endif %}

@@ -7,18 +7,18 @@ html[data-fontsize="3"] { font-size: 18px; } /* default */
 html[data-fontsize="4"] { font-size: 20px; }
 html[data-fontsize="5"] { font-size: 22px; }
 
-/* === Theme: Original (current sepia) === */
+/* === Theme: Original (current sepia) — WCAG AA compliant === */
 html[data-theme="original"] {
   --bg-body: #f4ecd8;
   --bg-toc: #ede5d0;
   --bg-sidebar: #efe7d3;
   --bg-card: #faf6ed;
-  --text-body: #3b3530;
+  --text-body: #2e2a25;
   --text-heading: #1a4a6e;
   --text-h3: #34495e;
-  --text-muted: #888;
+  --text-muted: #6b655e;
   --text-toc: #4a4540;
-  --text-toc-link: #5a5550;
+  --text-toc-link: #4a4540;
   --text-sidebar: #555;
   --border-color: #d8cdb5;
   --border-heading: #d4e2ed;
@@ -28,15 +28,18 @@ html[data-theme="original"] {
   --nav-link-color: #5a4a32;
   --example-bg: #faf6ed;
   --example-border: #d8cdb5;
-  --example-title-color: #666;
+  --example-title-color: #5a5450;
   --proof-color: #555;
   --proof-border: #ccc;
-  --card-text: #666;
-  --card-subtitle: #999;
-  --section-link-color: #777;
+  --card-text: #5a5450;
+  --card-subtitle: #7a746c;
+  --section-link-color: #6b655e;
   --sidebar-heading-border: #ddd;
   --sidebar-cell-border: #eee;
   --responsive-border: #e0dbd4;
+  --link-color: #2a6496;
+  --link-hover: #1a4a6e;
+  --link-visited: #5a3a8a;
 }
 
 /* === Theme: Quiet (muted gray) === */
@@ -69,6 +72,9 @@ html[data-theme="quiet"] {
   --sidebar-heading-border: #d5d5d5;
   --sidebar-cell-border: #e5e5e5;
   --responsive-border: #d0d0d0;
+  --link-color: #3a7ab5;
+  --link-hover: #2c5e8a;
+  --link-visited: #6a4a9a;
 }
 
 /* === Theme: Paper (warm cream) === */
@@ -101,6 +107,9 @@ html[data-theme="paper"] {
   --sidebar-heading-border: #e0d5c5;
   --sidebar-cell-border: #ede5d8;
   --responsive-border: #e0d5c5;
+  --link-color: #8b4513;
+  --link-hover: #6b3210;
+  --link-visited: #6a4a6a;
 }
 
 /* === Theme: Bold (high contrast) === */
@@ -133,6 +142,9 @@ html[data-theme="bold"] {
   --sidebar-heading-border: #ccc;
   --sidebar-cell-border: #ddd;
   --responsive-border: #ccc;
+  --link-color: #0a3d6b;
+  --link-hover: #062d50;
+  --link-visited: #4a2a7a;
 }
 
 /* === Theme: Calm (soft green/blue) === */
@@ -165,6 +177,9 @@ html[data-theme="calm"] {
   --sidebar-heading-border: #c0d8c8;
   --sidebar-cell-border: #d5e8dc;
   --responsive-border: #c0d8c8;
+  --link-color: #1a5c3a;
+  --link-hover: #0e4028;
+  --link-visited: #5a3a6a;
 }
 
 /* === Theme: Focus (pure white, minimal) === */
@@ -197,6 +212,9 @@ html[data-theme="focus"] {
   --sidebar-heading-border: #e5e5e5;
   --sidebar-cell-border: #eee;
   --responsive-border: #e5e5e5;
+  --link-color: #333;
+  --link-hover: #111;
+  --link-visited: #555;
 }
 
 /* === Dark mode variant for each theme === */
@@ -229,6 +247,9 @@ html[data-theme="dark"] {
   --sidebar-heading-border: #333355;
   --sidebar-cell-border: #2a2a4a;
   --responsive-border: #333355;
+  --link-color: #6ab0e0;
+  --link-hover: #8cc8f0;
+  --link-visited: #b090d0;
 }
 
 /* Dark mode: adjust box colors for readability */

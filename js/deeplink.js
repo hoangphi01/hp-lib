@@ -1,17 +1,45 @@
-// Deep-linking: auto-update URL hash on scroll + share button
-// Like YouTube's ?t=62 — but for document sections
+// Deep-linking: auto-update URL hash on scroll + share button + status highlight
+// Like YouTube's ?t=62 — but for document sections and component blocks
 (function() {
   'use strict';
 
-  // --- 1. Collect all section anchors ---
+  // --- 1. Collect all section anchors (headings + component blocks) ---
   var anchors = [];
-  document.querySelectorAll('h2[id], h3[id]').forEach(function(el) {
+  document.querySelectorAll('h2[id], h3[id], .box[id], .example[id], .exercise[id], .review[id]').forEach(function(el) {
     anchors.push({ id: el.id, el: el });
   });
 
   if (anchors.length === 0) return;
 
-  // --- 2. Update URL hash as user scrolls (debounced) ---
+  // --- 2. Read ?status param and highlight target block ---
+  var params = new URLSearchParams(window.location.search);
+  var statusParam = params.get('status');
+  var hashId = window.location.hash ? window.location.hash.substring(1) : null;
+
+  if (statusParam && hashId) {
+    var targetEl = document.getElementById(hashId);
+    if (targetEl) {
+      // Add highlight class
+      var hlClass = 'deeplink-highlight-' + (statusParam === 'done' ? 'done' : 'wip');
+      var subtleClass = 'deeplink-highlighted-' + (statusParam === 'done' ? 'done' : 'wip');
+      targetEl.classList.add(hlClass);
+
+      // Inject badge
+      var badge = document.createElement('span');
+      badge.className = 'deeplink-focus-badge deeplink-focus-badge--' + (statusParam === 'done' ? 'done' : 'wip');
+      badge.textContent = statusParam === 'done' ? 'Đã hoàn thành' : 'Trọng tâm hiện tại';
+      targetEl.style.position = targetEl.style.position || 'relative';
+      targetEl.appendChild(badge);
+
+      // After animation (4s), switch to subtle persistent outline
+      setTimeout(function() {
+        targetEl.classList.remove(hlClass);
+        targetEl.classList.add(subtleClass);
+      }, 4000);
+    }
+  }
+
+  // --- 3. Update URL hash as user scrolls (debounced) ---
   var scrollTimer = null;
   var userClicked = false; // avoid fighting with click-scroll
 
@@ -35,7 +63,7 @@
     }
 
     if (current && '#' + current.id !== window.location.hash) {
-      history.replaceState(null, '', '#' + current.id);
+      history.replaceState(null, '', window.location.pathname + window.location.search + '#' + current.id);
     }
   }
 
@@ -44,7 +72,7 @@
     scrollTimer = setTimeout(updateHash, 150);
   });
 
-  // --- 3. Scroll to hash on page load ---
+  // --- 4. Scroll to hash on page load ---
   if (window.location.hash) {
     var target = document.getElementById(window.location.hash.substring(1));
     if (target) {
@@ -55,7 +83,7 @@
     }
   }
 
-  // --- 4. Track click-scrolls to avoid hash fighting ---
+  // --- 5. Track click-scrolls to avoid hash fighting ---
   document.querySelectorAll('a[href^="#"]').forEach(function(link) {
     link.addEventListener('click', function() {
       userClicked = true;
@@ -63,7 +91,7 @@
     });
   });
 
-  // --- 5. Share button ---
+  // --- 6. Share button ---
   var shareBtn = document.getElementById('share-btn');
   if (!shareBtn) return;
 

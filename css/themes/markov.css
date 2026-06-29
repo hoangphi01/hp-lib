@@ -3,8 +3,9 @@
 body {
   font-family: 'Literata', Georgia, 'Times New Roman', serif;
   font-size: 1rem;
-  line-height: 1.8;
-  color: var(--text-body, #3b3530);
+  line-height: 1.85;
+  letter-spacing: 0.005em;
+  color: var(--text-body, #2e2a25);
   background: var(--bg-body, #f4ecd8);
 }
 
@@ -185,6 +186,42 @@ th {
 .weekly-update li {
   font-size: 0.9rem;
   line-height: 1.6;
+}
+
+/* === Links (Gwern-style) === */
+.content a {
+  color: var(--link-color, #2a6496);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.content a:hover {
+  color: var(--link-hover, #1a4a6e);
+  border-bottom-color: var(--link-hover, #1a4a6e);
+}
+
+.content a:visited {
+  color: var(--link-visited, #5a3a8a);
+}
+
+/* === Blockquote === */
+blockquote {
+  margin: 1.2em 0;
+  padding: 12px 20px;
+  border-left: 3px solid var(--border-heading, #d4e2ed);
+  background: var(--bg-card, #faf6ed);
+  border-radius: 0 var(--box-radius, 20px) var(--box-radius, 20px) 0;
+}
+
+/* === Aside (tangential notes) === */
+aside {
+  margin: 1.2em 0;
+  padding: 12px 20px;
+  border: 1px dashed var(--border-color, #d8cdb5);
+  border-radius: var(--box-radius, 20px);
+  font-size: 0.92em;
+  color: var(--text-muted, #6b655e);
 }
 
 /* Responsive overrides */

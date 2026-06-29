@@ -159,31 +159,34 @@
 
 /* === Typography === */
 h1 {
-  font-size: 30px;
+  font-size: 1.75rem;
   margin-bottom: 6px;
-  line-height: 1.3;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
 }
 
 h1 small {
-  font-size: 17px;
+  font-size: 0.54em;
   font-weight: normal;
   font-style: italic;
+  display: block;
+  margin-top: 0.25em;
 }
 
 h2 {
-  font-size: 23px;
-  margin-top: 45px;
-  margin-bottom: 18px;
+  font-size: 1.35rem;
+  margin-top: 2.5em;
+  margin-bottom: 0.75em;
   padding-bottom: 6px;
 }
 
 h3 {
-  font-size: 19px;
-  margin-top: 30px;
-  margin-bottom: 12px;
+  font-size: 1.12rem;
+  margin-top: 2em;
+  margin-bottom: 0.6em;
 }
 
-p { margin-bottom: 14px; }
+p { margin-bottom: 1em; }
 
 ul, ol {
   margin-bottom: 14px;
@@ -448,6 +451,93 @@ details.review[open] .review-title {
 mjx-container {
   overflow-x: auto;
   overflow-y: hidden;
+}
+
+/* === Visual Hierarchy: Secondary tier (formula, summary) === */
+.box.formula .box-title,
+.box.summary .box-title {
+  background: none;
+  color: var(--box-header);
+  border-radius: 0;
+  padding: 10px 20px;
+  border-left: 4px solid var(--box-header);
+}
+
+.box.formula,
+.box.summary {
+  box-shadow: none;
+}
+
+/* === Component Spacing === */
+.box + .box, .box + .example, .example + .box, .example + .example { margin-top: 32px; }
+.box + p, .example + p { margin-top: 20px; }
+
+/* === Box Title English subtitle === */
+.box-title-en {
+  font-weight: normal;
+  font-size: 0.85em;
+  opacity: 0.75;
+  margin-left: 4px;
+}
+
+/* === MathJax display spacing === */
+mjx-container[display="true"] {
+  margin: 20px 0;
+}
+
+/* === Deep-link highlight animations === */
+@keyframes deeplink-pulse-wip {
+  0%, 100% { outline-color: rgba(230, 168, 23, 0.3); }
+  50% { outline-color: rgba(230, 168, 23, 0.8); }
+}
+
+@keyframes deeplink-pulse-done {
+  0%, 100% { outline-color: rgba(40, 167, 69, 0.3); }
+  50% { outline-color: rgba(40, 167, 69, 0.8); }
+}
+
+.deeplink-highlight-wip {
+  outline: 3px solid rgba(230, 168, 23, 0.6);
+  outline-offset: 4px;
+  animation: deeplink-pulse-wip 1.33s ease-in-out 3;
+}
+
+.deeplink-highlight-done {
+  outline: 3px solid rgba(40, 167, 69, 0.6);
+  outline-offset: 4px;
+  animation: deeplink-pulse-done 1.33s ease-in-out 3;
+}
+
+.deeplink-highlighted-wip {
+  outline: 2px solid rgba(230, 168, 23, 0.35);
+  outline-offset: 4px;
+}
+
+.deeplink-highlighted-done {
+  outline: 2px solid rgba(40, 167, 69, 0.35);
+  outline-offset: 4px;
+}
+
+.deeplink-focus-badge {
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 10px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.deeplink-focus-badge--wip {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.deeplink-focus-badge--done {
+  background: #d4edda;
+  color: #155724;
 }
 
 /* === Responsive === */

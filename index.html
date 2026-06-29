@@ -39,6 +39,79 @@ title: "Thư viện Nghiên cứu"
   </div>
 </section>
 
+<!-- Progress Overview -->
+{% assign wip_total = 0 %}
+{% assign plan_total = 0 %}
+{% for book in site.data.books %}
+  {% assign chapters = site.data[book.data_key].chapters %}
+  {% for ch in chapters %}
+    {% if ch.status == "in-progress" %}
+      {% assign wip_total = wip_total | plus: 1 %}
+    {% elsif ch.status == "planned" %}
+      {% assign plan_total = plan_total | plus: 1 %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+
+{% assign circumference = 327 %}
+{% if total_chapters > 0 %}
+  {% assign done_offset = done_chapters | times: circumference | divided_by: total_chapters %}
+  {% assign ring_offset = circumference | minus: done_offset %}
+{% else %}
+  {% assign ring_offset = circumference %}
+{% endif %}
+
+<section class="lib-progress">
+  <div class="lib-progress__inner">
+    <!-- SVG Ring -->
+    <div class="lib-progress__ring">
+      <svg width="130" height="130" viewBox="0 0 130 130">
+        <circle class="lib-progress__ring-bg" cx="65" cy="65" r="52"/>
+        <circle class="lib-progress__ring-fill" cx="65" cy="65" r="52"
+                stroke-dasharray="{{ circumference }}"
+                stroke-dashoffset="{{ ring_offset }}"/>
+        <text class="lib-progress__ring-text" x="65" y="62" text-anchor="middle" dominant-baseline="middle" transform="rotate(90 65 65)">{{ done_chapters }}/{{ total_chapters }}</text>
+        <text class="lib-progress__ring-label" x="65" y="80" text-anchor="middle" transform="rotate(90 65 65)">chương</text>
+      </svg>
+      <div class="lib-progress__legend">
+        <span><span class="lib-progress__legend-dot lib-progress__legend-dot--done"></span>{{ done_chapters }}</span>
+        <span><span class="lib-progress__legend-dot lib-progress__legend-dot--wip"></span>{{ wip_total }}</span>
+        <span><span class="lib-progress__legend-dot lib-progress__legend-dot--planned"></span>{{ plan_total }}</span>
+      </div>
+    </div>
+
+    <!-- Linear Timeline -->
+    <div class="lib-progress__timeline">
+      {% for book in site.data.books %}
+        {% assign chapters = site.data[book.data_key].chapters %}
+        <h3>{{ book.title_vi }}</h3>
+        <div class="lib-timeline">
+          {% for ch in chapters %}
+            {% if ch.status %}
+              {% if ch.status == "done" %}
+                {% assign dot_class = "done" %}
+              {% elsif ch.status == "in-progress" %}
+                {% assign dot_class = "wip" %}
+              {% else %}
+                {% assign dot_class = "planned" %}
+              {% endif %}
+
+              <a href="{{ ch.url | relative_url }}" class="lib-timeline__node">
+                <span class="lib-timeline__dot lib-timeline__dot--{{ dot_class }}"></span>
+                <span class="lib-timeline__label">{{ ch.nav_title }}</span>
+                {% if ch.last_updated %}<span class="lib-timeline__date">{{ ch.last_updated }}</span>{% endif %}
+                {% unless forloop.last %}
+                  <span class="lib-timeline__connector lib-timeline__connector--{{ dot_class }}"></span>
+                {% endunless %}
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
 <!-- Search / Filter -->
 <section class="lib-search">
   <div class="lib-search__input-wrap">
