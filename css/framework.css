@@ -466,6 +466,14 @@ mjx-container {
 .box.formula,
 .box.summary {
   box-shadow: none;
+  background: var(--box-bg);
+  border: 1px solid var(--box-border);
+}
+
+.box.formula .box-body,
+.box.summary .box-body {
+  border: none;
+  background: none;
 }
 
 /* === Component Spacing === */

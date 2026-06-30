@@ -273,35 +273,35 @@ html[data-theme="dark"] mjx-container {
   user-select: none;
 }
 
-/* Main toggle button */
+/* Main toggle button — Liquid Glass */
 .floating-nav__toggle {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 1px solid var(--border-color, #d8cdb5);
-  background: var(--bg-toc, #ede5d0);
+  border: 0.5px solid rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.45);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   color: var(--text-body, #3b3530);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.12), inset 0 0 0 0.5px rgba(255,255,255,0.2);
   transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
   position: relative;
   z-index: 2;
-  opacity: 0.85;
 }
 
 .floating-nav__toggle:hover {
-  opacity: 1;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18), inset 0 0 0 0.5px rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.55);
 }
 
 .floating-nav.open .floating-nav__toggle {
-  opacity: 1;
-  background: var(--text-heading, #1a4a6e);
-  color: #fff;
-  border-color: var(--text-heading, #1a4a6e);
+  background: rgba(255,255,255,0.55);
+  color: var(--text-heading, #1a4a6e);
+  border-color: rgba(255,255,255,0.4);
 }
 
 .floating-nav__toggle .floating-nav__icon-close {
@@ -318,33 +318,42 @@ html[data-theme="dark"] mjx-container {
   font-size: 24px;
 }
 
-/* Menu container */
+/* Menu container — Liquid Glass pill */
 .floating-nav__menu {
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   pointer-events: none;
-  padding-bottom: 12px;
+  padding: 0;
+  border-radius: 28px;
+  transition: background 0.25s, box-shadow 0.25s, padding 0.25s;
 }
 
 .floating-nav.open .floating-nav__menu {
   pointer-events: auto;
+  background: rgba(255,255,255,0.3);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 0.5px solid rgba(255,255,255,0.25);
+  padding: 10px;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.1);
 }
 
-/* Individual menu items */
+/* Individual menu items — Liquid Glass */
 .floating-nav__item {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid var(--border-color, #d8cdb5);
-  background: var(--bg-card, #faf6ed);
+  border: none;
+  background: rgba(255,255,255,0.15);
   color: var(--text-body, #3b3530);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: none;
   text-decoration: none;
   font-size: 0;
   position: relative;
@@ -359,18 +368,16 @@ html[data-theme="dark"] mjx-container {
 }
 
 .floating-nav__item:hover {
-  background: var(--toc-hover-bg, #e5dcc6);
-  box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+  background: rgba(255,255,255,0.35);
 }
 
 /* Nav-type items get accent color */
 .floating-nav__item--nav {
-  background: var(--bg-toc, #ede5d0);
   color: var(--text-heading, #1a4a6e);
 }
 
 .floating-nav__item--nav:hover {
-  background: var(--toc-current-bg, #ddd5be);
+  background: rgba(255,255,255,0.4);
 }
 
 /* Staggered reveal on open */
@@ -390,17 +397,20 @@ html[data-theme="dark"] mjx-container {
   display: none;
 }
 
-/* Tooltip (left side) */
+/* Tooltip (left side) — Liquid Glass */
 .floating-nav__item[data-tooltip]::before {
   content: attr(data-tooltip);
   position: absolute;
   right: calc(100% + 10px);
   top: 50%;
   transform: translateY(-50%);
-  background: var(--text-body, #3b3530);
-  color: var(--bg-card, #faf6ed);
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
   padding: 4px 10px;
   border-radius: 6px;
+  border: 0.5px solid rgba(255,255,255,0.1);
   font-size: 12px;
   white-space: nowrap;
   opacity: 0;
@@ -428,22 +438,25 @@ html[data-theme="dark"] mjx-container {
   cursor: grabbing;
 }
 
-/* Share toast notification */
+/* Share toast notification — Liquid Glass */
 .share-toast {
   position: fixed;
   bottom: 80px;
   left: 50%;
   transform: translateX(-50%) translateY(20px);
-  background: var(--text-body, #3b3530);
-  color: var(--bg-card, #faf6ed);
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  color: #fff;
   padding: 10px 20px;
   border-radius: 8px;
+  border: 0.5px solid rgba(255,255,255,0.1);
   font-size: 14px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s, transform 0.3s;
   z-index: 2000;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
 }
 
 .share-toast.visible {
@@ -457,10 +470,12 @@ html[data-theme="dark"] mjx-container {
   right: 20px;
   z-index: 999;
   width: 300px;
-  background: var(--bg-card, #faf6ed);
-  border: 1px solid var(--border-color, #d8cdb5);
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 0.5px solid rgba(255,255,255,0.3);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
   padding: 20px;
   opacity: 0;
   visibility: hidden;
@@ -642,4 +657,52 @@ html[data-theme="dark"] mjx-container {
     opacity: 1;
     visibility: visible;
   }
+}
+
+/* === Dark theme: Liquid Glass overrides === */
+html[data-theme="dark"] .floating-nav__toggle {
+  background: rgba(30,30,50,0.55);
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.3), inset 0 0 0 0.5px rgba(255,255,255,0.06);
+}
+
+html[data-theme="dark"] .floating-nav__toggle:hover {
+  background: rgba(30,30,50,0.7);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.35), inset 0 0 0 0.5px rgba(255,255,255,0.08);
+}
+
+html[data-theme="dark"] .floating-nav.open .floating-nav__toggle {
+  background: rgba(40,40,65,0.7);
+  border-color: rgba(255,255,255,0.1);
+}
+
+html[data-theme="dark"] .floating-nav.open .floating-nav__menu {
+  background: rgba(25,25,45,0.45);
+  border-color: rgba(255,255,255,0.06);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+}
+
+html[data-theme="dark"] .floating-nav__item {
+  background: rgba(255,255,255,0.06);
+}
+
+html[data-theme="dark"] .floating-nav__item:hover,
+html[data-theme="dark"] .floating-nav__item--nav:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+html[data-theme="dark"] .settings-panel {
+  background: rgba(25,25,45,0.7);
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+html[data-theme="dark"] .share-toast {
+  background: rgba(20,20,40,0.65);
+  border-color: rgba(255,255,255,0.06);
+}
+
+html[data-theme="dark"] .floating-nav__item[data-tooltip]::before {
+  background: rgba(15,15,30,0.7);
+  border-color: rgba(255,255,255,0.06);
 }
