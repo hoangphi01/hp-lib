@@ -454,9 +454,8 @@ mjx-container {
   overflow-y: hidden;
 }
 
-/* === Visual Hierarchy: Secondary tier (formula, summary) === */
-.box.formula .box-title,
-.box.summary .box-title {
+/* === Visual Hierarchy: Secondary tier (formula) === */
+.box.formula .box-title {
   background: none;
   color: var(--box-header);
   border-radius: 0;
@@ -464,15 +463,13 @@ mjx-container {
   border-left: 4px solid var(--box-header);
 }
 
-.box.formula,
-.box.summary {
+.box.formula {
   box-shadow: none;
   background: var(--box-bg);
   border: 1px solid var(--box-border);
 }
 
-.box.formula .box-body,
-.box.summary .box-body {
+.box.formula .box-body {
   border: none;
   background: none;
 }
