@@ -4,29 +4,30 @@
    ========================================================== */
 
 :root {
-  --lib-bg: #f8f6f1;
-  --lib-surface: #ffffff;
-  --lib-border: #e8e4dc;
-  --lib-text: #333333;
-  --lib-text-light: #888888;
-  --lib-text-muted: #aaaaaa;
-  --lib-accent: #8b7355;
+  /* Aliases: --lib-* now points to unified --hp-* tokens from tokens.css */
+  --lib-bg: var(--hp-bg-primary);
+  --lib-surface: var(--hp-bg-surface);
+  --lib-border: var(--hp-border-light);
+  --lib-text: var(--hp-text-primary);
+  --lib-text-light: var(--hp-text-secondary);
+  --lib-text-muted: var(--hp-text-tertiary);
+  --lib-accent: var(--hp-accent);
   --lib-accent-light: #a8956f;
-  --lib-heading: #1a1a1a;
-  --lib-radius: 16px;
-  --lib-radius-sm: 8px;
-  --lib-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  --lib-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.1);
-  --lib-navbar-h: 60px;
-  --lib-max-w: 960px;
-  --lib-green: #28a745;
-  --lib-yellow: #e6a817;
+  --lib-heading: var(--hp-text-heading);
+  --lib-radius: var(--hp-radius-lg);
+  --lib-radius-sm: var(--hp-radius-sm);
+  --lib-shadow: var(--hp-shadow-md);
+  --lib-shadow-hover: var(--hp-shadow-lg);
+  --lib-navbar-h: var(--hp-navbar-h);
+  --lib-max-w: var(--hp-max-w);
+  --lib-green: var(--hp-green);
+  --lib-yellow: var(--hp-yellow);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--hp-font-sans);
   background: var(--lib-bg);
   color: var(--lib-text);
   min-height: 100vh;
@@ -46,7 +47,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(248, 246, 241, 0.8);
+  background: rgba(246, 241, 231, 0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid transparent;
@@ -654,7 +655,7 @@ body {
     position: fixed;
     top: var(--lib-navbar-h);
     right: 0;
-    background: rgba(248, 246, 241, 0.97);
+    background: rgba(246, 241, 231, 0.97);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     flex-direction: column;

@@ -1,7 +1,8 @@
 /* Framework CSS - Reusable grid, box structure, nav, responsive (any book) */
 
 :root {
-  --box-radius: 20px;
+  /* Alias: --box-radius now references unified token */
+  --box-radius: var(--hp-radius-lg);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -61,7 +62,7 @@
 /* Center: Main Content */
 .content {
   padding: 40px 50px;
-  max-width: 820px;
+  max-width: var(--hp-content-w);
   margin: 0 auto;
 }
 
@@ -116,7 +117,7 @@
 .sidebar-card {
   padding: 14px 14px 10px;
   margin-bottom: 14px;
-  border-radius: 14px;
+  border-radius: var(--hp-radius-md);
 }
 
 .sidebar-card h4 {
@@ -200,7 +201,7 @@ li { margin-bottom: 5px; }
   margin: 24px 0;
   border-radius: var(--box-radius);
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: var(--hp-shadow-md);
 }
 
 .box .box-title {
@@ -235,7 +236,7 @@ li { margin-bottom: 5px; }
   margin: 24px 0;
   padding: 18px 24px;
   border-radius: var(--box-radius);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  box-shadow: var(--hp-shadow-sm);
 }
 
 .example .example-title,
@@ -320,12 +321,12 @@ th, td {
 .chapter-card {
   border-radius: var(--box-radius);
   padding: 22px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: var(--hp-shadow-sm);
   transition: box-shadow 0.2s;
 }
 
 .chapter-card:hover {
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  box-shadow: var(--hp-shadow-lg);
 }
 
 .chapter-card h3 {
@@ -356,7 +357,7 @@ th, td {
   margin: 24px 0;
   border-radius: var(--box-radius);
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: var(--hp-shadow-md);
   border: 1px solid var(--review-border, #ce93d8);
 }
 

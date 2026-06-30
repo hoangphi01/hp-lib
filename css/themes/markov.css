@@ -1,12 +1,12 @@
 /* Book CSS - Literata font, sepia palette, box colors (Markov Chains book) */
 
 body {
-  font-family: 'Literata', Georgia, 'Times New Roman', serif;
+  font-family: var(--hp-font-serif);
   font-size: 1rem;
-  line-height: 1.85;
+  line-height: var(--hp-leading-relaxed);
   letter-spacing: 0.005em;
-  color: var(--text-body, #2e2a25);
-  background: var(--bg-body, #f4ecd8);
+  color: var(--text-body, var(--hp-text-primary));
+  background: var(--bg-body, var(--hp-bg-primary));
 }
 
 /* === Palette (driven by CSS variables from themes.css) === */
