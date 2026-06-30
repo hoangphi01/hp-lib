@@ -2,7 +2,6 @@
 (function() {
   'use strict';
 
-  var THEMES = ['original', 'quiet', 'paper', 'bold', 'calm', 'focus', 'dark'];
   var FONT_SIZES = [15, 17, 18, 20, 22];
   var DEFAULT_THEME = 'original';
   var DEFAULT_FONT_LEVEL = 3; // 18px
@@ -11,7 +10,7 @@
   var currentTheme = localStorage.getItem('theme') || DEFAULT_THEME;
   var currentFontLevel = parseInt(localStorage.getItem('fontSize'), 10) || DEFAULT_FONT_LEVEL;
 
-  // --- Apply (already done by inline script, but re-apply for safety) ---
+  // --- Apply ---
   function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
@@ -27,53 +26,28 @@
     updateFontUI();
   }
 
-  // --- Panel toggle ---
+  // --- Panel ---
   var panel = document.getElementById('settings-panel');
   var overlay = document.getElementById('settings-overlay');
-  var btn = document.getElementById('settings-btn');
-
-  var backToTop = document.getElementById('back-to-top');
-
-  function openPanel() {
-    panel.classList.add('open');
-    if (overlay) overlay.classList.add('open');
-    btn.setAttribute('aria-expanded', 'true');
-    backToTop.classList.remove('visible');
-  }
 
   function closePanel() {
-    panel.classList.remove('open');
+    if (panel) panel.classList.remove('open');
     if (overlay) overlay.classList.remove('open');
-    btn.setAttribute('aria-expanded', 'false');
-    updateBackToTop();
   }
 
-  function togglePanel() {
-    if (panel.classList.contains('open')) {
-      closePanel();
-    } else {
-      openPanel();
-    }
-  }
-
-  btn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    togglePanel();
-  });
-
-  // Close on outside click (ignore clicks inside floating-buttons container)
-  var floatingBtns = document.querySelector('.floating-buttons');
+  // Close on outside click (but not if clicking floating nav)
+  var floatingNav = document.getElementById('floating-nav');
   document.addEventListener('click', function(e) {
-    if (panel.classList.contains('open') && !panel.contains(e.target) && !floatingBtns.contains(e.target)) {
+    if (panel && panel.classList.contains('open') && !panel.contains(e.target)) {
+      if (floatingNav && floatingNav.contains(e.target)) return;
       closePanel();
     }
   });
 
   // Close on Escape
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && panel.classList.contains('open')) {
+    if (e.key === 'Escape' && panel && panel.classList.contains('open')) {
       closePanel();
-      btn.focus();
     }
   });
 
@@ -103,40 +77,28 @@
   var barFill = document.getElementById('font-bar-fill');
   var fontLabel = document.getElementById('font-size-label');
 
-  btnMinus.addEventListener('click', function() {
-    applyFontSize(currentFontLevel - 1);
-  });
+  if (btnMinus) {
+    btnMinus.addEventListener('click', function() {
+      applyFontSize(currentFontLevel - 1);
+    });
+  }
 
-  btnPlus.addEventListener('click', function() {
-    applyFontSize(currentFontLevel + 1);
-  });
+  if (btnPlus) {
+    btnPlus.addEventListener('click', function() {
+      applyFontSize(currentFontLevel + 1);
+    });
+  }
 
   function updateFontUI() {
+    if (!barFill || !fontLabel) return;
     var pct = ((currentFontLevel - 1) / 4) * 100;
     barFill.style.width = pct + '%';
     fontLabel.textContent = FONT_SIZES[currentFontLevel - 1] + 'px';
-    btnMinus.disabled = currentFontLevel <= 1;
-    btnPlus.disabled = currentFontLevel >= 5;
+    if (btnMinus) btnMinus.disabled = currentFontLevel <= 1;
+    if (btnPlus) btnPlus.disabled = currentFontLevel >= 5;
   }
-
-  // --- Back to top button ---
-  function updateBackToTop() {
-    if (panel.classList.contains('open')) return;
-    if (window.scrollY > 300) {
-      backToTop.classList.add('visible');
-    } else {
-      backToTop.classList.remove('visible');
-    }
-  }
-
-  backToTop.addEventListener('click', function() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-
-  window.addEventListener('scroll', updateBackToTop);
 
   // --- Init ---
   updateThemeCards();
   updateFontUI();
-  updateBackToTop();
 })();

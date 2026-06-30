@@ -65,7 +65,7 @@
   {% endif %}
   {% include mathjax.html %}
 </head>
-<body>
+<body data-page-level="chapter" data-book-key="{{ book_key }}" data-book-url="{{ book_data.url | relative_url }}" data-book-title="{{ book_data.title_vi }}">
   <div class="page-wrapper">
     <!-- LEFT: TOC -->
     <nav class="toc">
@@ -113,6 +113,7 @@
 
   {% include floating-ui.html show_share=true %}
 
+  <script src="{{ '/js/floating-nav.js' | relative_url }}"></script>
   <script src="{{ '/js/nav.js' | relative_url }}"></script>
   <script src="{{ '/js/settings.js' | relative_url }}"></script>
   <script src="{{ '/js/deeplink.js' | relative_url }}"></script>

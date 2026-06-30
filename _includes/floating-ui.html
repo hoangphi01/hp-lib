@@ -1,21 +1,46 @@
 {% comment %}
-  Floating UI: back-to-top, share (optional), settings button + panel + toast + overlay.
-  Parameters: include.show_share (boolean) — whether to show share/deep-link button.
+  Floating Nav (Assistive Touch): draggable main button that expands to show
+  context-aware navigation + utility buttons. Replaces old floating buttons.
+  Parameters: include.show_share (boolean)
 {% endcomment %}
 
-<!-- Floating buttons (bottom-right) -->
-<div class="floating-buttons">
-  {% if include.show_share %}
-  <button id="share-btn" class="floating-btn share-btn" aria-label="Chia sẻ link tới vị trí hiện tại">
-    <span class="material-icons-outlined" style="font-size:22px">link</span>
+<!-- Floating Nav - Assistive Touch -->
+<div id="floating-nav" class="floating-nav" role="navigation" aria-label="Điều hướng nhanh">
+  <!-- Main toggle button (draggable) -->
+  <button id="floating-nav-toggle" class="floating-nav__toggle" aria-label="Menu điều hướng" aria-expanded="false">
+    <span class="material-icons-outlined floating-nav__icon-menu">explore</span>
+    <span class="material-icons-outlined floating-nav__icon-close">close</span>
   </button>
-  {% endif %}
-  <button id="back-to-top" class="floating-btn back-to-top" aria-label="Quay lên đầu trang">
-    <span class="material-icons-outlined" style="font-size:22px">vertical_align_top</span>
-  </button>
-  <button id="settings-btn" class="floating-btn" aria-label="Cài đặt giao diện" aria-expanded="false" aria-controls="settings-panel">
-    <span class="material-icons-outlined" style="font-size:22px">text_fields</span>
-  </button>
+
+  <!-- Expandable menu items (fan upward) -->
+  <div class="floating-nav__menu" id="floating-nav-menu">
+    <!-- Back to Top -->
+    <button class="floating-nav__item" id="fn-back-top" aria-label="Quay lên đầu trang" data-tooltip="Lên đầu">
+      <span class="material-icons-outlined">vertical_align_top</span>
+    </button>
+
+    <!-- Settings -->
+    <button class="floating-nav__item" id="fn-settings" aria-label="Cài đặt giao diện" data-tooltip="Giao diện">
+      <span class="material-icons-outlined">text_fields</span>
+    </button>
+
+    {% if include.show_share %}
+    <!-- Share / Deep-link -->
+    <button class="floating-nav__item" id="fn-share" aria-label="Chia sẻ link" data-tooltip="Chia sẻ">
+      <span class="material-icons-outlined">link</span>
+    </button>
+    {% endif %}
+
+    <!-- Back to Book (L2 only) -->
+    <a class="floating-nav__item floating-nav__item--nav" id="fn-book" aria-label="Về trang sách" data-tooltip="Trang sách" href="#">
+      <span class="material-icons-outlined">menu_book</span>
+    </a>
+
+    <!-- Home / Library -->
+    <a class="floating-nav__item floating-nav__item--nav" id="fn-home" aria-label="Thư viện" data-tooltip="Thư viện" href="{{ '/' | relative_url }}">
+      <span class="material-icons-outlined">home</span>
+    </a>
+  </div>
 </div>
 
 <!-- Settings panel -->

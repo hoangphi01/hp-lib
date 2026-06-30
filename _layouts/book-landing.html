@@ -38,7 +38,7 @@
   {% endif %}
   {% include mathjax.html %}
 </head>
-<body>
+<body data-page-level="book-landing" data-book-key="{{ book_key }}" data-book-url="{{ book_data.url | relative_url }}" data-book-title="{{ book_data.title_vi }}">
   <div class="page-wrapper" style="grid-template-columns: 1fr;">
     <div class="content" style="max-width: 900px;">
 
@@ -126,6 +126,7 @@
 
   {% include floating-ui.html show_share=false %}
 
+  <script src="{{ '/js/floating-nav.js' | relative_url }}"></script>
   <script src="{{ '/js/nav.js' | relative_url }}"></script>
   <script src="{{ '/js/settings.js' | relative_url }}"></script>
 </body>
