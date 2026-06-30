@@ -2,7 +2,7 @@
 
 Thư viện tài liệu nghiên cứu PhD cá nhân — Đại học Debrecen, Hungary.
 
-Live site: [hp-lib.io.vn](https://hp-lib.io.vn) (sắp có)
+Live site: [hp-lib.io.vn](https://hp-lib.io.vn)
 
 ## Cấu trúc dự án
 
@@ -20,10 +20,12 @@ hp-lib/
 │
 ├── _layouts/
 │   ├── default.html              # Layout trang chủ thư viện
+│   ├── book-landing.html         # Layout trang chủ sách (mục lục, weekly update)
 │   └── book-chapter.html         # Layout 3 cột cho chương sách
 │
 ├── _includes/
-│   ├── book-nav.html             # Navigation bar cho sách
+│   ├── book-nav.html             # TOC navigation cho sách (left column)
+│   ├── floating-ui.html          # Floating nav Assistive Touch + settings panel
 │   ├── mathjax.html              # MathJax v3 config + custom macros
 │   ├── components/               # 8 component includes (box, example, exercise, review)
 │   └── sidebars/markov/          # Sidebar mục lục từng chương
@@ -37,14 +39,17 @@ hp-lib/
 │
 ├── css/
 │   ├── framework.css             # CSS framework dùng chung (grid, boxes)
+│   ├── shared-ui.css             # Font sizes, 7 reading themes, floating nav, settings panel
 │   ├── library.css               # CSS trang chủ thư viện
 │   └── themes/
-│       ├── markov.css            # Theme chính cho sách Markov
-│       └── markov-themes.css     # 7 theme variants (quiet, paper, bold, calm, focus, dark)
+│       └── markov.css            # Per-book theme (font, box colors, palette)
 │
 └── js/
-    ├── nav.js                    # Điều hướng & sidebar toggle
-    └── settings.js               # Chuyển theme, font, lưu localStorage
+    ├── floating-nav.js           # Assistive Touch: drag, expand/collapse, context-aware nav
+    ├── nav.js                    # TOC active state tracking & smooth scroll
+    ├── settings.js               # Theme switching, font size, localStorage
+    ├── deeplink.js               # Deep-link share (URL hash + highlight)
+    └── library.js                # Library landing page (search, hamburger menu)
 ```
 
 ## Cách hoạt động
@@ -74,11 +79,16 @@ bundle exec jekyll serve
 
 - Song ngữ Việt-Anh (heading + nội dung)
 - MathJax v3 với custom macros (`\PP`, `\E`, `\N`, `\Z`, `\R`, `\ind`)
-- 7 theme: original, quiet, paper, bold, calm, focus, dark
-- Responsive 3-column layout (sidebar / content / outline)
+- 7 reading themes: original, quiet, paper, bold, calm, focus, dark
+- 5 font size levels (15–22px)
+- Responsive 3-column layout (TOC / content / sidebar)
 - 5 loại box: definition (xanh lá), theorem (đỏ), formula (vàng), summary (xanh dương), review (tím)
 - Badge trạng thái tự động: Hoàn thành / Đang viết / Kế hoạch
-- Lưu preferences (theme, font) vào localStorage
+- Floating nav Assistive Touch — draggable, snap-to-edge, context-aware (Home, Back to Book, Share, Settings, Back to Top)
+- Deep-linking: chia sẻ link trực tiếp tới definition/theorem/example cụ thể
+- Lưu preferences (theme, font, nav position) vào localStorage
+- Landing page: search, progress bars, responsive navbar
+- Deploy: Cloudflare Pages
 
 ---
 
@@ -111,9 +121,12 @@ Browser print → PDF từ progress page, hoặc LaTeX report riêng.
 
 ### Roadmap
 
-| Ưu tiên | Tính năng | Backend? | Ghi chú |
-|---------|-----------|----------|---------|
-| P0 | Deploy Cloudflare Pages | Không | CNAME hp-lib.io.vn |
+| Ưu tiên | Tính năng | Backend? | Trạng thái |
+|---------|-----------|----------|------------|
+| P0 | Deploy Cloudflare Pages | Không | Done |
+| P0 | Landing page (search, stats, navbar) | Không | Done |
+| P0 | Deep-linking (share block-level URLs) | Không | Done |
+| P0 | Floating nav Assistive Touch | Không | Done |
 | P1 | Progress page cho thầy | Không | `/progress.html` đọc YAML |
 | P1 | Print CSS | Không | `@media print` |
 | P2 | Client-side search | Không | Lunr.js khi có 3+ sách |
