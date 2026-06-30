@@ -1,4 +1,5 @@
-/* Themes CSS - 6 Apple Books-style themes + font size levels */
+/* Shared UI CSS - Font sizes, 7 reading themes, floating buttons, settings panel */
+/* Used by all books. Per-book CSS provides font, box colors, palette overrides. */
 
 /* === Font Size Levels === */
 html[data-fontsize="1"] { font-size: 15px; }
@@ -217,7 +218,7 @@ html[data-theme="focus"] {
   --link-visited: #555;
 }
 
-/* === Dark mode variant for each theme === */
+/* === Theme: Dark === */
 html[data-theme="dark"] {
   --bg-body: #1a1a2e;
   --bg-toc: #16162a;
@@ -250,22 +251,6 @@ html[data-theme="dark"] {
   --link-color: #6ab0e0;
   --link-hover: #8cc8f0;
   --link-visited: #b090d0;
-}
-
-/* Dark mode: adjust box colors for readability */
-html[data-theme="dark"] .box.definition { --box-bg: #1a2e1a; --box-border: #2a5a2a; }
-html[data-theme="dark"] .box.theorem    { --box-bg: #2e1a1a; --box-border: #5a2a2a; }
-html[data-theme="dark"] .box.formula    { --box-bg: #2e2a1a; --box-border: #5a4a2a; }
-html[data-theme="dark"] .box.summary    { --box-bg: #1a1a2e; --box-border: #2a2a5a; }
-
-html[data-theme="dark"] .example,
-html[data-theme="dark"] .exercise {
-  background: var(--example-bg);
-  border-color: var(--example-border);
-}
-
-html[data-theme="dark"] .exercise {
-  border-left-color: #a855c8;
 }
 
 /* Dark mode: MathJax color override */
@@ -366,8 +351,6 @@ html[data-theme="dark"] mjx-container {
   visibility: visible;
   transform: translateY(0);
 }
-
-/* Panel opens upward from bottom-right buttons */
 
 .settings-panel h3 {
   font-size: 15px;

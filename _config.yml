@@ -9,3 +9,4 @@ exclude:
   - README.md
   - .gitignore
   - docs/
+  - scripts/

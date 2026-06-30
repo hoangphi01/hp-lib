@@ -2,12 +2,15 @@
 MathJax = {
   tex: {
     macros: {
-      PP: "\\mathbb{P}",
-      E: "\\mathbb{E}",
-      N: "\\mathbb{N}",
-      Z: "\\mathbb{Z}",
-      R: "\\mathbb{R}",
-      ind: "\\mathbf{1}"
+      {% assign book_key = page.book_key %}
+      {% if book_key %}
+        {% assign macros = site.data[book_key].mathjax.macros %}
+        {% if macros %}
+          {% for m in macros %}
+            {{ m[0] | jsonify }}: {{ m[1] | jsonify }}{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        {% endif %}
+      {% endif %}
     },
     tags: 'ams'
   }

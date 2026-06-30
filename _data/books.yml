@@ -3,10 +3,21 @@
   title_en: "Markov Chains"
   subtitle: "Tài liệu Song ngữ Việt-Anh"
   source: "Privault (2011)"
+  source_title: "Notes on Markov Chains"
+  source_author: "Nicolas Privault (NTU, 2011)"
   status: active
-  chapters: 7
   cover: /assets/covers/markov.png
   url: /books/markov-chains/
   description: "Lý thuyết chuỗi Markov với ví dụ chi tiết và bài tập song ngữ."
   tags: [xác suất, ngẫu nhiên, markov]
   data_key: markov
+  theme_css: markov
+  google_font: "Literata:ital,wght@0,400;0,700;1,400;1,700"
+  about_vi: |
+    Tài liệu này trình bày lý thuyết chuỗi Markov bằng song ngữ Việt--Anh,
+    được biên soạn từ sách <em>Notes on Markov Chains</em> của Nicolas Privault (NTU, 2011).
+    Nội dung bao gồm 1 chương giới thiệu, 5 chương chính và 1 phụ lục, với các ví dụ chi tiết,
+    bài tập, và phương pháp sư phạm giúp hiểu trực quan các khái niệm toán học.
+  about_en: |
+    Layout 3 cột (khi xem trên desktop): mục lục bên trái, nội dung chính ở giữa,
+    sidebar bên phải với các ký hiệu và tham chiếu nhanh.

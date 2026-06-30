@@ -224,6 +224,22 @@ aside {
   color: var(--text-muted, #6b655e);
 }
 
+/* Dark mode: adjust box colors for readability */
+html[data-theme="dark"] .box.definition { --box-bg: #1a2e1a; --box-border: #2a5a2a; }
+html[data-theme="dark"] .box.theorem    { --box-bg: #2e1a1a; --box-border: #5a2a2a; }
+html[data-theme="dark"] .box.formula    { --box-bg: #2e2a1a; --box-border: #5a4a2a; }
+html[data-theme="dark"] .box.summary    { --box-bg: #1a1a2e; --box-border: #2a2a5a; }
+
+html[data-theme="dark"] .example,
+html[data-theme="dark"] .exercise {
+  background: var(--example-bg);
+  border-color: var(--example-border);
+}
+
+html[data-theme="dark"] .exercise {
+  border-left-color: #a855c8;
+}
+
 /* Responsive overrides */
 @media (max-width: 900px) {
   .toc {

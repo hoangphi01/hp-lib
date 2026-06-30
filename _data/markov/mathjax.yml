@@ -1,0 +1,7 @@
+macros:
+  PP: "\\mathbb{P}"
+  E: "\\mathbb{E}"
+  N: "\\mathbb{N}"
+  Z: "\\mathbb{Z}"
+  R: "\\mathbb{R}"
+  ind: "\\mathbf{1}"

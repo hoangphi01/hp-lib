@@ -52,13 +52,17 @@
       document.documentElement.setAttribute('data-fontsize',f);
     })();
   </script>
+  {% if book_data.google_font %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Literata:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family={{ book_data.google_font }}&display=swap" rel="stylesheet">
+  {% endif %}
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
   <link rel="stylesheet" href="{{ '/css/framework.css' | relative_url }}">
-  <link rel="stylesheet" href="{{ '/css/themes/markov.css' | relative_url }}">
-  <link rel="stylesheet" href="{{ '/css/themes/markov-themes.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/css/shared-ui.css' | relative_url }}">
+  {% if book_data.theme_css %}
+  <link rel="stylesheet" href="{{ '/css/themes/' | append: book_data.theme_css | append: '.css' | relative_url }}">
+  {% endif %}
   {% include mathjax.html %}
 </head>
 <body>
@@ -100,77 +104,14 @@
     <aside class="sidebar">
       {% if page.sidebar_include %}
         {% include {{ page.sidebar_include }} %}
+      {% else %}
+        {% capture sidebar_file %}sidebars/{{ page.book_key }}/{{ page.slug }}.html{% endcapture %}
+        {% include {{ sidebar_file }} %}
       {% endif %}
     </aside>
   </div>
 
-  <!-- Floating buttons (bottom-right) -->
-  <div class="floating-buttons">
-    <button id="share-btn" class="floating-btn share-btn" aria-label="Chia sẻ link tới vị trí hiện tại">
-      <span class="material-icons-outlined" style="font-size:22px">link</span>
-    </button>
-    <button id="back-to-top" class="floating-btn back-to-top" aria-label="Quay lên đầu trang">
-      <span class="material-icons-outlined" style="font-size:22px">vertical_align_top</span>
-    </button>
-    <button id="settings-btn" class="floating-btn" aria-label="Cài đặt giao diện" aria-expanded="false" aria-controls="settings-panel">
-      <span class="material-icons-outlined" style="font-size:22px">text_fields</span>
-    </button>
-  </div>
-
-  <!-- Settings panel -->
-  <div id="settings-panel" class="settings-panel" role="dialog" aria-label="Giao diện đọc">
-    <h3>Giao diện đọc</h3>
-
-    <!-- Font size -->
-    <div class="font-size-controls">
-      <button id="font-decrease" aria-label="Giảm cỡ chữ" style="font-size:14px">A</button>
-      <div class="font-size-bar">
-        <div class="font-size-bar-fill" id="font-bar-fill"></div>
-      </div>
-      <span class="font-size-label" id="font-size-label">18px</span>
-      <button id="font-increase" aria-label="Tăng cỡ chữ" style="font-size:20px">A</button>
-    </div>
-
-    <div class="settings-divider"></div>
-
-    <!-- Theme grid -->
-    <div class="theme-grid">
-      <button class="theme-card" data-theme="original">
-        <div class="theme-card-swatch"></div>
-        Original
-      </button>
-      <button class="theme-card" data-theme="quiet">
-        <div class="theme-card-swatch"></div>
-        Quiet
-      </button>
-      <button class="theme-card" data-theme="paper">
-        <div class="theme-card-swatch"></div>
-        Paper
-      </button>
-      <button class="theme-card" data-theme="bold">
-        <div class="theme-card-swatch"></div>
-        Bold
-      </button>
-      <button class="theme-card" data-theme="calm">
-        <div class="theme-card-swatch"></div>
-        Calm
-      </button>
-      <button class="theme-card" data-theme="focus">
-        <div class="theme-card-swatch"></div>
-        Focus
-      </button>
-      <button class="theme-card" data-theme="dark">
-        <div class="theme-card-swatch"></div>
-        Dark
-      </button>
-    </div>
-  </div>
-
-  <!-- Share toast -->
-  <div id="share-toast" class="share-toast" aria-live="polite"></div>
-
-  <!-- Mobile overlay -->
-  <div id="settings-overlay" class="settings-overlay"></div>
+  {% include floating-ui.html show_share=true %}
 
   <script src="{{ '/js/nav.js' | relative_url }}"></script>
   <script src="{{ '/js/settings.js' | relative_url }}"></script>

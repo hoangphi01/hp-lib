@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% assign book_key = page.book_key %}
+  {% assign book_data = nil %}
+  {% for book in site.data.books %}
+    {% if book.data_key == book_key %}{% assign book_data = book %}{% endif %}
+  {% endfor %}
+  {% assign chapters = site.data[book_key].chapters %}
+  <title>{{ book_data.title_vi }} - {{ book_data.subtitle }}</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ book_data.title_vi }} - {{ book_data.subtitle }}">
+  <meta property="og:description" content="{{ book_data.description }}">
+  <meta property="og:site_name" content="{{ site.title }}">
+  <meta property="og:locale" content="vi_VN">
+  <meta name="description" content="{{ book_data.description }}">
+  <!-- Prevent flash: apply saved theme/font before render -->
+  <script>
+    (function(){
+      var t=localStorage.getItem('theme')||'original';
+      var f=localStorage.getItem('fontSize')||'3';
+      document.documentElement.setAttribute('data-theme',t);
+      document.documentElement.setAttribute('data-fontsize',f);
+    })();
+  </script>
+  {% if book_data.google_font %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family={{ book_data.google_font }}&display=swap" rel="stylesheet">
+  {% endif %}
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <link rel="stylesheet" href="{{ '/css/framework.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/css/shared-ui.css' | relative_url }}">
+  {% if book_data.theme_css %}
+  <link rel="stylesheet" href="{{ '/css/themes/' | append: book_data.theme_css | append: '.css' | relative_url }}">
+  {% endif %}
+  {% include mathjax.html %}
+</head>
+<body>
+  <div class="page-wrapper" style="grid-template-columns: 1fr;">
+    <div class="content" style="max-width: 900px;">
+
+      <p style="margin-bottom: 20px;"><a href="{{ '/' | relative_url }}" style="font-size: 14px; text-decoration: none; color: var(--text-muted, #888);">&larr; Thư viện</a></p>
+
+      <!-- Hero -->
+      <div class="index-hero">
+        <h1>{{ book_data.title_vi }}</h1>
+        <p class="subtitle">{{ book_data.subtitle }}</p>
+        {% if book_data.source_title %}
+        <p style="margin-top: 15px; font-size: 15px; color: #888;">
+          Dựa trên <em>{{ book_data.source_title }}</em> của {{ book_data.source_author }}<br>
+          Biên soạn phục vụ nghiên cứu PhD -- Đại học Debrecen
+        </p>
+        {% endif %}
+      </div>
+
+      <!-- Weekly update -->
+      {% assign weekly = site.data[book_key].weekly | first %}
+      {% if weekly %}
+      <section class="weekly-update">
+        <h3>Cập nhật tuần {{ weekly.week }}</h3>
+        <ul>
+          {% for item in weekly.items %}
+            <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+
+      <h2>Mục lục / Table of Contents</h2>
+
+      <!-- Chapter grid -->
+      <div class="chapter-grid">
+        {% for ch in chapters %}
+        {% unless ch.slug == "index" %}
+        <div class="chapter-card">
+          <h3>
+            <a href="{{ ch.url | relative_url }}">{{ ch.heading }}</a>
+            {% if ch.status == "done" %}
+              <span class="badge badge-done">Hoàn thành</span>
+            {% elsif ch.status == "in-progress" %}
+              <span class="badge badge-wip">Đang viết</span>
+            {% elsif ch.status == "planned" %}
+              <span class="badge badge-planned">Kế hoạch</span>
+            {% endif %}
+          </h3>
+          <p class="card-subtitle">{{ ch.heading_en }}</p>
+          <p>{{ ch.description }}</p>
+          {% if ch.last_updated %}
+            <small class="last-updated">Cập nhật: {{ ch.last_updated | date: "%d/%m/%Y" }}</small>
+          {% endif %}
+        </div>
+        {% endunless %}
+        {% endfor %}
+      </div>
+
+      <!-- About -->
+      {% if book_data.about_vi %}
+      <h2>Giới thiệu / About</h2>
+      <p>{{ book_data.about_vi }}</p>
+      {% if book_data.about_en %}
+      <p>Các công thức toán học được render bằng <strong>MathJax</strong>.
+      {{ book_data.about_en }}</p>
+      {% endif %}
+      {% endif %}
+
+      <!-- Symbols -->
+      {% assign symbols = site.data[book_key].symbols %}
+      {% if symbols %}
+      <div class="box summary">
+        <p class="box-title">Các ký hiệu chính / Key Symbols</p>
+        <ul>
+          {% for sym in symbols %}
+          <li>\({{ sym.latex }}\) -- {{ sym.vi }} <em>({{ sym.en }})</em></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      {{ content }}
+
+    </div>
+  </div>
+
+  {% include floating-ui.html show_share=false %}
+
+  <script src="{{ '/js/nav.js' | relative_url }}"></script>
+  <script src="{{ '/js/settings.js' | relative_url }}"></script>
+</body>
+</html>
