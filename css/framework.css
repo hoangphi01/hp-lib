@@ -454,25 +454,7 @@ mjx-container {
   overflow-y: hidden;
 }
 
-/* === Visual Hierarchy: Secondary tier (formula) === */
-.box.formula .box-title {
-  background: none;
-  color: var(--box-header);
-  border-radius: 0;
-  padding: 10px 20px;
-  border-left: 4px solid var(--box-header);
-}
-
-.box.formula {
-  box-shadow: none;
-  background: var(--box-bg);
-  border: 1px solid var(--box-border);
-}
-
-.box.formula .box-body {
-  border: none;
-  background: none;
-}
+/* All box types (definition, theorem, formula, summary) use filled header */
 
 /* === Component Spacing === */
 .box + .box, .box + .example, .example + .box, .example + .example { margin-top: 32px; }
