@@ -303,7 +303,14 @@ details[open] > .lib-weekly__summary::before {
 .lib-book-card__source {
   font-size: 13px;
   color: var(--lib-text-muted);
-  margin-bottom: 14px;
+  margin-bottom: 6px;
+}
+
+.lib-book-card__desc {
+  font-size: 13px;
+  color: var(--lib-text-light);
+  line-height: 1.5;
+  margin-bottom: 12px;
 }
 
 /* Progress bar */

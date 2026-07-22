@@ -1,7 +1,6 @@
 - slug: markov-chains
   title_vi: "Chuỗi Markov"
   title_en: "Markov Chains"
-  subtitle: "Tài liệu Song ngữ Việt-Anh"
   source: "Privault (2011)"
   source_title: "Notes on Markov Chains"
   source_author: "Nicolas Privault (NTU, 2011)"
@@ -21,3 +20,30 @@
   about_en: |
     Layout 3 cột (khi xem trên desktop): mục lục bên trái, nội dung chính ở giữa,
     sidebar bên phải với các ký hiệu và tham chiếu nhanh.
+
+- slug: tollbooth-paper
+  title_vi: "Đọc bài báo: Tollbooth Tandem Queue"
+  title_en: "A closed-form solution for a tollbooth tandem queue"
+  source: "Do, T.V. (2015)"
+  source_title: "European Journal of Operational Research, Vol. 247"
+  source_author: "Tien Van Do"
+  status: active
+  url: "#"
+  description: "Nghiên cứu bài báo của thầy Đỗ Văn Tiến về lời giải dạng đóng cho hàng đợi tollbooth với hai máy chủ không đồng nhất."
+  tags: [hàng đợi, markov, bài báo]
+  data_key: tollbooth
+  progress_manual:
+    total: 5
+    done: 1
+    wip: 1
+    sections:
+      - name: "Giới thiệu & bối cảnh"
+        status: done
+      - name: "Spectral expansion method"
+        status: in-progress
+      - name: "Closed-form solution"
+        status: planned
+      - name: "Kết quả số"
+        status: planned
+      - name: "Tổng kết & ghi chú"
+        status: planned

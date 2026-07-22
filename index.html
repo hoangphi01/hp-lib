@@ -3,24 +3,6 @@ layout: default
 title: "Thư viện Nghiên cứu"
 ---
 
-{% comment %} ===== Compute book stats ===== {% endcomment %}
-{% for book in site.data.books %}
-  {% assign chapters = site.data[book.data_key].chapters %}
-  {% assign b_total = 0 %}
-  {% assign b_done = 0 %}
-  {% assign b_wip = 0 %}
-  {% for ch in chapters %}
-    {% if ch.status %}
-      {% assign b_total = b_total | plus: 1 %}
-      {% if ch.status == "done" %}
-        {% assign b_done = b_done | plus: 1 %}
-      {% elsif ch.status == "in-progress" %}
-        {% assign b_wip = b_wip | plus: 1 %}
-      {% endif %}
-    {% endif %}
-  {% endfor %}
-{% endfor %}
-
 <!-- Hero -->
 <section class="lib-hero">
   <h1 class="lib-hero__title">Thư viện Nghiên cứu</h1>
@@ -83,25 +65,36 @@ title: "Thư viện Nghiên cứu"
   {% endfor %}
 </section>
 
-<!-- Bookshelf: Phi's own digital books -->
+<!-- Current tasks -->
 <section class="lib-bookshelf">
-  <h2 class="lib-bookshelf__heading">Sách của Phi</h2>
+  <h2 class="lib-bookshelf__heading">Tiến độ hiện tại</h2>
 
   {% for book in site.data.books %}
+    {% comment %} Compute progress: from chapters.yml or manual {% endcomment %}
     {% assign chapters = site.data[book.data_key].chapters %}
-    {% assign b_total = 0 %}
-    {% assign b_done = 0 %}
-    {% assign b_wip = 0 %}
-    {% for ch in chapters %}
-      {% if ch.status %}
-        {% assign b_total = b_total | plus: 1 %}
-        {% if ch.status == "done" %}
-          {% assign b_done = b_done | plus: 1 %}
-        {% elsif ch.status == "in-progress" %}
-          {% assign b_wip = b_wip | plus: 1 %}
+    {% if chapters %}
+      {% assign b_total = 0 %}
+      {% assign b_done = 0 %}
+      {% assign b_wip = 0 %}
+      {% for ch in chapters %}
+        {% if ch.status %}
+          {% assign b_total = b_total | plus: 1 %}
+          {% if ch.status == "done" %}
+            {% assign b_done = b_done | plus: 1 %}
+          {% elsif ch.status == "in-progress" %}
+            {% assign b_wip = b_wip | plus: 1 %}
+          {% endif %}
         {% endif %}
-      {% endif %}
-    {% endfor %}
+      {% endfor %}
+    {% elsif book.progress_manual %}
+      {% assign b_total = book.progress_manual.total %}
+      {% assign b_done = book.progress_manual.done %}
+      {% assign b_wip = book.progress_manual.wip %}
+    {% else %}
+      {% assign b_total = 0 %}
+      {% assign b_done = 0 %}
+      {% assign b_wip = 0 %}
+    {% endif %}
     {% if b_total > 0 %}
       {% assign done_pct = b_done | times: 100 | divided_by: b_total %}
       {% assign wip_pct = b_wip | times: 100 | divided_by: b_total %}
@@ -112,20 +105,23 @@ title: "Thư viện Nghiên cứu"
 
     <a href="{{ book.url | relative_url }}" class="lib-book-card">
       <div class="lib-book-card__cover">
-        <span class="material-icons-outlined">menu_book</span>
+        <span class="material-icons-outlined">
+          {% if book.tags contains 'bài báo' %}article{% else %}menu_book{% endif %}
+        </span>
       </div>
       <div class="lib-book-card__body">
-        <h3 class="lib-book-card__title">{{ book.title_vi }} &mdash; {{ book.title_en }}</h3>
-        <p class="lib-book-card__source">{{ book.source }} &middot; {{ book.subtitle }}</p>
+        <h3 class="lib-book-card__title">{{ book.title_vi }}</h3>
+        <p class="lib-book-card__source">{{ book.source }}</p>
+        <p class="lib-book-card__desc">{{ book.description }}</p>
         <div class="lib-book-card__progress">
           <div class="lib-book-card__progress-bar">
             <div class="lib-book-card__progress-done" style="width: {{ done_pct }}%"></div>
             <div class="lib-book-card__progress-wip" style="width: {{ wip_pct }}%"></div>
           </div>
-          <span class="lib-book-card__progress-text">{{ b_done }}/{{ b_total }} chương</span>
+          <span class="lib-book-card__progress-text">{{ b_done }}/{{ b_total }} phần</span>
         </div>
         <span class="lib-badge lib-badge--{{ book.status }}">
-          {% if book.status == "active" %}Đang viết{% elsif book.status == "draft" %}Bản nháp{% else %}Kế hoạch{% endif %}
+          {% if book.status == "active" %}Đang làm{% elsif book.status == "draft" %}Bản nháp{% else %}Kế hoạch{% endif %}
         </span>
       </div>
     </a>
