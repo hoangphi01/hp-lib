@@ -1,0 +1,23 @@
+# Moi nhat o tren
+- week: "2026-07-21"
+  items:
+    - "Nghien cuu Xac suat cham (Hitting Probabilities): tinh xac suat chuoi Markov di tu trang thai nay den trang thai khac"
+    - "Nghien cuu Thoi gian cham va hap thu trung binh: phan tich so buoc trung binh de dat trang thai muc tieu"
+  plan:
+    - "Nghien cuu ve thoi gian quay lai lan dau (First Return Times)"
+    - "Tim hieu ve phan loai trang thai (Classification of States)"
+
+- week: "2026-07-14"
+  items:
+    - "Hoan thanh Chuong 3: Thoi gian cham va Hap thu (Hitting Times & Absorption)"
+    - "Viet bai tap va vi du minh hoa cho cac khai niem ve thoi gian cham"
+  plan:
+    - "Bat dau nghien cuu Xac suat cham (Hitting Probabilities)"
+    - "Tiep tuc bo sung vi du cho Chuong 3"
+
+- week: "2026-07-07"
+  items:
+    - "Hoan thanh Chuong 2: Phan loai Trang thai (Classification of States)"
+    - "Them cac vi du ve trang thai hut va trang thai thoang qua"
+  plan:
+    - "Bat dau Chuong 3: Thoi gian cham va Hap thu"

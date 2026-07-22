@@ -1,19 +1,21 @@
 ---
 layout: default
-title: "Thư viện Nghiên cứu"
+title: "Thu vien Nghien cuu"
 ---
 
-{% comment %} ===== Compute stats ===== {% endcomment %}
-{% assign total_books = site.data.books | size %}
-{% assign total_chapters = 0 %}
-{% assign done_chapters = 0 %}
+{% comment %} ===== Compute book stats ===== {% endcomment %}
 {% for book in site.data.books %}
   {% assign chapters = site.data[book.data_key].chapters %}
+  {% assign b_total = 0 %}
+  {% assign b_done = 0 %}
+  {% assign b_wip = 0 %}
   {% for ch in chapters %}
     {% if ch.status %}
-      {% assign total_chapters = total_chapters | plus: 1 %}
+      {% assign b_total = b_total | plus: 1 %}
       {% if ch.status == "done" %}
-        {% assign done_chapters = done_chapters | plus: 1 %}
+        {% assign b_done = b_done | plus: 1 %}
+      {% elsif ch.status == "in-progress" %}
+        {% assign b_wip = b_wip | plus: 1 %}
       {% endif %}
     {% endif %}
   {% endfor %}
@@ -21,130 +23,76 @@ title: "Thư viện Nghiên cứu"
 
 <!-- Hero -->
 <section class="lib-hero">
-  <h1 class="lib-hero__title">Thư viện Nghiên cứu</h1>
-  <p class="lib-hero__subtitle">Tài liệu nghiên cứu PhD &mdash; Đại học Debrecen</p>
-  <div class="lib-stats">
-    <div class="lib-stats__item">
-      <span class="lib-stats__number">{{ total_books }}</span>
-      <span class="lib-stats__label">Sách</span>
-    </div>
-    <div class="lib-stats__item">
-      <span class="lib-stats__number">{{ total_chapters }}</span>
-      <span class="lib-stats__label">Chương</span>
-    </div>
-    <div class="lib-stats__item">
-      <span class="lib-stats__number">{{ done_chapters }}</span>
-      <span class="lib-stats__label">Hoàn thành</span>
-    </div>
-  </div>
+  <h1 class="lib-hero__title">Thu vien Nghien cuu</h1>
+  <p class="lib-hero__subtitle">Tai lieu nghien cuu PhD &mdash; Dai hoc Debrecen</p>
 </section>
 
-<!-- Progress Overview -->
-{% assign wip_total = 0 %}
-{% assign plan_total = 0 %}
-{% for book in site.data.books %}
-  {% assign chapters = site.data[book.data_key].chapters %}
-  {% for ch in chapters %}
-    {% if ch.status == "in-progress" %}
-      {% assign wip_total = wip_total | plus: 1 %}
-    {% elsif ch.status == "planned" %}
-      {% assign plan_total = plan_total | plus: 1 %}
+<!-- Weekly Updates -->
+<section class="lib-weekly">
+  <h2 class="lib-weekly__heading">Cap nhat hang tuan</h2>
+
+  {% for entry in site.data.weekly %}
+    {% assign week_date = entry.week | date: "%d/%m/%Y" %}
+
+    {% if forloop.first %}
+      <!-- Latest week: always expanded -->
+      <div class="lib-weekly__card lib-weekly__card--latest">
+        <h3 class="lib-weekly__date">Tuan {{ week_date }}</h3>
+        {% if entry.items.size > 0 %}
+          <p class="lib-weekly__label">Thua thay, tuan vua roi con da hoan thanh:</p>
+          <ul class="lib-weekly__list">
+            {% for item in entry.items %}
+              <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        {% if entry.plan.size > 0 %}
+          <p class="lib-weekly__label">Ke hoach tuan toi:</p>
+          <ul class="lib-weekly__list lib-weekly__list--plan">
+            {% for item in entry.plan %}
+              <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+    {% else %}
+      <!-- Older weeks: collapsible -->
+      <details class="lib-weekly__card">
+        <summary class="lib-weekly__summary">Tuan {{ week_date }}</summary>
+        <div class="lib-weekly__content">
+          {% if entry.items.size > 0 %}
+            <p class="lib-weekly__label">Da hoan thanh:</p>
+            <ul class="lib-weekly__list">
+              {% for item in entry.items %}
+                <li>{{ item }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+          {% if entry.plan.size > 0 %}
+            <p class="lib-weekly__label">Ke hoach tuan toi:</p>
+            <ul class="lib-weekly__list lib-weekly__list--plan">
+              {% for item in entry.plan %}
+                <li>{{ item }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      </details>
     {% endif %}
   {% endfor %}
-{% endfor %}
-
-{% assign circumference = 327 %}
-{% if total_chapters > 0 %}
-  {% assign done_offset = done_chapters | times: circumference | divided_by: total_chapters %}
-  {% assign ring_offset = circumference | minus: done_offset %}
-{% else %}
-  {% assign ring_offset = circumference %}
-{% endif %}
-
-<section class="lib-progress">
-  <div class="lib-progress__inner">
-    <!-- SVG Ring -->
-    <div class="lib-progress__ring">
-      <svg width="130" height="130" viewBox="0 0 130 130">
-        <circle class="lib-progress__ring-bg" cx="65" cy="65" r="52"/>
-        <circle class="lib-progress__ring-fill" cx="65" cy="65" r="52"
-                stroke-dasharray="{{ circumference }}"
-                stroke-dashoffset="{{ ring_offset }}"/>
-        <text class="lib-progress__ring-text" x="65" y="62" text-anchor="middle" dominant-baseline="middle" transform="rotate(90 65 65)">{{ done_chapters }}/{{ total_chapters }}</text>
-        <text class="lib-progress__ring-label" x="65" y="80" text-anchor="middle" transform="rotate(90 65 65)">chương</text>
-      </svg>
-      <div class="lib-progress__legend">
-        <span><span class="lib-progress__legend-dot lib-progress__legend-dot--done"></span>{{ done_chapters }}</span>
-        <span><span class="lib-progress__legend-dot lib-progress__legend-dot--wip"></span>{{ wip_total }}</span>
-        <span><span class="lib-progress__legend-dot lib-progress__legend-dot--planned"></span>{{ plan_total }}</span>
-      </div>
-    </div>
-
-    <!-- Linear Timeline -->
-    <div class="lib-progress__timeline">
-      {% for book in site.data.books %}
-        {% assign chapters = site.data[book.data_key].chapters %}
-        <h3>{{ book.title_vi }}</h3>
-        <div class="lib-timeline">
-          {% for ch in chapters %}
-            {% if ch.status %}
-              {% if ch.status == "done" %}
-                {% assign dot_class = "done" %}
-              {% elsif ch.status == "in-progress" %}
-                {% assign dot_class = "wip" %}
-              {% else %}
-                {% assign dot_class = "planned" %}
-              {% endif %}
-
-              <a href="{{ ch.url | relative_url }}" class="lib-timeline__node">
-                <span class="lib-timeline__dot lib-timeline__dot--{{ dot_class }}"></span>
-                <span class="lib-timeline__label">{{ ch.nav_title }}</span>
-                {% if ch.last_updated %}<span class="lib-timeline__date">{{ ch.last_updated }}</span>{% endif %}
-                {% unless forloop.last %}
-                  <span class="lib-timeline__connector lib-timeline__connector--{{ dot_class }}"></span>
-                {% endunless %}
-              </a>
-            {% endif %}
-          {% endfor %}
-        </div>
-      {% endfor %}
-    </div>
-  </div>
 </section>
 
-<!-- Search / Filter -->
-<section class="lib-search">
-  <div class="lib-search__input-wrap">
-    <span class="material-icons-outlined">search</span>
-    <input type="text" class="lib-search__input" placeholder="Tìm kiếm sách, chương, từ khóa...">
-  </div>
-  <div class="lib-search__tags">
-    <button class="lib-search__tag lib-search__tag--active" data-tag="all">Tất cả</button>
-    {% assign all_tags = "" %}
-    {% for book in site.data.books %}
-      {% for tag in book.tags %}
-        {% unless all_tags contains tag %}
-          <button class="lib-search__tag" data-tag="{{ tag }}">{{ tag }}</button>
-          {% if all_tags == "" %}
-            {% assign all_tags = tag %}
-          {% else %}
-            {% assign all_tags = all_tags | append: "," | append: tag %}
-          {% endif %}
-        {% endunless %}
-      {% endfor %}
-    {% endfor %}
-  </div>
-</section>
+<!-- Bookshelf -->
+<section class="lib-bookshelf">
+  <h2 class="lib-bookshelf__heading">Ke sach</h2>
 
-<!-- Book Cards -->
-<section class="lib-book-grid" id="books">
   {% for book in site.data.books %}
-    {% comment %} ===== Per-book chapter stats ===== {% endcomment %}
-    {% assign book_chapters = site.data[book.data_key].chapters %}
+    {% assign chapters = site.data[book.data_key].chapters %}
     {% assign b_total = 0 %}
     {% assign b_done = 0 %}
     {% assign b_wip = 0 %}
-    {% for ch in book_chapters %}
+    {% for ch in chapters %}
       {% if ch.status %}
         {% assign b_total = b_total | plus: 1 %}
         {% if ch.status == "done" %}
@@ -162,57 +110,24 @@ title: "Thư viện Nghiên cứu"
       {% assign wip_pct = 0 %}
     {% endif %}
 
-    <a href="{{ book.url | relative_url }}"
-       class="lib-book-card"
-       data-title="{{ book.title_vi }} {{ book.title_en }}"
-       data-tags="{{ book.tags | join: ' ' }}"
-       style="animation-delay: {{ forloop.index0 | times: 100 }}ms">
-
+    <a href="{{ book.url | relative_url }}" class="lib-book-card">
       <div class="lib-book-card__cover">
         <span class="material-icons-outlined">menu_book</span>
       </div>
-
       <div class="lib-book-card__body">
-        <h2 class="lib-book-card__title">{{ book.title_vi }}</h2>
-        <p class="lib-book-card__title-en">{{ book.title_en }}</p>
-        <p class="lib-book-card__subtitle">{{ book.subtitle }} &mdash; {{ book.source }}</p>
-        <p class="lib-book-card__desc">{{ book.description }}</p>
-
-        <!-- Progress bar -->
+        <h3 class="lib-book-card__title">{{ book.title_vi }} &mdash; {{ book.title_en }}</h3>
+        <p class="lib-book-card__source">{{ book.source }} &middot; {{ book.subtitle }}</p>
         <div class="lib-book-card__progress">
           <div class="lib-book-card__progress-bar">
             <div class="lib-book-card__progress-done" style="width: {{ done_pct }}%"></div>
             <div class="lib-book-card__progress-wip" style="width: {{ wip_pct }}%"></div>
           </div>
-          <span class="lib-book-card__progress-text">{{ b_done }}/{{ b_total }} chương hoàn thành</span>
+          <span class="lib-book-card__progress-text">{{ b_done }}/{{ b_total }} chuong</span>
         </div>
-
-        <!-- Badges -->
-        <div class="lib-book-card__meta">
-          <span class="lib-badge lib-badge--{{ book.status }}">
-            <span class="material-icons-outlined">
-              {% if book.status == "active" %}edit_note{% elsif book.status == "draft" %}draft{% else %}schedule{% endif %}
-            </span>
-            {% if book.status == "active" %}Đang viết{% elsif book.status == "draft" %}Bản nháp{% else %}Kế hoạch{% endif %}
-          </span>
-          <span class="lib-badge lib-badge--format">
-            <span class="material-icons-outlined">code</span>
-            HTML
-          </span>
-        </div>
-
-        <!-- Tags -->
-        <div class="lib-book-card__tags">
-          {% for tag in book.tags %}
-            <span class="lib-book-card__tag">#{{ tag }}</span>
-          {% endfor %}
-        </div>
+        <span class="lib-badge lib-badge--{{ book.status }}">
+          {% if book.status == "active" %}Dang viet{% elsif book.status == "draft" %}Ban nhap{% else %}Ke hoach{% endif %}
+        </span>
       </div>
     </a>
   {% endfor %}
-
-  <div class="lib-empty">
-    <span class="material-icons-outlined">search_off</span>
-    <p>Không tìm thấy kết quả</p>
-  </div>
 </section>
