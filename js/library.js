@@ -1,4 +1,4 @@
-/* HP Library -- Landing page interactions */
+/* HP Library — Landing page interactions */
 
 (function () {
   'use strict';
@@ -20,4 +20,27 @@
       hamburger.textContent = isOpen ? 'close' : 'menu';
     });
   }
+
+  /* ---- Materials type filter ---- */
+  var filterButtons = document.querySelectorAll('.lib-materials__filter');
+  var spines = document.querySelectorAll('.lib-spine');
+
+  filterButtons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var type = btn.getAttribute('data-type');
+
+      filterButtons.forEach(function (b) {
+        b.classList.remove('lib-materials__filter--active');
+      });
+      btn.classList.add('lib-materials__filter--active');
+
+      spines.forEach(function (spine) {
+        if (type === 'all' || spine.getAttribute('data-type') === type) {
+          spine.style.display = '';
+        } else {
+          spine.style.display = 'none';
+        }
+      });
+    });
+  });
 })();

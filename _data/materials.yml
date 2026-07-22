@@ -1,0 +1,35 @@
+# Tài liệu tham khảo — sắp xếp theo ngày thêm (mới nhất trước)
+# Loại: book, paper, thesis, lecture-notes
+
+- title: "A closed-form solution for a tollbooth tandem queue with two heterogeneous servers and exponential service times"
+  author: "Tien Van Do"
+  year: 2015
+  type: paper
+  source: "European Journal of Operational Research, Vol. 247, pp. 672–675"
+  date_added: "2026-07-17"
+
+- title: "Spectral Expansion Solution for some Finite and Infinite Capacity Queues"
+  author: "Ram Chakka"
+  type: thesis
+  source: "PhD Thesis"
+  date_added: "2026-07-17"
+
+- title: "Notes on Markov Chains"
+  author: "Nicolas Privault"
+  year: 2011
+  type: lecture-notes
+  source: "MAS328, Nanyang Technological University"
+  date_added: "2026-05-15"
+
+- title: "Understanding Markov Chains: Examples and Applications"
+  author: "Nicolas Privault"
+  type: book
+  source: "Springer Undergraduate Mathematics Series"
+  date_added: "2026-05-15"
+
+- title: "Simulation Modeling and Analysis"
+  author: "Averill M. Law"
+  year: 2015
+  type: book
+  source: "McGraw-Hill, 5th Edition"
+  date_added: "2026-05-15"

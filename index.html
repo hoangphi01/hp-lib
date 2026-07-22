@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Thu vien Nghien cuu"
+title: "Thư viện Nghiên cứu"
 ---
 
 {% comment %} ===== Compute book stats ===== {% endcomment %}
@@ -23,13 +23,13 @@ title: "Thu vien Nghien cuu"
 
 <!-- Hero -->
 <section class="lib-hero">
-  <h1 class="lib-hero__title">Thu vien Nghien cuu</h1>
-  <p class="lib-hero__subtitle">Tai lieu nghien cuu PhD &mdash; Dai hoc Debrecen</p>
+  <h1 class="lib-hero__title">Thư viện Nghiên cứu</h1>
+  <p class="lib-hero__subtitle">Tài liệu nghiên cứu PhD &mdash; Đại học Debrecen</p>
 </section>
 
 <!-- Weekly Updates -->
 <section class="lib-weekly">
-  <h2 class="lib-weekly__heading">Cap nhat hang tuan</h2>
+  <h2 class="lib-weekly__heading">Cập nhật hàng tuần</h2>
 
   {% for entry in site.data.weekly %}
     {% assign week_date = entry.week | date: "%d/%m/%Y" %}
@@ -37,9 +37,9 @@ title: "Thu vien Nghien cuu"
     {% if forloop.first %}
       <!-- Latest week: always expanded -->
       <div class="lib-weekly__card lib-weekly__card--latest">
-        <h3 class="lib-weekly__date">Tuan {{ week_date }}</h3>
+        <h3 class="lib-weekly__date">Tuần {{ week_date }}</h3>
         {% if entry.items.size > 0 %}
-          <p class="lib-weekly__label">Thua thay, tuan vua roi con da hoan thanh:</p>
+          <p class="lib-weekly__label">Thưa thầy, tuần vừa rồi con đã hoàn thành:</p>
           <ul class="lib-weekly__list">
             {% for item in entry.items %}
               <li>{{ item }}</li>
@@ -47,7 +47,7 @@ title: "Thu vien Nghien cuu"
           </ul>
         {% endif %}
         {% if entry.plan.size > 0 %}
-          <p class="lib-weekly__label">Ke hoach tuan toi:</p>
+          <p class="lib-weekly__label">Kế hoạch tuần tới:</p>
           <ul class="lib-weekly__list lib-weekly__list--plan">
             {% for item in entry.plan %}
               <li>{{ item }}</li>
@@ -59,10 +59,10 @@ title: "Thu vien Nghien cuu"
     {% else %}
       <!-- Older weeks: collapsible -->
       <details class="lib-weekly__card">
-        <summary class="lib-weekly__summary">Tuan {{ week_date }}</summary>
+        <summary class="lib-weekly__summary">Tuần {{ week_date }}</summary>
         <div class="lib-weekly__content">
           {% if entry.items.size > 0 %}
-            <p class="lib-weekly__label">Da hoan thanh:</p>
+            <p class="lib-weekly__label">Đã hoàn thành:</p>
             <ul class="lib-weekly__list">
               {% for item in entry.items %}
                 <li>{{ item }}</li>
@@ -70,7 +70,7 @@ title: "Thu vien Nghien cuu"
             </ul>
           {% endif %}
           {% if entry.plan.size > 0 %}
-            <p class="lib-weekly__label">Ke hoach tuan toi:</p>
+            <p class="lib-weekly__label">Kế hoạch tuần tới:</p>
             <ul class="lib-weekly__list lib-weekly__list--plan">
               {% for item in entry.plan %}
                 <li>{{ item }}</li>
@@ -83,9 +83,9 @@ title: "Thu vien Nghien cuu"
   {% endfor %}
 </section>
 
-<!-- Bookshelf -->
+<!-- Bookshelf: Phi's own digital books -->
 <section class="lib-bookshelf">
-  <h2 class="lib-bookshelf__heading">Ke sach</h2>
+  <h2 class="lib-bookshelf__heading">Sách của Phi</h2>
 
   {% for book in site.data.books %}
     {% assign chapters = site.data[book.data_key].chapters %}
@@ -122,12 +122,42 @@ title: "Thu vien Nghien cuu"
             <div class="lib-book-card__progress-done" style="width: {{ done_pct }}%"></div>
             <div class="lib-book-card__progress-wip" style="width: {{ wip_pct }}%"></div>
           </div>
-          <span class="lib-book-card__progress-text">{{ b_done }}/{{ b_total }} chuong</span>
+          <span class="lib-book-card__progress-text">{{ b_done }}/{{ b_total }} chương</span>
         </div>
         <span class="lib-badge lib-badge--{{ book.status }}">
-          {% if book.status == "active" %}Dang viet{% elsif book.status == "draft" %}Ban nhap{% else %}Ke hoach{% endif %}
+          {% if book.status == "active" %}Đang viết{% elsif book.status == "draft" %}Bản nháp{% else %}Kế hoạch{% endif %}
         </span>
       </div>
     </a>
   {% endfor %}
+</section>
+
+<!-- Materials: Reference bookshelf -->
+<section class="lib-materials">
+  <h2 class="lib-materials__heading">Kệ sách tham khảo</h2>
+
+  <div class="lib-materials__filters">
+    <button class="lib-materials__filter lib-materials__filter--active" data-type="all">Tất cả</button>
+    <button class="lib-materials__filter" data-type="book">Sách</button>
+    <button class="lib-materials__filter" data-type="paper">Bài báo</button>
+    <button class="lib-materials__filter" data-type="thesis">Luận văn</button>
+    <button class="lib-materials__filter" data-type="lecture-notes">Bài giảng</button>
+  </div>
+
+  <div class="lib-shelf">
+    <div class="lib-shelf__row">
+      {% for mat in site.data.materials %}
+        <div class="lib-spine lib-spine--{{ mat.type }}" data-type="{{ mat.type }}" data-date="{{ mat.date_added }}">
+          <span class="lib-spine__type">
+            {% if mat.type == "book" %}Sách{% elsif mat.type == "paper" %}Bài báo{% elsif mat.type == "thesis" %}Luận văn{% else %}Bài giảng{% endif %}
+          </span>
+          <div class="lib-spine__info">
+            <span class="lib-spine__title">{{ mat.title }}</span>
+            <span class="lib-spine__author">{{ mat.author }}{% if mat.year %} ({{ mat.year }}){% endif %}</span>
+          </div>
+          <span class="lib-spine__date">{{ mat.date_added | date: "%d/%m" }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 </section>

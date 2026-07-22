@@ -1,23 +1,23 @@
-# Moi nhat o tren
+# Mới nhất ở trên
 - week: "2026-07-21"
   items:
-    - "Nghien cuu Xac suat cham (Hitting Probabilities): tinh xac suat chuoi Markov di tu trang thai nay den trang thai khac"
-    - "Nghien cuu Thoi gian cham va hap thu trung binh: phan tich so buoc trung binh de dat trang thai muc tieu"
+    - "Nghiên cứu Xác suất chạm (Hitting Probabilities): tính xác suất chuỗi Markov đi từ trạng thái này đến trạng thái khác"
+    - "Nghiên cứu Thời gian chạm và hấp thụ trung bình: phân tích số bước trung bình để đạt trạng thái mục tiêu"
   plan:
-    - "Nghien cuu ve thoi gian quay lai lan dau (First Return Times)"
-    - "Tim hieu ve phan loai trang thai (Classification of States)"
+    - "Nghiên cứu về thời gian quay lại lần đầu (First Return Times)"
+    - "Tìm hiểu về phân loại trạng thái (Classification of States)"
 
 - week: "2026-07-14"
   items:
-    - "Hoan thanh Chuong 3: Thoi gian cham va Hap thu (Hitting Times & Absorption)"
-    - "Viet bai tap va vi du minh hoa cho cac khai niem ve thoi gian cham"
+    - "Hoàn thành Chương 3: Thời gian chạm và Hấp thụ (Hitting Times & Absorption)"
+    - "Viết bài tập và ví dụ minh hoạ cho các khái niệm về thời gian chạm"
   plan:
-    - "Bat dau nghien cuu Xac suat cham (Hitting Probabilities)"
-    - "Tiep tuc bo sung vi du cho Chuong 3"
+    - "Bắt đầu nghiên cứu Xác suất chạm (Hitting Probabilities)"
+    - "Tiếp tục bổ sung ví dụ cho Chương 3"
 
 - week: "2026-07-07"
   items:
-    - "Hoan thanh Chuong 2: Phan loai Trang thai (Classification of States)"
-    - "Them cac vi du ve trang thai hut va trang thai thoang qua"
+    - "Hoàn thành Chương 2: Phân loại Trạng thái (Classification of States)"
+    - "Thêm các ví dụ về trạng thái hút và trạng thái thoáng qua"
   plan:
-    - "Bat dau Chuong 3: Thoi gian cham va Hap thu"
+    - "Bắt đầu Chương 3: Thời gian chạm và Hấp thụ"
