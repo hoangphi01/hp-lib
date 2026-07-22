@@ -1,5 +1,14 @@
 # Mới nhất ở trên
-- week: "2026-07-21"
+- week: "2026-07-23"
+  items:
+    - "Tiếp tục đọc về Markov chains từ lần trước"
+    - "Xây dựng website để số hóa và trực quan hóa quá trình học, cũng như làm cơ sở để sau này tham khảo tra cứu tại hp-lib.io.vn"
+    - "Nghiên cứu bài báo của thầy về Tollbooth Tandem Queue và tạo sách số tương ứng"
+  plan:
+    - "Tiếp tục nghiên cứu bài báo của thầy và cập nhật thêm nội dung"
+    - "Hoàn thiện website để đầy đủ hơn và thầy cũng dễ dàng theo dõi tiến độ"
+
+- week: "2026-06-21"
   items:
     - "Nghiên cứu Xác suất chạm (Hitting Probabilities): tính xác suất chuỗi Markov đi từ trạng thái này đến trạng thái khác"
     - "Nghiên cứu Thời gian chạm và hấp thụ trung bình: phân tích số bước trung bình để đạt trạng thái mục tiêu"
@@ -7,7 +16,7 @@
     - "Nghiên cứu về thời gian quay lại lần đầu (First Return Times)"
     - "Tìm hiểu về phân loại trạng thái (Classification of States)"
 
-- week: "2026-07-14"
+- week: "2026-06-14"
   items:
     - "Hoàn thành Chương 3: Thời gian chạm và Hấp thụ (Hitting Times & Absorption)"
     - "Viết bài tập và ví dụ minh hoạ cho các khái niệm về thời gian chạm"
@@ -15,7 +24,7 @@
     - "Bắt đầu nghiên cứu Xác suất chạm (Hitting Probabilities)"
     - "Tiếp tục bổ sung ví dụ cho Chương 3"
 
-- week: "2026-07-07"
+- week: "2026-06-07"
   items:
     - "Hoàn thành Chương 2: Phân loại Trạng thái (Classification of States)"
     - "Thêm các ví dụ về trạng thái hút và trạng thái thoáng qua"
