@@ -113,7 +113,7 @@ sections:
 
       <p><strong>Tại sao quan trọng?</strong> Trong phương pháp spectral expansion, chỉ các trị riêng với
       \(|x_k| < 1\) mới đóng góp vào nghiệm (để tổng \(\sum a_k x_k^i\) hội tụ khi \(i \to \infty\)).
-      Có 3 trị riêng phù hợp cho ma trận pha kích thước \(2 \times 2\) — vừa đủ để xác định duy nhất nghiệm.</p>
+      Có 3 trị riêng phù hợp cho ma trận pha kích thước \(2 \times 2\), vừa đủ để xác định duy nhất nghiệm.</p>
 
       <!-- ================================================================ -->
       <h2 id="vector-rieng">5. Vector riêng <small>(Eigenvectors)</small></h2>
@@ -127,11 +127,11 @@ sections:
           \boldsymbol{\psi}_k = \begin{pmatrix} \mu_1 x_k \\ (\lambda + \mu_1)x_k - \lambda x_k^2 \end{pmatrix}
           = \begin{pmatrix} \mu_1 x_k \\ x_k[(\lambda + \mu_1) - \lambda x_k] \end{pmatrix}
         \]
-        <p>Đặc biệt với \(r_1 = 0\): \(\boldsymbol{\psi}_1 = (0, 0)\) — nghiệm tầm thường, cần xử lý riêng.</p>
+        <p>Đặc biệt với \(r_1 = 0\): \(\boldsymbol{\psi}_1 = (0, 0)\), nghiệm tầm thường, cần xử lý riêng.</p>
       {% include components/box-end.html %}
 
       <!-- ================================================================ -->
-      <h2 id="he-so">6. Hệ số a₁, a₂, a₃ <small>(Coefficients — Proposition 3)</small></h2>
+      <h2 id="he-so">6. Hệ số a₁, a₂, a₃ <small>(Coefficients: Proposition 3)</small></h2>
 
       <p>Xác suất trạng thái dừng được biểu diễn:</p>
       \[
@@ -196,12 +196,12 @@ sections:
         \[
           P_B = \sum_{i=1}^{\infty} \pi_{i,2} = \sum_{k \in \{3,4\}} a_k \frac{r_k}{1-r_k} \psi_{k,2} + \pi_{1,2} \tag{37}
         \]
-        <p>Đây là xác suất server 2 đang bận — khi một khách mới hoàn thành tại server 1, nó sẽ bị chặn với xác suất này.</p>
+        <p>Đây là xác suất server 2 đang bận: khi một khách mới hoàn thành tại server 1, nó sẽ bị chặn với xác suất này.</p>
       {% include components/box-end.html %}
 
       {% include components/box-start.html type="summary" title='Tóm tắt chương' %}
         <ul>
-          <li>Phương trình \(\det[Q(x)] = 0\) là đa thức bậc 4 — giải tường minh bằng quartic formula.</li>
+          <li>Phương trình \(\det[Q(x)] = 0\) là đa thức bậc 4, giải tường minh bằng quartic formula.</li>
           <li>3 trị riêng nằm trong đường tròn đơn vị: \(r_1 = 0, r_3, r_4\).</li>
           <li>Vector riêng và hệ số xác định duy nhất từ điều kiện biên + chuẩn hóa.</li>
           <li>Xác suất dừng có dạng đóng: \(\pi_{i,j} = \sum_k a_k r_k^i \psi_{k,j}\).</li>

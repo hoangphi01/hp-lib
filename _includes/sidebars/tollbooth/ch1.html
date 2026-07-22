@@ -28,3 +28,27 @@
   <p>\(\lambda < \dfrac{\mu_1 \mu_2}{\mu_1 + \mu_2}\)</p>
   <p class="sidebar-tip">Tốc độ đến phải nhỏ hơn tốc độ phục vụ hiệu dụng của hệ tandem.</p>
 </div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">layers</span> Quá trình QBD</h4>
+  <p><strong>Quasi-Birth-Death</strong>: chuỗi Markov phân cấp theo <em>level</em> (số khách) và <em>phase</em> (trạng thái server).</p>
+  <p class="sidebar-tip">Ma trận tốc độ chuyển có dạng <strong>block-tridiagonal</strong> lặp lại: từ mỗi level chỉ chuyển lên/xuống 1 level hoặc giữ nguyên.</p>
+  <p class="sidebar-tip">Gọi "quasi" vì giống birth-death nhưng mỗi level có nhiều phase thay vì 1 trạng thái.</p>
+</div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">timeline</span> Phân phối mũ</h4>
+  <p>Thời gian phục vụ \(\sim \text{Exp}(\mu)\): trung bình \(1/\mu\), phương sai \(1/\mu^2\).</p>
+  <p class="sidebar-tip"><strong>Tính không nhớ:</strong> \(\PP(X > s + t \mid X > s) = \PP(X > t)\). Đây là lý do CTMC hoạt động: tương lai không phụ thuộc quá khứ.</p>
+</div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">rule</span> 5 quy tắc vận hành</h4>
+  <ol style="margin:0; padding-left:1.2em; font-size:0.85em;">
+    <li><strong>FIFO</strong>: phục vụ theo thứ tự đến.</li>
+    <li><strong>Nối tiếp</strong>: S1 → S2.</li>
+    <li><strong>Không bộ đệm</strong> giữa hai server.</li>
+    <li><strong>Blocking</strong>: S1 xong + S2 bận → chặn.</li>
+    <li><strong>Chuyển tức thì</strong>: S2 trống → khách vào ngay.</li>
+  </ol>
+</div>

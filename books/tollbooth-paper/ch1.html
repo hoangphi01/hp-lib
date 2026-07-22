@@ -28,7 +28,7 @@ sections:
 
       <p><strong>Câu chuyện:</strong> Quay lại trạm thu phí. Ta có một hàng xe dài (bộ đệm vô hạn) chờ trước cửa 1.
       Hai cửa thu phí hoạt động nối tiếp: xe vào cửa 1 trước, rồi cửa 2.
-      Giữa hai cửa <strong>không có chỗ đợi</strong> — nếu cửa 2 đang bận,
+      Giữa hai cửa <strong>không có chỗ đợi</strong>: nếu cửa 2 đang bận,
       xe ở cửa 1 phải <strong>chờ tại chỗ</strong> dù đã được phục vụ xong.</p>
 
       {% include components/box-start.html type="definition" title='Mô hình hàng đợi Tollbooth' %}
@@ -83,7 +83,7 @@ sections:
       <p>Trạng thái \((0, 0)\) nghĩa là hệ thống trống. Khi có ít nhất 1 khách (\(i \geq 1\)),
       ít nhất một server phải đang bận, nên \(j \in \{1, 2\}\).</p>
 
-      {% include components/box-start.html type="review" title='Ôn tập: CTMC (từ Chuỗi Markov, Ch. 5)' %}
+      {% include components/review-start.html title='Ôn tập: CTMC (từ Chuỗi Markov, Ch. 5)' %}
         <p>Chuỗi Markov thời gian liên tục là quá trình ngẫu nhiên \(\{X(t) : t \geq 0\}\) sao cho:</p>
         <ul>
           <li>Thời gian ở mỗi trạng thái phân phối mũ <em>(exponential)</em>.</li>
@@ -91,7 +91,7 @@ sections:
           <li>Tính chất Markov: tương lai chỉ phụ thuộc hiện tại, không phụ thuộc quá khứ.</li>
         </ul>
         <p>Xem chi tiết: <a href="/books/markov-chains/ch5.html">Chuỗi Markov, Chương 5</a>.</p>
-      {% include components/box-end.html %}
+      {% include components/review-end.html %}
 
       <!-- ================================================================ -->
       <h2 id="quy-tac-van-hanh">3. Quy tắc vận hành <small>(Operating Rules)</small></h2>
@@ -221,7 +221,7 @@ sections:
       {% include components/box-end.html %}
 
       <p><strong>Ý nghĩa trực quan:</strong> Tốc độ phục vụ hiệu dụng của hệ tandem là
-      \(\mu_1 \mu_2 / (\mu_1 + \mu_2)\) — đây là nghịch đảo của tổng thời gian phục vụ trung bình.
+      \(\mu_1 \mu_2 / (\mu_1 + \mu_2)\), chính là nghịch đảo của tổng thời gian phục vụ trung bình.
       Nếu khách đến nhanh hơn tốc độ này, hàng đợi sẽ dài vô hạn.</p>
 
       {% include components/example-start.html title='Ví dụ: Kiểm tra điều kiện ổn định' %}
