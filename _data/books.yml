@@ -22,28 +22,19 @@
     sidebar bên phải với các ký hiệu và tham chiếu nhanh.
 
 - slug: tollbooth-paper
-  title_vi: "Đọc bài báo: Tollbooth Tandem Queue"
+  title_vi: "Lời giải dạng đóng cho hàng đợi tollbooth"
   title_en: "A closed-form solution for a tollbooth tandem queue"
   source: "Do, T.V. (2015)"
-  source_title: "European Journal of Operational Research, Vol. 247"
+  source_title: "European Journal of Operational Research, Vol. 247, pp. 672–675"
   source_author: "Tien Van Do"
   status: active
-  url: "#"
+  url: /books/tollbooth-paper/
   description: "Nghiên cứu bài báo của thầy Đỗ Văn Tiến về lời giải dạng đóng cho hàng đợi tollbooth với hai máy chủ không đồng nhất."
   tags: [hàng đợi, markov, bài báo]
   data_key: tollbooth
-  progress_manual:
-    total: 5
-    done: 1
-    wip: 1
-    sections:
-      - name: "Giới thiệu & bối cảnh"
-        status: done
-      - name: "Spectral expansion method"
-        status: in-progress
-      - name: "Closed-form solution"
-        status: planned
-      - name: "Kết quả số"
-        status: planned
-      - name: "Tổng kết & ghi chú"
-        status: planned
+  theme_css: markov
+  google_font: "Literata:ital,wght@0,400;0,700;1,400;1,700"
+  about_vi: |
+    Bài báo trình bày lời giải dạng đóng cho mô hình hàng đợi tollbooth
+    sử dụng phương pháp spectral expansion. Biên soạn song ngữ Việt–Anh
+    phục vụ nghiên cứu PhD tại Đại học Debrecen.

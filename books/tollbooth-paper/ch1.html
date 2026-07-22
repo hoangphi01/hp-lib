@@ -1,0 +1,277 @@
+---
+layout: book-chapter
+slug: ch1
+book_key: tollbooth
+sidebar_include: sidebars/tollbooth/ch1.html
+title: "Mục 2: Mô hình"
+sections:
+  - id: mo-hinh-tollbooth
+    title: "1. Mô hình tollbooth"
+  - id: ctmc
+    title: "2. Chuỗi Markov liên tục (CTMC)"
+  - id: quy-tac-van-hanh
+    title: "3. Quy tắc vận hành"
+  - id: so-do-chuyen
+    title: "4. Sơ đồ tốc độ chuyển"
+  - id: ma-tran-toc-do
+    title: "5. Ma trận tốc độ chuyển"
+  - id: phuong-trinh-can-bang
+    title: "6. Phương trình cân bằng"
+  - id: dieu-kien-on-dinh
+    title: "7. Điều kiện ổn định"
+  - id: qbd-spectral
+    title: "8. Quá trình QBD & Spectral expansion"
+---
+
+      <!-- ================================================================ -->
+      <h2 id="mo-hinh-tollbooth">1. Mô hình tollbooth <small>(Tollbooth Model)</small></h2>
+
+      <p><strong>Câu chuyện:</strong> Quay lại trạm thu phí. Ta có một hàng xe dài (bộ đệm vô hạn) chờ trước cửa 1.
+      Hai cửa thu phí hoạt động nối tiếp: xe vào cửa 1 trước, rồi cửa 2.
+      Giữa hai cửa <strong>không có chỗ đợi</strong> — nếu cửa 2 đang bận,
+      xe ở cửa 1 phải <strong>chờ tại chỗ</strong> dù đã được phục vụ xong.</p>
+
+      {% include components/box-start.html type="definition" title='Mô hình hàng đợi Tollbooth' %}
+        <p>Hệ thống gồm:</p>
+        <ul>
+          <li><strong>Dòng đến:</strong> Khách hàng (xe) đến theo <strong>quá trình Poisson</strong> với tốc độ \(\lambda\).</li>
+          <li><strong>Server 1:</strong> Thời gian phục vụ phân phối mũ với tốc độ \(\mu_1\).</li>
+          <li><strong>Server 2:</strong> Thời gian phục vụ phân phối mũ với tốc độ \(\mu_2\).</li>
+          <li><strong>Bộ đệm:</strong> Hàng đợi trước server 1 có dung lượng vô hạn. Giữa server 1 và 2 <strong>không có bộ đệm</strong>.</li>
+          <li><strong>Blocking:</strong> Nếu server 2 đang bận khi server 1 hoàn thành, xe bị chặn tại server 1.</li>
+        </ul>
+        <p>Đây là hàng đợi dạng \(M/M/1 \to \cdot/M/1\) với blocking.</p>
+      {% include components/box-end.html %}
+
+      <p><strong>Ký hiệu chính:</strong></p>
+      <ul>
+        <li>\(\lambda\): tốc độ đến <em>(arrival rate)</em></li>
+        <li>\(\mu_1\): tốc độ phục vụ của server 1</li>
+        <li>\(\mu_2\): tốc độ phục vụ của server 2</li>
+        <li>\(1/\lambda\): thời gian trung bình giữa hai lần đến</li>
+        <li>\(1/\mu_k\): thời gian phục vụ trung bình của server \(k\)</li>
+      </ul>
+
+      <!-- ================================================================ -->
+      <h2 id="ctmc">2. Chuỗi Markov liên tục (CTMC) <small>(Continuous-Time Markov Chain)</small></h2>
+
+      <p>Để phân tích hệ thống, ta mô hình hóa nó bằng một <strong>chuỗi Markov thời gian liên tục</strong> <em>(CTMC)</em>.</p>
+
+      {% include components/box-start.html type="definition" title='Quá trình Markov của hệ tollbooth' %}
+        <p>Định nghĩa quá trình Markov hai chiều \(\{I^*(t), J(t)\}\) trên không gian trạng thái \(S\):</p>
+        <ul>
+          <li>\(I^*(t)\): số khách hàng trong hệ thống tại thời điểm \(t\) (bao gồm cả đang được phục vụ).</li>
+          <li>\(J(t)\): trạng thái kết hợp của hai server tại thời điểm \(t\).</li>
+        </ul>
+        <p>\(J(t)\) nhận giá trị trong \(\{0, 1, 2\}\) theo quy ước:</p>
+        <table class="styled-table">
+          <thead>
+            <tr><th>\(J(t)\)</th><th>Server 1</th><th>Server 2</th><th>Mô tả</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>0</td><td>Rảnh <em>(Idle)</em></td><td>Rảnh <em>(Idle)</em></td><td>Cả hai server đều rảnh</td></tr>
+            <tr><td>1</td><td>Bận <em>(Busy)</em></td><td>Rảnh <em>(Idle)</em></td><td>Server 1 đang phục vụ, server 2 rảnh</td></tr>
+            <tr><td>2</td><td>Rảnh/Bận</td><td>Bận <em>(Busy)</em></td><td>Server 2 đang phục vụ</td></tr>
+          </tbody>
+        </table>
+      {% include components/box-end.html %}
+
+      <p>Không gian trạng thái đầy đủ:</p>
+      \[
+        S = \{(0, 0)\} \cup \{(i, j) : i \geq 1,\; j \in \{1, 2\}\}
+      \]
+      <p>Trạng thái \((0, 0)\) nghĩa là hệ thống trống. Khi có ít nhất 1 khách (\(i \geq 1\)),
+      ít nhất một server phải đang bận, nên \(j \in \{1, 2\}\).</p>
+
+      {% include components/box-start.html type="review" title='Ôn tập: CTMC (từ Chuỗi Markov, Ch. 5)' %}
+        <p>Chuỗi Markov thời gian liên tục là quá trình ngẫu nhiên \(\{X(t) : t \geq 0\}\) sao cho:</p>
+        <ul>
+          <li>Thời gian ở mỗi trạng thái phân phối mũ <em>(exponential)</em>.</li>
+          <li>Khi rời trạng thái, chuyển sang trạng thái mới theo xác suất cố định.</li>
+          <li>Tính chất Markov: tương lai chỉ phụ thuộc hiện tại, không phụ thuộc quá khứ.</li>
+        </ul>
+        <p>Xem chi tiết: <a href="/books/markov-chains/ch5.html">Chuỗi Markov, Chương 5</a>.</p>
+      {% include components/box-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="quy-tac-van-hanh">3. Quy tắc vận hành <small>(Operating Rules)</small></h2>
+
+      <p>Hệ thống tollbooth hoạt động theo 5 quy tắc sau:</p>
+
+      <ol>
+        <li><strong>FIFO:</strong> Khách hàng được phục vụ theo thứ tự đến <em>(First-In-First-Out)</em>.</li>
+        <li><strong>Nối tiếp:</strong> Mỗi khách phải qua server 1 trước, rồi server 2.</li>
+        <li><strong>Không có bộ đệm giữa:</strong> Giữa server 1 và server 2 không có chỗ đợi.</li>
+        <li><strong>Blocking:</strong> Nếu server 1 hoàn thành nhưng server 2 đang bận, khách bị <strong>chặn</strong>
+            tại server 1 (server 1 không thể nhận khách mới).</li>
+        <li><strong>Chuyển tức thì:</strong> Khi server 2 trống và có khách chờ (hoặc bị chặn) tại server 1,
+            khách chuyển sang server 2 ngay lập tức.</li>
+      </ol>
+
+      {% include components/box-start.html type="summary" title='Tóm tắt' %}
+        <p>Quy tắc blocking là đặc trưng quan trọng nhất: nó tạo ra sự <strong>phụ thuộc</strong> giữa hai server,
+        khiến phân tích phức tạp hơn nhiều so với hai hàng đợi độc lập.</p>
+      {% include components/box-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="so-do-chuyen">4. Sơ đồ tốc độ chuyển <small>(Transition Rate Diagram)</small></h2>
+
+      <p>Sơ đồ dưới đây mô tả các tốc độ chuyển giữa các trạng thái (tương ứng Fig. 1 trong bài báo).
+      Mỗi mũi tên chỉ hướng chuyển, nhãn là tốc độ chuyển.</p>
+
+      <p>Tại <strong>mức 0</strong> (hệ thống trống hoặc có 1 khách):</p>
+      <ul>
+        <li>\((0,0) \xrightarrow{\lambda} (1,1)\): Khách đến khi hệ trống → vào server 1.</li>
+        <li>\((1,1) \xrightarrow{\mu_1} (1,2)\): Server 1 xong → khách chuyển sang server 2.</li>
+        <li>\((1,2) \xrightarrow{\mu_2} (0,0)\): Server 2 xong → khách rời hệ, hệ trống.</li>
+      </ul>
+
+      <p>Tại <strong>mức \(i \geq 2\)</strong> (có \(i\) khách trong hệ):</p>
+      <ul>
+        <li>\((i,1) \xrightarrow{\lambda} (i+1,1)\): Thêm khách đến, server 1 đang bận (server 2 rảnh).</li>
+        <li>\((i,1) \xrightarrow{\mu_1} (i,2)\): Server 1 xong → khách chuyển sang server 2.</li>
+        <li>\((i,2) \xrightarrow{\lambda} (i+1,2)\): Thêm khách đến, server 2 đang bận.</li>
+        <li>\((i,2) \xrightarrow{\mu_2} (i-1,1)\): Server 2 xong → khách rời hệ, khách tiếp theo vào server 1.</li>
+      </ul>
+
+      <!-- ================================================================ -->
+      <h2 id="ma-tran-toc-do">5. Ma trận tốc độ chuyển <small>(Transition Rate Matrices)</small></h2>
+
+      <p>Cấu trúc QBD cho phép ta viết ma trận tốc độ chuyển dưới dạng block-tridiagonal.
+      Các block ma trận chính (kích thước \(2 \times 2\), ứng với pha \(j \in \{1, 2\}\)):</p>
+
+      {% include components/box-start.html type="formula" title='Ma trận tốc độ chuyển A₀, A₁, A₂' %}
+        <p><strong>Ma trận chuyển lên</strong> (thêm khách đến):</p>
+        \[
+          A_0 = \begin{bmatrix} \lambda & 0 \\ 0 & \lambda \end{bmatrix}
+        \]
+
+        <p><strong>Ma trận đường chéo</strong> (ở lại cùng mức):</p>
+        \[
+          A_1 = \begin{bmatrix} -(\lambda + \mu_1) & \mu_1 \\ 0 & -(\lambda + \mu_2) \end{bmatrix}
+        \]
+
+        <p><strong>Ma trận chuyển xuống</strong> (khách rời hệ):</p>
+        \[
+          A_2 = \begin{bmatrix} 0 & 0 \\ \mu_2 & 0 \end{bmatrix}
+        \]
+      {% include components/box-end.html %}
+
+      <p>Ma trận biên tại mức 0–1 (chuyển từ/đến trạng thái \((0,0)\)):</p>
+
+      {% include components/box-start.html type="formula" title='Ma trận biên A₃, B₀, B₁' %}
+        \[
+          A_3 = \begin{bmatrix} 0 \\ \mu_2 \end{bmatrix}, \quad
+          B_0 = \begin{bmatrix} \lambda & 0 \end{bmatrix}, \quad
+          B_1 = [-\lambda]
+        \]
+        <p>Trong đó \(A_3\) là vector cột (chuyển từ mức 1 về mức 0),
+        \(B_0\) là vector hàng (chuyển từ mức 0 lên mức 1),
+        và \(B_1 = [-\lambda]\) là tốc độ rời trạng thái \((0,0)\).</p>
+      {% include components/box-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="phuong-trinh-can-bang">6. Phương trình cân bằng <small>(Balance Equations)</small></h2>
+
+      <p>Tại trạng thái dừng, tốc độ vào = tốc độ ra cho mỗi trạng thái.
+      Gọi \(\pi_{i,j} = \lim_{t \to \infty} \PP(I^*(t) = i, J(t) = j)\) là xác suất trạng thái dừng.</p>
+
+      {% include components/box-start.html type="formula" title='Phương trình cân bằng (eqs 1–10 trong bài báo)' %}
+        <p><strong>Trạng thái \((0,0)\):</strong></p>
+        \[
+          \lambda \pi_{0,0} = \mu_2 \pi_{1,2} \tag{1}
+        \]
+
+        <p><strong>Trạng thái \((1,1)\):</strong></p>
+        \[
+          (\lambda + \mu_1) \pi_{1,1} = \lambda \pi_{0,0} + \mu_2 \pi_{2,2} \tag{2}
+        \]
+
+        <p><strong>Trạng thái \((1,2)\):</strong></p>
+        \[
+          (\lambda + \mu_2) \pi_{1,2} = \mu_1 \pi_{1,1} \tag{3}
+        \]
+
+        <p><strong>Trạng thái \((i,1)\), \(i \geq 2\):</strong></p>
+        \[
+          (\lambda + \mu_1) \pi_{i,1} = \lambda \pi_{i-1,1} + \mu_2 \pi_{i+1,2} \tag{4}
+        \]
+
+        <p><strong>Trạng thái \((i,2)\), \(i \geq 2\):</strong></p>
+        \[
+          (\lambda + \mu_2) \pi_{i,2} = \lambda \pi_{i-1,2} + \mu_1 \pi_{i,1} \tag{5}
+        \]
+      {% include components/box-end.html %}
+
+      <p>Thêm điều kiện chuẩn hóa:</p>
+      \[
+        \pi_{0,0} + \sum_{i=1}^{\infty} (\pi_{i,1} + \pi_{i,2}) = 1 \tag{6}
+      \]
+
+      <!-- ================================================================ -->
+      <h2 id="dieu-kien-on-dinh">7. Điều kiện ổn định <small>(Stability Condition)</small></h2>
+
+      {% include components/box-start.html type="theorem" title='Proposition 1 (Điều kiện ổn định)' %}
+        <p>Hệ thống tollbooth ổn định (có phân phối dừng) khi và chỉ khi:</p>
+        \[
+          \lambda < \frac{\mu_1 \mu_2}{\mu_1 + \mu_2}
+        \]
+        <p>Tương đương: \(\displaystyle\frac{1}{\lambda} > \frac{1}{\mu_1} + \frac{1}{\mu_2}\), nghĩa là
+        thời gian trung bình giữa hai lần đến phải lớn hơn tổng thời gian phục vụ trung bình của cả hai server.</p>
+      {% include components/box-end.html %}
+
+      <p><strong>Ý nghĩa trực quan:</strong> Tốc độ phục vụ hiệu dụng của hệ tandem là
+      \(\mu_1 \mu_2 / (\mu_1 + \mu_2)\) — đây là nghịch đảo của tổng thời gian phục vụ trung bình.
+      Nếu khách đến nhanh hơn tốc độ này, hàng đợi sẽ dài vô hạn.</p>
+
+      {% include components/example-start.html title='Ví dụ: Kiểm tra điều kiện ổn định' %}
+        <p>Cho \(\mu_1 = 2\), \(\mu_2 = 3\) (khách/phút). Tốc độ phục vụ hiệu dụng:</p>
+        \[
+          \frac{\mu_1 \mu_2}{\mu_1 + \mu_2} = \frac{2 \times 3}{2 + 3} = \frac{6}{5} = 1.2 \text{ khách/phút}
+        \]
+        <p>Hệ ổn định khi \(\lambda < 1.2\). Nếu \(\lambda = 1\): ổn định. Nếu \(\lambda = 1.5\): không ổn định.</p>
+      {% include components/example-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="qbd-spectral">8. Quá trình QBD & Spectral expansion <small>(QBD Process & Spectral Expansion)</small></h2>
+
+      <p>Cấu trúc lặp lại của phương trình cân bằng (4)–(5) cho thấy đây là quá trình <strong>QBD</strong>
+      với mức <em>(level)</em> \(i\) và pha <em>(phase)</em> \(j \in \{1, 2\}\).</p>
+
+      {% include components/box-start.html type="definition" title='Phương pháp Spectral Expansion' %}
+        <p>Phương pháp spectral expansion tìm nghiệm dạng:</p>
+        \[
+          \boldsymbol{\pi}_i = (\pi_{i,1},\; \pi_{i,2}) = \sum_{k} a_k x_k^i \boldsymbol{\psi}_k, \quad i \geq 1
+        \]
+        <p>trong đó:</p>
+        <ul>
+          <li>\(x_k\) là <strong>trị riêng</strong> <em>(eigenvalue)</em> của ma trận đa thức đặc trưng \(Q(x)\).</li>
+          <li>\(\boldsymbol{\psi}_k\) là <strong>vector riêng</strong> <em>(eigenvector)</em> tương ứng.</li>
+          <li>\(a_k\) là <strong>hệ số</strong> xác định bởi điều kiện biên.</li>
+        </ul>
+        <p>Yêu cầu: \(|x_k| < 1\) để tổng hội tụ (xác suất hữu hạn).</p>
+      {% include components/box-end.html %}
+
+      <p>Ma trận đa thức đặc trưng:</p>
+
+      {% include components/box-start.html type="formula" title='Ma trận đa thức đặc trưng Q(x)' %}
+        \[
+          Q(x) = A_0 x^2 + A_1 x + A_2 = \begin{bmatrix} \lambda x^2 - (\lambda + \mu_1)x & \mu_1 x \\ \mu_2 & \lambda x^2 - (\lambda + \mu_2)x \end{bmatrix}
+        \]
+        <p>Trị riêng \(x\) được tìm từ điều kiện:</p>
+        \[
+          \det[Q(x)] = 0
+        \]
+        <p>Phương trình này là đa thức bậc 4 theo \(x\), và bài báo chỉ ra rằng nó có thể giải được bằng công thức tường minh.
+        Chi tiết xem <a href="ch2.html">Chương 2: Lời giải dạng đóng</a>.</p>
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="summary" title='Tóm tắt chương' %}
+        <ul>
+          <li>Mô hình tollbooth = hàng đợi tandem với blocking, mô hình hóa bằng CTMC.</li>
+          <li>Không gian trạng thái: \(S = \{(0,0)\} \cup \{(i,j) : i \geq 1, j \in \{1,2\}\}\).</li>
+          <li>Ma trận tốc độ chuyển có cấu trúc QBD (block-tridiagonal lặp lại).</li>
+          <li>Điều kiện ổn định: \(\lambda < \mu_1\mu_2 / (\mu_1 + \mu_2)\).</li>
+          <li>Phương pháp spectral expansion: tìm trị riêng & vector riêng của \(Q(x)\).</li>
+        </ul>
+      {% include components/box-end.html %}

@@ -1,0 +1,57 @@
+---
+layout: book-chapter
+slug: ch3
+book_key: tollbooth
+sidebar_include: sidebars/tollbooth/ch3.html
+title: "Mục 4: Kết quả số"
+sections:
+  - id: thiet-lap
+    title: "1. Thiết lập thực nghiệm"
+  - id: bang-ket-qua
+    title: "2. Bảng kết quả"
+  - id: phan-tich-hoan-doi
+    title: "3. Phân tích hoán đổi server"
+  - id: y-nghia-quan-ly
+    title: "4. Ý nghĩa quản lý"
+---
+
+      <!-- ================================================================ -->
+      <h2 id="thiet-lap">1. Thiết lập thực nghiệm <small>(Experimental Setup)</small></h2>
+
+      <p>Bài báo khảo sát hiệu năng hệ thống với các tổ hợp giá trị khác nhau
+      của thời gian phục vụ trung bình \(1/\mu_1\), \(1/\mu_2\) và thời gian giữa hai lần đến \(1/\lambda\).</p>
+
+      <p><em>Nội dung chi tiết đang được biên soạn...</em></p>
+
+      <!-- ================================================================ -->
+      <h2 id="bang-ket-qua">2. Bảng kết quả <small>(Table 2 — Results)</small></h2>
+
+      <p>Bảng dưới đây tái tạo Table 2 từ bài báo: thời gian chờ trung bình \(W\)
+      và xác suất bị chặn \(P_B\) cho các cấu hình khác nhau.</p>
+
+      <p><em>Bảng đang được format lại...</em></p>
+
+      <!-- ================================================================ -->
+      <h2 id="phan-tich-hoan-doi">3. Phân tích hiệu ứng hoán đổi server <small>(Server Swap Analysis)</small></h2>
+
+      {% include components/box-start.html type="summary" title='Kết luận chính từ kết quả số' %}
+        <p>Khi hai server có tốc độ phục vụ khác nhau (\(\mu_1 \neq \mu_2\)),
+        <strong>đặt server nhanh hơn ở vị trí 2</strong> (cửa cuối) luôn cho kết quả tốt hơn:</p>
+        <ul>
+          <li>Thời gian chờ trung bình \(W\) <strong>giảm</strong>.</li>
+          <li>Xác suất bị chặn \(P_B\) <strong>giảm</strong>.</li>
+        </ul>
+      {% include components/box-end.html %}
+
+      <p><em>Phân tích chi tiết đang được biên soạn...</em></p>
+
+      <!-- ================================================================ -->
+      <h2 id="y-nghia-quan-ly">4. Ý nghĩa quản lý <small>(Managerial Implications)</small></h2>
+
+      <p>Kết quả số gợi ý chiến lược bố trí nhân sự tối ưu cho trạm thu phí:</p>
+      <ul>
+        <li>Luôn đặt nhân viên <strong>giỏi hơn</strong> (phục vụ nhanh hơn) ở <strong>cửa cuối</strong>.</li>
+        <li>Lý do: cửa cuối là "nút thắt cổ chai" — nếu cửa cuối chậm, cửa đầu bị chặn nhiều hơn.</li>
+      </ul>
+
+      <p><em>Nội dung chi tiết đang được biên soạn...</em></p>

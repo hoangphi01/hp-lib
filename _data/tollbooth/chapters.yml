@@ -1,0 +1,48 @@
+- slug: index
+  url: /books/tollbooth-paper/
+  nav_title: "Trang chủ"
+
+- slug: intro
+  url: /books/tollbooth-paper/intro.html
+  nav_title: "Giới thiệu"
+  heading: "Giới thiệu & Bối cảnh"
+  heading_en: "Introduction & Background"
+  description: "Bài toán hàng đợi tollbooth, đóng góp của bài báo, phương pháp spectral expansion, cấu trúc bài báo."
+  status: done
+  last_updated: 2026-07-23
+
+- slug: ch1
+  url: /books/tollbooth-paper/ch1.html
+  nav_title: "Mục 2: Mô hình"
+  heading: "Mô hình Toán học & Phương pháp Spectral Expansion"
+  heading_en: "Mathematical Model & Spectral Expansion Method"
+  description: "Quá trình QBD, CTMC, quy tắc vận hành tollbooth, ma trận tốc độ chuyển, phương trình cân bằng, điều kiện ổn định."
+  status: done
+  last_updated: 2026-07-23
+
+- slug: ch2
+  url: /books/tollbooth-paper/ch2.html
+  nav_title: "Mục 3: Lời giải"
+  heading: "Lời giải Dạng đóng"
+  heading_en: "Closed-form Solution"
+  description: "Ma trận đa thức đặc trưng, trị riêng & vector riêng, công thức quartic, xác suất trạng thái dừng, công thức hiệu năng."
+  status: in-progress
+  last_updated: 2026-07-23
+
+- slug: ch3
+  url: /books/tollbooth-paper/ch3.html
+  nav_title: "Mục 4: Kết quả số"
+  heading: "Kết quả Số & Phân tích"
+  heading_en: "Numerical Results & Analysis"
+  description: "Thời gian trung bình, xác suất bị chặn, phân tích hiệu ứng hoán đổi server, ý nghĩa quản lý."
+  status: planned
+  last_updated:
+
+- slug: ch4
+  url: /books/tollbooth-paper/ch4.html
+  nav_title: "Mục 5: Kết luận"
+  heading: "Kết luận & Hướng phát triển"
+  heading_en: "Conclusions & Future Work"
+  description: "Tóm tắt đóng góp, ý nghĩa thực tiễn, hạn chế và hướng phát triển, tài liệu tham khảo."
+  status: planned
+  last_updated:

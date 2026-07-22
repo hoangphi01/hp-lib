@@ -1,0 +1,151 @@
+---
+layout: book-chapter
+slug: intro
+book_key: tollbooth
+sidebar_include: sidebars/tollbooth/intro.html
+title: "Giới thiệu"
+sections:
+  - id: bai-toan-tollbooth
+    title: "1. Bài toán hàng đợi Tollbooth"
+  - id: dong-gop-bai-bao
+    title: "2. Đóng góp của bài báo"
+  - id: phuong-phap-tiep-can
+    title: "3. Phương pháp tiếp cận"
+  - id: cau-truc-bai-bao
+    title: "4. Cấu trúc bài báo"
+---
+
+      <!-- ================================================================ -->
+      <h2 id="bai-toan-tollbooth">1. Bài toán hàng đợi Tollbooth <small>(The Tollbooth Queueing Problem)</small></h2>
+
+      <p><strong>Câu chuyện:</strong> Hãy tưởng tượng bạn đang lái xe trên đường cao tốc và đến một trạm thu phí <em>(tollbooth)</em>.
+      Trạm có <strong>hai cửa thu phí nối tiếp</strong> <em>(tandem)</em>: cửa đầu tiên kiểm tra vé,
+      cửa thứ hai thu tiền. Xe phải đi qua cả hai cửa theo thứ tự.</p>
+
+      <p>Đặc biệt, hai nhân viên tại hai cửa có <strong>tốc độ phục vụ khác nhau</strong> <em>(heterogeneous servers)</em>:
+      người nhanh, người chậm. Câu hỏi tự nhiên đặt ra:</p>
+      <ul>
+        <li>Nên đặt nhân viên giỏi hơn ở cửa nào?</li>
+        <li>Trung bình xe phải chờ bao lâu?</li>
+        <li>Xác suất một xe bị <strong>chặn</strong> <em>(blocking)</em> — khi cửa phía sau đầy — là bao nhiêu?</li>
+      </ul>
+
+      {% include components/example-start.html title='Ví dụ thực tế: Trạm thu phí đường cao tốc' %}
+        <p>Trạm thu phí trên xa lộ M3 (Hungary) có hai bước xử lý nối tiếp:</p>
+        <ol>
+          <li><strong>Cửa 1:</strong> Quét thẻ / kiểm tra loại xe — tốc độ phục vụ \(\mu_1\).</li>
+          <li><strong>Cửa 2:</strong> Thanh toán phí — tốc độ phục vụ \(\mu_2\).</li>
+        </ol>
+        <p>Xe đến theo <strong>quá trình Poisson</strong> với tốc độ \(\lambda\).
+        Nếu xe ở cửa 1 hoàn thành nhưng cửa 2 đang bận, xe bị <strong>chặn</strong> <em>(blocked)</em> —
+        phải đợi tại cửa 1 cho đến khi cửa 2 trống.</p>
+        <p>Mô hình này là <strong>hàng đợi tandem</strong> <em>(tandem queue)</em>: hai server nối tiếp với bộ đệm giữa chúng bằng 0.</p>
+      {% include components/example-end.html %}
+
+      <p>Bài toán này thuộc lớp <strong>hàng đợi tandem</strong>, một chủ đề quan trọng trong lý thuyết hàng đợi
+      với nhiều ứng dụng trong viễn thông, sản xuất, và giao thông.</p>
+
+      <!-- ================================================================ -->
+      <h2 id="dong-gop-bai-bao">2. Đóng góp của bài báo <small>(Contributions)</small></h2>
+
+      <p>Trước bài báo này (2015), <strong>lời giải dạng đóng</strong> <em>(closed-form solution)</em>
+      chỉ tồn tại cho trường hợp hai server <strong>đồng nhất</strong> <em>(homogeneous)</em>, tức \(\mu_1 = \mu_2\)
+      (NewHall & Harris, 1972).</p>
+
+      <p>Bài báo của thầy Đỗ Văn Tiến mở rộng kết quả này cho trường hợp <strong>không đồng nhất</strong>
+      <em>(heterogeneous)</em>, tức \(\mu_1 \neq \mu_2\) — đây là trường hợp thực tế hơn nhiều.</p>
+
+      {% include components/box-start.html type="summary" title='Tóm tắt đóng góp chính' %}
+        <ol>
+          <li><strong>Lời giải dạng đóng</strong> cho xác suất trạng thái dừng của hàng đợi tollbooth
+              với hai server không đồng nhất và thời gian phục vụ phân phối mũ.</li>
+          <li><strong>Công thức tường minh</strong> cho trị riêng <em>(eigenvalues)</em> của ma trận đa thức đặc trưng —
+              sử dụng phương pháp spectral expansion.</li>
+          <li><strong>Kết quả số</strong> chỉ ra rằng nên đặt server giỏi hơn ở vị trí 2 (cửa cuối)
+              để giảm thời gian chờ trung bình và xác suất bị chặn.</li>
+        </ol>
+      {% include components/box-end.html %}
+
+      <!-- ================================================================ -->
+      <h2 id="phuong-phap-tiep-can">3. Phương pháp tiếp cận <small>(Methodology)</small></h2>
+
+      <p>Bài báo sử dụng <strong>phương pháp spectral expansion</strong> <em>(spectral expansion method)</em> — một kỹ thuật
+      mạnh mẽ để phân tích các quá trình <strong>Quasi-Birth-Death</strong> (QBD).</p>
+
+      <p>Ý tưởng chính:</p>
+      <ol>
+        <li><strong>Mô hình hóa</strong> hệ thống bằng chuỗi Markov liên tục <em>(CTMC)</em> với không gian trạng thái vô hạn đếm được.</li>
+        <li><strong>Nhận diện</strong> cấu trúc QBD — ma trận tốc độ chuyển có dạng block-tridiagonal lặp lại.</li>
+        <li><strong>Tìm trị riêng</strong> của ma trận đa thức đặc trưng \(Q(x)\) — đây là bước then chốt.</li>
+        <li><strong>Biểu diễn</strong> xác suất trạng thái dừng dưới dạng tổ hợp tuyến tính của các vector riêng.</li>
+      </ol>
+
+      {% include components/box-start.html type="definition" title='Quá trình QBD <small>(Quasi-Birth-Death Process)</small>' %}
+        <p>Một <strong>quá trình QBD</strong> là chuỗi Markov liên tục có không gian trạng thái phân cấp theo "mức" <em>(level)</em>,
+        trong đó từ mỗi mức chỉ có thể chuyển sang mức kề bên (lên 1, giữ nguyên, hoặc xuống 1) —
+        tương tự quá trình sinh-tử <em>(birth-death)</em>, nhưng mỗi mức có nhiều "pha" <em>(phase)</em>.</p>
+        <p>Ma trận tốc độ chuyển có dạng block-tridiagonal:</p>
+        \[
+          \mathbf{Q} = \begin{bmatrix}
+            B_1 & A_0 & & \\
+            A_2 & A_1 & A_0 & \\
+            & A_2 & A_1 & A_0 & \\
+            & & \ddots & \ddots & \ddots
+          \end{bmatrix}
+        \]
+      {% include components/box-end.html %}
+
+      <p>Điểm đặc biệt của bài báo: thay vì giải số <em>(numerically)</em>, tác giả tìm được
+      <strong>công thức tường minh</strong> cho trị riêng — nhờ ma trận pha chỉ có kích thước \(3 \times 3\),
+      dẫn đến đa thức đặc trưng bậc 4 có thể giải bằng công thức giải phương trình bậc 4 <em>(quartic formula)</em>.</p>
+
+      <!-- ================================================================ -->
+      <h2 id="cau-truc-bai-bao">4. Cấu trúc bài báo <small>(Paper Structure)</small></h2>
+
+      <p>Bài báo gồm 5 mục, được trình bày trong sách số này như sau:</p>
+
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Mục</th>
+            <th>Nội dung</th>
+            <th>Chương</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Section 1</td>
+            <td>Giới thiệu <em>(Introduction)</em></td>
+            <td>Trang này</td>
+          </tr>
+          <tr>
+            <td>Section 2</td>
+            <td>Mô hình & Spectral Expansion</td>
+            <td><a href="ch1.html">Chương 1</a></td>
+          </tr>
+          <tr>
+            <td>Section 3</td>
+            <td>Lời giải dạng đóng <em>(Closed-form Solution)</em></td>
+            <td><a href="ch2.html">Chương 2</a></td>
+          </tr>
+          <tr>
+            <td>Section 4</td>
+            <td>Kết quả số <em>(Numerical Results)</em></td>
+            <td><a href="ch3.html">Chương 3</a></td>
+          </tr>
+          <tr>
+            <td>Section 5</td>
+            <td>Kết luận <em>(Conclusions)</em></td>
+            <td><a href="ch4.html">Chương 4</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      {% include components/box-start.html type="summary" title='Tài liệu gốc' %}
+        <p><strong>Bài báo:</strong> Do, T.V. (2015). "A closed-form solution for a tollbooth tandem queue
+        with two heterogeneous servers and exponential service times."
+        <em>European Journal of Operational Research</em>, 247(2), 672–675.</p>
+        <p><strong>Loại:</strong> Short Communication (4 trang).</p>
+        <p><strong>Từ khóa:</strong> Queueing, Tollbooth, Tandem queue, Heterogeneous servers,
+        Spectral expansion, Closed-form solution.</p>
+      {% include components/box-end.html %}

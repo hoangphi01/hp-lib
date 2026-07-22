@@ -1,0 +1,30 @@
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">functions</span> Ký hiệu</h4>
+  <h5>Tốc độ</h5>
+  <p>\(\lambda\) = tốc độ đến</p>
+  <p>\(\mu_1\) = tốc độ server 1</p>
+  <p>\(\mu_2\) = tốc độ server 2</p>
+
+  <h5>Trạng thái</h5>
+  <p>\(I^*(t)\) = số khách trong hệ</p>
+  <p>\(J(t) \in \{0, 1, 2\}\) = trạng thái server</p>
+  <p class="sidebar-tip">\(J=0\): cả hai rảnh. \(J=1\): S1 bận. \(J=2\): S2 bận.</p>
+</div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">grid_on</span> Ma trận tốc độ chuyển</h4>
+  <h5>Chuyển lên (thêm khách)</h5>
+  <p>\(A_0 = \begin{bmatrix} \lambda & 0 \\ 0 & \lambda \end{bmatrix}\)</p>
+
+  <h5>Đường chéo</h5>
+  <p>\(A_1 = \begin{bmatrix} -(\lambda+\mu_1) & \mu_1 \\ 0 & -(\lambda+\mu_2) \end{bmatrix}\)</p>
+
+  <h5>Chuyển xuống (khách rời)</h5>
+  <p>\(A_2 = \begin{bmatrix} 0 & 0 \\ \mu_2 & 0 \end{bmatrix}\)</p>
+</div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">verified</span> Điều kiện ổn định</h4>
+  <p>\(\lambda < \dfrac{\mu_1 \mu_2}{\mu_1 + \mu_2}\)</p>
+  <p class="sidebar-tip">Tốc độ đến phải nhỏ hơn tốc độ phục vụ hiệu dụng của hệ tandem.</p>
+</div>
