@@ -1,12 +1,13 @@
 # Mới nhất ở trên
 - week: "2026-07-23"
+  label: "Thưa thầy, trong thời gian vừa rồi do có nhiều việc bận nên con không kịp cập nhật thường xuyên. Dưới đây là những gì con đã làm được:"
   items:
-    - "Tiếp tục đọc về Markov chains từ lần trước"
-    - "Xây dựng website để số hóa và trực quan hóa quá trình học, cũng như làm cơ sở để sau này tham khảo tra cứu tại hp-lib.io.vn"
-    - "Nghiên cứu bài báo của thầy về Tollbooth Tandem Queue và tạo sách số tương ứng"
+    - "Tiếp tục nghiên cứu lý thuyết chuỗi Markov từ lần cập nhật trước"
+    - "Xây dựng website hp-lib.io.vn để số hóa và trực quan hóa quá trình học, đồng thời làm nơi lưu trữ và tra cứu các kiến thức đã nghiên cứu"
+    - "Bắt đầu nghiên cứu bài báo của thầy về Tollbooth Tandem Queue và tổng hợp kiến thức lên website"
   plan:
-    - "Tiếp tục nghiên cứu bài báo của thầy và cập nhật thêm nội dung"
-    - "Hoàn thiện website để đầy đủ hơn và thầy cũng dễ dàng theo dõi tiến độ"
+    - "Tiếp tục nghiên cứu sâu hơn bài báo của thầy và cập nhật những gì học được lên website"
+    - "Hoàn thiện website để thầy có thể dễ dàng theo dõi tiến độ"
 
 - week: "2026-06-21"
   items:

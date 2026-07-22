@@ -21,7 +21,7 @@ title: "Thư viện Nghiên cứu"
       <div class="lib-weekly__card lib-weekly__card--latest">
         <h3 class="lib-weekly__date">Tuần {{ week_date }}</h3>
         {% if entry.items.size > 0 %}
-          <p class="lib-weekly__label">Thưa thầy, tuần vừa rồi con đã hoàn thành:</p>
+          <p class="lib-weekly__label">{{ entry.label | default: "Thưa thầy, tuần vừa rồi con đã hoàn thành:" }}</p>
           <ul class="lib-weekly__list">
             {% for item in entry.items %}
               <li>{{ item }}</li>
