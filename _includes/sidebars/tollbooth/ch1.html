@@ -6,49 +6,52 @@
   <p>\(\mu_2\) = tốc độ server 2</p>
 
   <h5>Trạng thái</h5>
-  <p>\(I^*(t)\) = số khách trong hệ</p>
-  <p>\(J(t) \in \{0, 1, 2\}\) = trạng thái server</p>
-  <p class="sidebar-tip">\(J=0\): cả hai rảnh. \(J=1\): S1 bận. \(J=2\): S2 bận.</p>
+  <p>\(J(t)\) = số khách trong hệ</p>
+  <p>\(I^*(t) \in \{0, 1, 2, 3\}\) = trạng thái server</p>
+  <p class="sidebar-tip">\(I^*\!=\!0\): cả hai rảnh. \(I^*\!=\!1\): S2 bận. \(I^*\!=\!2\): S1 bận. \(I^*\!=\!3\): cả hai bận.</p>
 </div>
 
 <div class="sidebar-card">
-  <h4><span class="material-icons-outlined" style="font-size:16px">grid_on</span> Ma trận tốc độ chuyển</h4>
+  <h4><span class="material-icons-outlined" style="font-size:16px">grid_on</span> Ma trận 3×3 (eq 11)</h4>
   <h5>Chuyển lên (thêm khách)</h5>
-  <p>\(A_0 = \begin{bmatrix} \lambda & 0 \\ 0 & \lambda \end{bmatrix}\)</p>
+  <p>\(A_0 = \lambda I_{3 \times 3}\)</p>
 
-  <h5>Đường chéo</h5>
-  <p>\(A_1 = \begin{bmatrix} -(\lambda+\mu_1) & \mu_1 \\ 0 & -(\lambda+\mu_2) \end{bmatrix}\)</p>
+  <h5>Trong cùng mức</h5>
+  <p>\(A_1\): đường chéo \(-(\lambda\!+\!\mu_2)\), \(-(\mu_1\!+\!\lambda)\), \(-(\mu_1\!+\!\mu_2\!+\!\lambda)\); off-diag \(A_1[3,1]\!=\!\mu_1\)</p>
 
-  <h5>Chuyển xuống (khách rời)</h5>
-  <p>\(A_2 = \begin{bmatrix} 0 & 0 \\ \mu_2 & 0 \end{bmatrix}\)</p>
+  <h5>Xuống 1 mức</h5>
+  <p>\(A_2[2,3] = \mu_1\), \(A_2[3,2] = \mu_2\)</p>
+
+  <h5>Xuống 2 mức (rời đôi)</h5>
+  <p>\(A_3[1,3] = \mu_2\)</p>
 </div>
 
 <div class="sidebar-card">
-  <h4><span class="material-icons-outlined" style="font-size:16px">verified</span> Điều kiện ổn định</h4>
-  <p>\(\lambda < \dfrac{\mu_1 \mu_2}{\mu_1 + \mu_2}\)</p>
-  <p class="sidebar-tip">Tốc độ đến phải nhỏ hơn tốc độ phục vụ hiệu dụng của hệ tandem.</p>
+  <h4><span class="material-icons-outlined" style="font-size:16px">verified</span> Điều kiện ổn định (eq 13)</h4>
+  <p>\(\lambda < \dfrac{2\mu_1\mu_2(\mu_1+\mu_2)}{\mu_1^2+\mu_1\mu_2+\mu_2^2}\)</p>
+  <p class="sidebar-tip">Proposition 1 — áp dụng Theorem 1.7.1, Neuts (1981) cho GI/M/1-type.</p>
 </div>
 
 <div class="sidebar-card">
-  <h4><span class="material-icons-outlined" style="font-size:16px">layers</span> Quá trình QBD</h4>
-  <p><strong>Quasi-Birth-Death</strong>: chuỗi Markov phân cấp theo <em>level</em> (số khách) và <em>phase</em> (trạng thái server).</p>
-  <p class="sidebar-tip">Ma trận tốc độ chuyển có dạng <strong>block-tridiagonal</strong> lặp lại: từ mỗi level chỉ chuyển lên/xuống 1 level hoặc giữ nguyên.</p>
-  <p class="sidebar-tip">Gọi "quasi" vì giống birth-death nhưng mỗi level có nhiều phase thay vì 1 trạng thái.</p>
+  <h4><span class="material-icons-outlined" style="font-size:16px">layers</span> GI/M/1-type</h4>
+  <p>Không phải QBD chuẩn (block-tridiagonal). Có ma trận \(A_3\) — chuyển xuống <strong>2 mức</strong> do rời đôi.</p>
+  <p class="sidebar-tip">Quan hệ truy hồi (eq 12):<br>
+  \(\mathbf{v}_{j-1}A_0 + \mathbf{v}_j A_1 + \mathbf{v}_{j+1}A_2 + \mathbf{v}_{j+2}A_3 = \mathbf{0}\)</p>
 </div>
 
 <div class="sidebar-card">
   <h4><span class="material-icons-outlined" style="font-size:16px">timeline</span> Phân phối mũ</h4>
   <p>Thời gian phục vụ \(\sim \text{Exp}(\mu)\): trung bình \(1/\mu\), phương sai \(1/\mu^2\).</p>
-  <p class="sidebar-tip"><strong>Tính không nhớ:</strong> \(\PP(X > s + t \mid X > s) = \PP(X > t)\). Đây là lý do CTMC hoạt động: tương lai không phụ thuộc quá khứ.</p>
+  <p class="sidebar-tip"><strong>Tính không nhớ:</strong> \(\Pr(X > s + t \mid X > s) = \Pr(X > t)\). Đây là lý do CTMC hoạt động: tương lai không phụ thuộc quá khứ.</p>
 </div>
 
 <div class="sidebar-card">
-  <h4><span class="material-icons-outlined" style="font-size:16px">rule</span> 5 quy tắc vận hành</h4>
+  <h4><span class="material-icons-outlined" style="font-size:16px">rule</span> 5 quy tắc phục vụ</h4>
   <ol style="margin:0; padding-left:1.2em; font-size:0.85em;">
+    <li>Mỗi khách phục vụ bởi <strong>1 server</strong>.</li>
     <li><strong>FIFO</strong>: phục vụ theo thứ tự đến.</li>
-    <li><strong>Nối tiếp</strong>: S1 → S2.</li>
-    <li><strong>Không bộ đệm</strong> giữa hai server.</li>
-    <li><strong>Blocking</strong>: S1 xong + S2 bận → chặn.</li>
-    <li><strong>Chuyển tức thì</strong>: S2 trống → khách vào ngay.</li>
+    <li><strong>Blocking</strong>: S1 xong + S2 bận → chặn, 2 khách cùng rời khi S2 xong.</li>
+    <li>S2 rảnh + S1 bận → S2 <strong>không nhận</strong> từ bộ đệm.</li>
+    <li>Cả hai rảnh → khách vào <strong>S2</strong>.</li>
   </ol>
 </div>

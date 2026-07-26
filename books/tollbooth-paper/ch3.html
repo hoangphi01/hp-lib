@@ -18,18 +18,59 @@ sections:
       <!-- ================================================================ -->
       <h2 id="thiet-lap">1. Thiết lập thực nghiệm <small>(Experimental Setup)</small></h2>
 
-      <p>Bài báo khảo sát hiệu năng hệ thống với các tổ hợp giá trị khác nhau
-      của thời gian phục vụ trung bình \(1/\mu_1\), \(1/\mu_2\) và thời gian giữa hai lần đến \(1/\lambda\).</p>
+      <p>Bài báo khảo sát hiệu năng hệ thống với thời gian phục vụ trung bình
+      \(1/\mu_1\) và \(1/\mu_2\) nhận các giá trị <strong>15, 25, 30, 50 giây</strong> —
+      đây là "typical values measured at toll station terminals in Europe" (Section 4).</p>
 
-      <p><em>Nội dung chi tiết đang được biên soạn...</em></p>
+      <p>Hai cấu hình thời gian giữa hai lần đến:</p>
+      <ul>
+        <li>\(1/\lambda = 50\) giây</li>
+        <li>\(1/\lambda = 40\) giây (tải cao hơn)</li>
+      </ul>
+
+      <p>Với mỗi tổ hợp \((1/\mu_1, 1/\mu_2)\), bài báo tính thời gian chờ trung bình \(W\) (giây)
+      và xác suất bị chặn \(P_b\) từ công thức dạng đóng.</p>
 
       <!-- ================================================================ -->
       <h2 id="bang-ket-qua">2. Bảng kết quả <small>(Table 2: Results)</small></h2>
 
-      <p>Bảng dưới đây tái tạo Table 2 từ bài báo: thời gian chờ trung bình \(W\)
-      và xác suất bị chặn \(P_B\) cho các cấu hình khác nhau.</p>
+      <p>Bảng dưới đây tái tạo <strong>Table 2</strong> từ bài báo:</p>
 
-      <p><em>Bảng đang được format lại...</em></p>
+      <div style="overflow-x: auto;">
+      <table class="styled-table" style="font-size: 0.9em;">
+        <thead>
+          <tr>
+            <th>\(1/\mu_1\) (s)</th>
+            <th>\(1/\mu_2\) (s)</th>
+            <th colspan="2">\(1/\lambda = 50\) s</th>
+            <th colspan="2">\(1/\lambda = 40\) s</th>
+          </tr>
+          <tr>
+            <th></th><th></th>
+            <th>\(W\) (s)</th><th>\(P_b\)</th>
+            <th>\(W\) (s)</th><th>\(P_b\)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>15</td><td>15</td><td>18.2414</td><td>0.0300</td><td>19.4213</td><td>0.0438</td></tr>
+          <tr><td>15</td><td>25</td><td>31.5161</td><td>0.0854</td><td>34.4928</td><td>0.1215</td></tr>
+          <tr><td>25</td><td>15</td><td>22.0998</td><td>0.0236</td><td>25.0687</td><td>0.0350</td></tr>
+          <tr><td>15</td><td>30</td><td>39.3080</td><td>0.1207</td><td>44.0591</td><td>0.1703</td></tr>
+          <tr><td>30</td><td>15</td><td>24.9047</td><td>0.0216</td><td>29.5374</td><td>0.0323</td></tr>
+          <tr><td>15</td><td>50</td><td>85.2501</td><td>0.2970</td><td>115.246</td><td>0.4098</td></tr>
+          <tr><td>50</td><td>15</td><td>46.8399</td><td>0.0175</td><td>74.6341</td><td>0.0274</td></tr>
+          <tr><td>25</td><td>25</td><td>36.4653</td><td>0.0707</td><td>42.0385</td><td>0.1016</td></tr>
+          <tr><td>25</td><td>30</td><td>44.7704</td><td>0.1018</td><td>52.7806</td><td>0.1448</td></tr>
+          <tr><td>30</td><td>25</td><td>40.1770</td><td>0.0657</td><td>48.1952</td><td>0.0950</td></tr>
+          <tr><td>25</td><td>50</td><td>94.4031</td><td>0.2625</td><td>138.410</td><td>0.3640</td></tr>
+          <tr><td>50</td><td>25</td><td>69.7442</td><td>0.0541</td><td>113.192</td><td>0.0808</td></tr>
+          <tr><td>30</td><td>30</td><td>48.9247</td><td>0.0951</td><td>60.0204</td><td>0.1360</td></tr>
+          <tr><td>30</td><td>50</td><td>101.700</td><td>0.2494</td><td>159.659</td><td>0.3468</td></tr>
+          <tr><td>50</td><td>30</td><td>82.5942</td><td>0.0791</td><td>140.287</td><td>0.1162</td></tr>
+          <tr><td>50</td><td>50</td><td>167.915</td><td>0.2139</td><td>642.973</td><td>0.3020</td></tr>
+        </tbody>
+      </table>
+      </div>
 
       <!-- ================================================================ -->
       <h2 id="phan-tich-hoan-doi">3. Phân tích hiệu ứng hoán đổi server <small>(Server Swap Analysis)</small></h2>
@@ -39,19 +80,53 @@ sections:
         <strong>đặt server nhanh hơn ở vị trí 2</strong> (cửa cuối) luôn cho kết quả tốt hơn:</p>
         <ul>
           <li>Thời gian chờ trung bình \(W\) <strong>giảm</strong>.</li>
-          <li>Xác suất bị chặn \(P_B\) <strong>giảm</strong>.</li>
+          <li>Xác suất bị chặn \(P_b\) <strong>giảm</strong>.</li>
         </ul>
       {% include components/box-end.html %}
 
-      <p><em>Phân tích chi tiết đang được biên soạn...</em></p>
+      {% include components/example-start.html title='Ví dụ: Hoán đổi server (1/μ₁=15, 1/μ₂=50 vs ngược lại)' %}
+        <p>So sánh hai cấu hình với \(1/\lambda = 50\) giây:</p>
+
+        <table class="styled-table">
+          <thead>
+            <tr><th>Cấu hình</th><th>\(W\) (s)</th><th>\(P_b\)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>\(1/\mu_1 = 15\), \(1/\mu_2 = 50\) (S1 nhanh, S2 chậm)</td><td>85.25</td><td>0.2970</td></tr>
+            <tr><td>\(1/\mu_1 = 50\), \(1/\mu_2 = 15\) (S1 chậm, S2 nhanh)</td><td>46.84</td><td>0.0175</td></tr>
+          </tbody>
+        </table>
+
+        <p><strong>Kết quả hoán đổi:</strong></p>
+        <ul>
+          <li>\(W\) giảm từ 85.25 → 46.84 giây (giảm <strong>45%</strong>).</li>
+          <li>\(P_b\) giảm từ 0.2970 → 0.0175 (giảm <strong>17 lần</strong>).</li>
+        </ul>
+        <p>Bài báo ghi nhận: "the sojourn time is 85.2501 seconds for \(1/\mu_1 = 15\) seconds,
+        \(1/\mu_2 = 50\) seconds, \(\lambda = 1/50\) 1/seconds) when there is a big difference
+        between the capability of service persons."</p>
+      {% include components/example-end.html %}
+
+      <p>Hiệu ứng tương tự xuất hiện ở mọi cặp không đối xứng trong Table 2.
+      Ví dụ khác: \((25, 50)\) vs \((50, 25)\) với \(1/\lambda = 50\):</p>
+      <ul>
+        <li>\(W\): 94.40 → 69.74 (giảm 26%)</li>
+        <li>\(P_b\): 0.2625 → 0.0541 (giảm 4.8 lần)</li>
+      </ul>
 
       <!-- ================================================================ -->
       <h2 id="y-nghia-quan-ly">4. Ý nghĩa quản lý <small>(Managerial Implications)</small></h2>
 
-      <p>Kết quả số gợi ý chiến lược bố trí nhân sự tối ưu cho trạm thu phí:</p>
-      <ul>
-        <li>Luôn đặt nhân viên <strong>giỏi hơn</strong> (phục vụ nhanh hơn) ở <strong>cửa cuối</strong>.</li>
-        <li>Lý do: cửa cuối là "nút thắt cổ chai": nếu cửa cuối chậm, cửa đầu bị chặn nhiều hơn.</li>
-      </ul>
+      <p>Bài báo kết luận (Section 4): <em>"It can be concluded from these results that the sojourn time
+      and the utilization of the first server can be improved if a more skilled person
+      is placed in the second server position of the tollbooth system."</em></p>
 
-      <p><em>Nội dung chi tiết đang được biên soạn...</em></p>
+      {% include components/box-start.html type="summary" title='Khuyến nghị quản lý' %}
+        <p>Trong hệ thống tollbooth với hai server, <strong>"it is always advised to place a more skilled person
+        in the second server position"</strong> (Section 5).</p>
+        <p><strong>Lý do trực quan:</strong> Server 2 là nút thắt cổ chai <em>(bottleneck)</em> của hệ thống.
+        Khi server 2 chậm, hiện tượng blocking xảy ra thường xuyên hơn:
+        server 1 bị chặn, không thể nhận khách mới, hàng đợi dài ra.
+        Đặt người giỏi hơn ở cửa cuối giúp giải phóng hệ thống nhanh hơn,
+        giảm cả thời gian chờ lẫn xác suất bị chặn.</p>
+      {% include components/box-end.html %}

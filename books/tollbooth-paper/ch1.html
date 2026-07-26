@@ -20,27 +20,47 @@ sections:
   - id: dieu-kien-on-dinh
     title: "7. Điều kiện ổn định"
   - id: qbd-spectral
-    title: "8. Quá trình QBD & Spectral expansion"
+    title: "8. Quá trình GI/M/1-type & Spectral expansion"
 ---
 
       <!-- ================================================================ -->
       <h2 id="mo-hinh-tollbooth">1. Mô hình tollbooth <small>(Tollbooth Model)</small></h2>
 
-      <p><strong>Câu chuyện:</strong> Quay lại trạm thu phí. Ta có một hàng xe dài (bộ đệm vô hạn) chờ trước cửa 1.
-      Hai cửa thu phí hoạt động nối tiếp: xe vào cửa 1 trước, rồi cửa 2.
-      Giữa hai cửa <strong>không có chỗ đợi</strong>: nếu cửa 2 đang bận,
-      xe ở cửa 1 phải <strong>chờ tại chỗ</strong> dù đã được phục vụ xong.</p>
+      <p>Xét hệ thống hàng đợi tollbooth gồm hai server đặt nối tiếp <em>(tandem)</em>.
+      Mô hình này dùng để mô tả trạm thu phí đường cao tốc, nơi hai nhân viên thu phí
+      phục vụ khách hàng tại hai quầy đặt liên tiếp (Section 3.1, bài báo).</p>
 
       {% include components/box-start.html type="definition" title='Mô hình hàng đợi Tollbooth' %}
         <p>Hệ thống gồm:</p>
         <ul>
-          <li><strong>Dòng đến:</strong> Khách hàng (xe) đến theo <strong>quá trình Poisson</strong> với tốc độ \(\lambda\).</li>
-          <li><strong>Server 1:</strong> Thời gian phục vụ phân phối mũ với tốc độ \(\mu_1\).</li>
-          <li><strong>Server 2:</strong> Thời gian phục vụ phân phối mũ với tốc độ \(\mu_2\).</li>
-          <li><strong>Bộ đệm:</strong> Hàng đợi trước server 1 có dung lượng vô hạn. Giữa server 1 và 2 <strong>không có bộ đệm</strong>.</li>
-          <li><strong>Blocking:</strong> Nếu server 2 đang bận khi server 1 hoàn thành, xe bị chặn tại server 1.</li>
+          <li><strong>Dòng đến:</strong> Khách hàng đến theo <strong>quá trình Poisson</strong> với tốc độ \(\lambda\).</li>
+          <li><strong>Server 1:</strong> Thời gian phục vụ phân phối mũ với tham số \(\mu_1\).</li>
+          <li><strong>Server 2:</strong> Thời gian phục vụ phân phối mũ với tham số \(\mu_2\).</li>
+          <li><strong>Bộ đệm:</strong> Hàng đợi trước server 1 có dung lượng <strong>vô hạn</strong>. Giữa hai server <strong>không có bộ đệm</strong>.</li>
         </ul>
-        <p>Đây là hàng đợi dạng \(M/M/1 \to \cdot/M/1\) với blocking.</p>
+      {% include components/box-end.html %}
+
+      <p>Hệ thống được đặc trưng bởi <strong>5 quy tắc phục vụ</strong> sau (trích Section 3.1):</p>
+
+      <ol>
+        <li><strong>Mỗi khách chỉ được phục vụ bởi một server.</strong> Hai server có thể đồng thời rảnh
+            nếu không có khách chờ trong bộ đệm.</li>
+        <li><strong>FIFO</strong> <em>(First-In-First-Out)</em>: thứ tự phục vụ theo thứ tự đến tại mỗi server.</li>
+        <li><strong>Blocking khi rời:</strong> Khách hoàn thành phục vụ tại server 1 <strong>không thể rời</strong> hệ thống
+            nếu server 2 đang bận. Khách bị chặn <em>(blocked)</em> và phải đợi cho đến khi khách tại server 2 hoàn thành —
+            khi đó <strong>hai khách cùng rời</strong> hệ thống. Server 1 lúc này rảnh nhưng không thể nhận khách mới
+            vì vị trí phục vụ bị chiếm bởi khách bị chặn.</li>
+        <li><strong>Server 2 không nhận từ bộ đệm:</strong> Nếu server 2 rảnh nhưng server 1 đang bận,
+            server 2 không thể phục vụ khách từ bộ đệm. Khách đang được phục vụ bởi server 1
+            chặn sự di chuyển của khách từ bộ đệm.</li>
+        <li><strong>Cả hai rảnh → vào server 2:</strong> Nếu cả hai server đều rảnh, khách đến
+            được phục vụ bởi <strong>server 2</strong>.</li>
+      </ol>
+
+      {% include components/box-start.html type="summary" title='Điểm khác biệt quan trọng' %}
+        <p>Quy tắc 3 tạo ra hiện tượng <strong>rời đôi</strong> <em>(double departure)</em>: khi server 2 hoàn thành
+        và có khách bị chặn tại server 1, hai khách cùng rời hệ thống. Đây là lý do
+        chuỗi Markov có dạng <strong>GI/M/1-type</strong> (chuyển xuống 2 mức) thay vì QBD chuẩn.</p>
       {% include components/box-end.html %}
 
       <p><strong>Ký hiệu chính:</strong></p>
@@ -55,33 +75,39 @@ sections:
       <!-- ================================================================ -->
       <h2 id="ctmc">2. Chuỗi Markov liên tục (CTMC) <small>(Continuous-Time Markov Chain)</small></h2>
 
-      <p>Để phân tích hệ thống, ta mô hình hóa nó bằng một <strong>chuỗi Markov thời gian liên tục</strong> <em>(CTMC)</em>.</p>
+      <p>Gọi \(J(t)\) là số khách hàng trong hệ thống tại thời điểm \(t\).
+      Gọi \(I^*(t)\) là trạng thái của hai server tại thời điểm \(t\),
+      nhận giá trị trong \(\{0, 1, 2, 3\}\) theo Table 1 của bài báo:</p>
 
-      {% include components/box-start.html type="definition" title='Quá trình Markov của hệ tollbooth' %}
-        <p>Định nghĩa quá trình Markov hai chiều \(\{I^*(t), J(t)\}\) trên không gian trạng thái \(S\):</p>
-        <ul>
-          <li>\(I^*(t)\): số khách hàng trong hệ thống tại thời điểm \(t\) (bao gồm cả đang được phục vụ).</li>
-          <li>\(J(t)\): trạng thái kết hợp của hai server tại thời điểm \(t\).</li>
-        </ul>
-        <p>\(J(t)\) nhận giá trị trong \(\{0, 1, 2\}\) theo quy ước:</p>
+      {% include components/box-start.html type="definition" title='Trạng thái server I*(t) — Table 1' %}
         <table class="styled-table">
           <thead>
-            <tr><th>\(J(t)\)</th><th>Server 1</th><th>Server 2</th><th>Mô tả</th></tr>
+            <tr><th>\(I^*(t)\)</th><th>Server 1</th><th>Server 2</th><th>Mô tả</th></tr>
           </thead>
           <tbody>
             <tr><td>0</td><td>Rảnh <em>(Idle)</em></td><td>Rảnh <em>(Idle)</em></td><td>Cả hai server đều rảnh</td></tr>
-            <tr><td>1</td><td>Bận <em>(Busy)</em></td><td>Rảnh <em>(Idle)</em></td><td>Server 1 đang phục vụ, server 2 rảnh</td></tr>
-            <tr><td>2</td><td>Rảnh/Bận</td><td>Bận <em>(Busy)</em></td><td>Server 2 đang phục vụ</td></tr>
+            <tr><td>1</td><td>Rảnh <em>(Idle)</em></td><td>Bận <em>(Busy)</em></td><td>Chỉ server 2 đang phục vụ</td></tr>
+            <tr><td>2</td><td>Bận <em>(Busy)</em></td><td>Rảnh <em>(Idle)</em></td><td>Chỉ server 1 đang phục vụ</td></tr>
+            <tr><td>3</td><td>Bận <em>(Busy)</em></td><td>Bận <em>(Busy)</em></td><td>Cả hai server đều bận</td></tr>
           </tbody>
         </table>
+        <p><strong>Lưu ý:</strong> \(I^* = 1\) bao gồm cả trường hợp server 1 "rảnh" nhưng vị trí bị chiếm bởi
+        khách bị chặn <em>(blocked customer)</em>.</p>
       {% include components/box-end.html %}
 
-      <p>Không gian trạng thái đầy đủ:</p>
+      <p>Hệ thống được mô tả bởi CTMC \(\{I^*(t), J(t)\}\) trên không gian trạng thái:</p>
       \[
-        S = \{(0, 0)\} \cup \{(i, j) : i \geq 1,\; j \in \{1, 2\}\}
+        S = \{(0, 0)\} \cup \{(1, 1)\} \cup \{(2, 1)\} \cup \{(k, l) : k = 1, 2, 3;\; l \geq 2\}
       \]
-      <p>Trạng thái \((0, 0)\) nghĩa là hệ thống trống. Khi có ít nhất 1 khách (\(i \geq 1\)),
-      ít nhất một server phải đang bận, nên \(j \in \{1, 2\}\).</p>
+
+      <p><strong>Giải thích:</strong></p>
+      <ul>
+        <li><strong>Mức 0:</strong> Chỉ có trạng thái \((0, 0)\) — hệ trống, cả hai server rảnh.</li>
+        <li><strong>Mức 1:</strong> Hai trạng thái \((1, 1)\) và \((2, 1)\) — một khách đang ở server 2 hoặc server 1.
+            Không thể có \((3, 1)\) vì chỉ 1 khách thì không thể cả hai server đều bận.</li>
+        <li><strong>Mức \(l \geq 2\):</strong> Ba trạng thái \((1, l)\), \((2, l)\), \((3, l)\) — server có thể ở trạng thái 1, 2, hoặc 3.
+            Trạng thái \((0, l)\) không xảy ra vì có khách trong hệ thì ít nhất một server phải bận.</li>
+      </ul>
 
       {% include components/review-start.html title='Ôn tập: CTMC (từ Chuỗi Markov, Ch. 5)' %}
         <p>Chuỗi Markov thời gian liên tục là quá trình ngẫu nhiên \(\{X(t) : t \geq 0\}\) sao cho:</p>
@@ -96,182 +122,265 @@ sections:
       <!-- ================================================================ -->
       <h2 id="quy-tac-van-hanh">3. Quy tắc vận hành <small>(Operating Rules)</small></h2>
 
-      <p>Hệ thống tollbooth hoạt động theo 5 quy tắc sau:</p>
+      <p>Từ 5 quy tắc phục vụ, bài báo suy ra <strong>4 quy tắc đến</strong> <em>(arrival rules)</em> sau:</p>
 
-      <ol>
-        <li><strong>FIFO:</strong> Khách hàng được phục vụ theo thứ tự đến <em>(First-In-First-Out)</em>.</li>
-        <li><strong>Nối tiếp:</strong> Mỗi khách phải qua server 1 trước, rồi server 2.</li>
-        <li><strong>Không có bộ đệm giữa:</strong> Giữa server 1 và server 2 không có chỗ đợi.</li>
-        <li><strong>Blocking:</strong> Nếu server 1 hoàn thành nhưng server 2 đang bận, khách bị <strong>chặn</strong>
-            tại server 1 (server 1 không thể nhận khách mới).</li>
-        <li><strong>Chuyển tức thì:</strong> Khi server 2 trống và có khách chờ (hoặc bị chặn) tại server 1,
-            khách chuyển sang server 2 ngay lập tức.</li>
-      </ol>
+      {% include components/box-start.html type="definition" title='Quy tắc khi khách đến' %}
+        <ul>
+          <li>Nếu \(I^*(t) = 0\) (cả hai rảnh): khách được phục vụ bởi <strong>server 2</strong>.</li>
+          <li>Nếu \(J(t) = 1\) và server 1 đang bận (\(I^* = 2\)): khách <strong>chờ trong bộ đệm</strong>.</li>
+          <li>Nếu \(J(t) = 1\) và server 2 đang bận (\(I^* = 1\)): khách được phục vụ bởi <strong>server 1</strong>.</li>
+          <li>Nếu \(J(t) \geq 2\): khách <strong>vào bộ đệm</strong>.</li>
+        </ul>
+      {% include components/box-end.html %}
 
-      {% include components/box-start.html type="summary" title='Tóm tắt' %}
-        <p>Quy tắc blocking là đặc trưng quan trọng nhất: nó tạo ra sự <strong>phụ thuộc</strong> giữa hai server,
-        khiến phân tích phức tạp hơn nhiều so với hai hàng đợi độc lập.</p>
+      <p><strong>Giải thích quy tắc 2 & 3 (khi \(J = 1\)):</strong></p>
+      <ul>
+        <li>Nếu \(I^* = 2\) (S1 bận, S2 rảnh): S2 rảnh nhưng <strong>không thể nhận khách từ bộ đệm</strong>
+            vì khách tại S1 chặn sự di chuyển. Khách mới phải chờ.</li>
+        <li>Nếu \(I^* = 1\) (S1 rảnh, S2 bận): S1 rảnh và có thể nhận khách. Khách mới vào S1.</li>
+      </ul>
+
+      {% include components/box-start.html type="summary" title='Quy tắc rời' %}
+        <p>Khi server hoàn thành phục vụ, có hai kịch bản:</p>
+        <ul>
+          <li><strong>Rời đơn:</strong> Server 1 hoàn thành và server 2 rảnh (không bị chặn) → 1 khách rời.</li>
+          <li><strong>Rời đôi:</strong> Server 2 hoàn thành và có khách bị chặn tại server 1 → <strong>2 khách cùng rời</strong>.
+              Sau đó, nếu bộ đệm có ≥ 2 khách, cả hai server nhận khách mới (S2 trước theo quy tắc 5).</li>
+        </ul>
       {% include components/box-end.html %}
 
       <!-- ================================================================ -->
       <h2 id="so-do-chuyen">4. Sơ đồ tốc độ chuyển <small>(Transition Rate Diagram)</small></h2>
 
-      <p>Sơ đồ dưới đây mô tả các tốc độ chuyển giữa các trạng thái (tương ứng Fig. 1 trong bài báo).
-      Mỗi mũi tên chỉ hướng chuyển, nhãn là tốc độ chuyển.</p>
+      <p>Sơ đồ dưới đây mô tả các tốc độ chuyển chính giữa các trạng thái (Fig. 1 trong bài báo).
+      Không gian trạng thái được chia thành các mức <em>(level)</em> theo số khách \(J\).</p>
 
-      <p>Tại <strong>mức 0</strong> (hệ thống trống hoặc có 1 khách):</p>
+      <p><strong>Mức 0 → Mức 1:</strong></p>
       <ul>
-        <li>\((0,0) \xrightarrow{\lambda} (1,1)\): Khách đến khi hệ trống → vào server 1.</li>
-        <li>\((1,1) \xrightarrow{\mu_1} (1,2)\): Server 1 xong → khách chuyển sang server 2.</li>
-        <li>\((1,2) \xrightarrow{\mu_2} (0,0)\): Server 2 xong → khách rời hệ, hệ trống.</li>
+        <li>\((0,0) \xrightarrow{\lambda} (1,1)\): Khách đến khi hệ trống → vào server 2 (quy tắc 5).</li>
       </ul>
 
-      <p>Tại <strong>mức \(i \geq 2\)</strong> (có \(i\) khách trong hệ):</p>
+      <p><strong>Mức 1 (nội bộ & liên mức):</strong></p>
       <ul>
-        <li>\((i,1) \xrightarrow{\lambda} (i+1,1)\): Thêm khách đến, server 1 đang bận (server 2 rảnh).</li>
-        <li>\((i,1) \xrightarrow{\mu_1} (i,2)\): Server 1 xong → khách chuyển sang server 2.</li>
-        <li>\((i,2) \xrightarrow{\lambda} (i+1,2)\): Thêm khách đến, server 2 đang bận.</li>
-        <li>\((i,2) \xrightarrow{\mu_2} (i-1,1)\): Server 2 xong → khách rời hệ, khách tiếp theo vào server 1.</li>
+        <li>\((1,1) \xrightarrow{\mu_2} (0,0)\): Server 2 xong → khách rời, hệ trống.</li>
+        <li>\((1,1) \xrightarrow{\lambda} (3,2)\): Khách đến, S2 bận → vào S1 → cả hai bận, 2 khách.</li>
+        <li>\((2,1) \xrightarrow{\mu_1} (0,0)\): Server 1 xong, S2 rảnh (không bị chặn) → khách rời.</li>
+        <li>\((2,1) \xrightarrow{\lambda} (2,2)\): Khách đến, S1 bận → vào bộ đệm.</li>
+      </ul>
+
+      <p><strong>Mức \(l \geq 2\) — Chuyển trong cùng mức</strong> (ma trận \(A_1\)):</p>
+      <ul>
+        <li>\((3,l) \xrightarrow{\mu_1} (1,l)\): S1 xong nhưng S2 bận → khách bị <strong>chặn</strong>.</li>
+      </ul>
+
+      <p><strong>Mức \(l \geq 2\) — Chuyển lên 1 mức</strong> (ma trận \(A_0\)):</p>
+      <ul>
+        <li>\((k,l) \xrightarrow{\lambda} (k,l{+}1)\): Khách đến → vào bộ đệm, trạng thái server không đổi.</li>
+      </ul>
+
+      <p><strong>Mức \(l \geq 2\) — Chuyển xuống 1 mức</strong> (ma trận \(A_2\)):</p>
+      <ul>
+        <li>\((3,l) \xrightarrow{\mu_2} (2,l{-}1)\): S2 xong → 1 khách rời, S1 vẫn bận.</li>
+        <li>\((2,l) \xrightarrow{\mu_1} (3,l{-}1)\): S1 xong, không bị chặn → 1 khách rời,
+            cả hai rảnh, 2 khách từ bộ đệm lấp cả hai server → trạng thái 3.</li>
+      </ul>
+
+      <p><strong>Mức \(l \geq 2\) — Chuyển xuống 2 mức</strong> (ma trận \(A_3\)):</p>
+      <ul>
+        <li>\((1,l) \xrightarrow{\mu_2} (3,l{-}2)\): S2 xong + khách bị chặn tại S1 →
+            <strong>2 khách cùng rời</strong>, cả hai rảnh, 2 khách từ bộ đệm lấp cả hai server.</li>
       </ul>
 
       <!-- ================================================================ -->
       <h2 id="ma-tran-toc-do">5. Ma trận tốc độ chuyển <small>(Transition Rate Matrices)</small></h2>
 
-      <p>Cấu trúc QBD cho phép ta viết ma trận tốc độ chuyển dưới dạng block-tridiagonal.
-      Các block ma trận chính (kích thước \(2 \times 2\), ứng với pha \(j \in \{1, 2\}\)):</p>
+      <p>Đặt \(\mathbf{v}_j = [\pi_{1,j},\; \pi_{2,j},\; \pi_{3,j}]\) là vector xác suất dừng tại mức \(j \geq 2\).
+      Các ma trận tốc độ chuyển có kích thước \(3 \times 3\), ứng với 3 pha \(I^* \in \{1, 2, 3\}\) (eq 11):</p>
 
-      {% include components/box-start.html type="formula" title='Ma trận tốc độ chuyển A₀, A₁, A₂' %}
-        <p><strong>Ma trận chuyển lên</strong> (thêm khách đến):</p>
+      {% include components/box-start.html type="formula" title='Ma trận tốc độ chuyển A₀, A₁, A₂, A₃ (eq 11)' %}
+        <p><strong>Chuyển lên 1 mức</strong> (thêm khách):</p>
         \[
-          A_0 = \begin{bmatrix} \lambda & 0 \\ 0 & \lambda \end{bmatrix}
+          A_0 = \begin{bmatrix} \lambda & 0 & 0 \\ 0 & \lambda & 0 \\ 0 & 0 & \lambda \end{bmatrix}
         \]
 
-        <p><strong>Ma trận đường chéo</strong> (ở lại cùng mức):</p>
+        <p><strong>Chuyển trong cùng mức:</strong></p>
         \[
-          A_1 = \begin{bmatrix} -(\lambda + \mu_1) & \mu_1 \\ 0 & -(\lambda + \mu_2) \end{bmatrix}
+          A_1 = \begin{bmatrix} -\lambda - \mu_2 & 0 & 0 \\ 0 & -\mu_1 - \lambda & 0 \\ \mu_1 & 0 & -\mu_1 - \mu_2 - \lambda \end{bmatrix}
         \]
 
-        <p><strong>Ma trận chuyển xuống</strong> (khách rời hệ):</p>
+        <p><strong>Chuyển xuống 1 mức</strong> (1 khách rời):</p>
         \[
-          A_2 = \begin{bmatrix} 0 & 0 \\ \mu_2 & 0 \end{bmatrix}
+          A_2 = \begin{bmatrix} 0 & 0 & 0 \\ 0 & 0 & \mu_1 \\ 0 & \mu_2 & 0 \end{bmatrix}
+        \]
+
+        <p><strong>Chuyển xuống 2 mức</strong> (2 khách cùng rời):</p>
+        \[
+          A_3 = \begin{bmatrix} 0 & 0 & \mu_2 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{bmatrix}
         \]
       {% include components/box-end.html %}
 
-      <p>Ma trận biên tại mức 0–1 (chuyển từ/đến trạng thái \((0,0)\)):</p>
+      <p><strong>Đọc ma trận:</strong> Hàng = trạng thái đi, cột = trạng thái đến. Ví dụ \(A_1[3,1] = \mu_1\):
+      từ trạng thái 3 (cả hai bận), S1 hoàn thành (tốc độ \(\mu_1\)), chuyển sang trạng thái 1
+      (S1 rảnh/bị chặn, S2 bận) mà không thay đổi số khách.</p>
 
-      {% include components/box-start.html type="formula" title='Ma trận biên A₃, B₀, B₁' %}
-        \[
-          A_3 = \begin{bmatrix} 0 \\ \mu_2 \end{bmatrix}, \quad
-          B_0 = \begin{bmatrix} \lambda & 0 \end{bmatrix}, \quad
-          B_1 = [-\lambda]
-        \]
-        <p>Trong đó \(A_3\) là vector cột (chuyển từ mức 1 về mức 0),
-        \(B_0\) là vector hàng (chuyển từ mức 0 lên mức 1),
-        và \(B_1 = [-\lambda]\) là tốc độ rời trạng thái \((0,0)\).</p>
-      {% include components/box-end.html %}
+      <p>\(A_3[1,3] = \mu_2\): từ trạng thái 1 (S1 rảnh/bị chặn, S2 bận), S2 hoàn thành → 2 khách rời
+      (rời đôi) → cả hai rảnh → 2 khách từ bộ đệm lấp cả hai server → trạng thái 3.</p>
 
       <!-- ================================================================ -->
       <h2 id="phuong-trinh-can-bang">6. Phương trình cân bằng <small>(Balance Equations)</small></h2>
 
       <p>Tại trạng thái dừng, tốc độ vào = tốc độ ra cho mỗi trạng thái.
-      Gọi \(\pi_{i,j} = \lim_{t \to \infty} \PP(I^*(t) = i, J(t) = j)\) là xác suất trạng thái dừng.</p>
+      Gọi \(\pi_{i,j} = \lim_{t \to \infty} \Pr(I^*(t) = i,\; J(t) = j)\) là xác suất trạng thái dừng.
+      Bài báo đưa ra <strong>9 phương trình cân bằng</strong> (eqs 1–9):</p>
 
-      {% include components/box-start.html type="formula" title='Phương trình cân bằng (eqs 1–10 trong bài báo)' %}
+      {% include components/box-start.html type="formula" title='Phương trình cân bằng (eqs 1–9)' %}
         <p><strong>Trạng thái \((0,0)\):</strong></p>
         \[
-          \lambda \pi_{0,0} = \mu_2 \pi_{1,2} \tag{1}
+          \pi_{0,0}\,\lambda = (\pi_{1,1} + \pi_{1,2})\,\mu_2 + \pi_{2,1}\,\mu_1 \tag{1}
         \]
 
         <p><strong>Trạng thái \((1,1)\):</strong></p>
         \[
-          (\lambda + \mu_1) \pi_{1,1} = \lambda \pi_{0,0} + \mu_2 \pi_{2,2} \tag{2}
+          \pi_{1,1}(\mu_2 + \lambda) = \pi_{0,0}\,\lambda + \pi_{1,3}\,\mu_2 + \pi_{2,2}\,\mu_1 \tag{2}
+        \]
+
+        <p><strong>Trạng thái \((2,1)\):</strong></p>
+        \[
+          \pi_{2,1}(\mu_1 + \lambda) = \pi_{3,2}\,\mu_2 \tag{3}
         \]
 
         <p><strong>Trạng thái \((1,2)\):</strong></p>
         \[
-          (\lambda + \mu_2) \pi_{1,2} = \mu_1 \pi_{1,1} \tag{3}
+          \pi_{1,2}(\mu_2 + \lambda) = \pi_{3,2}\,\mu_1 \tag{4}
         \]
 
-        <p><strong>Trạng thái \((i,1)\), \(i \geq 2\):</strong></p>
+        <p><strong>Trạng thái \((2,2)\):</strong></p>
         \[
-          (\lambda + \mu_1) \pi_{i,1} = \lambda \pi_{i-1,1} + \mu_2 \pi_{i+1,2} \tag{4}
+          \pi_{2,2}(\mu_1 + \lambda) = \pi_{2,1}\,\lambda + \pi_{3,3}\,\mu_2 \tag{5}
         \]
 
-        <p><strong>Trạng thái \((i,2)\), \(i \geq 2\):</strong></p>
+        <p><strong>Trạng thái \((3,2)\):</strong></p>
         \[
-          (\lambda + \mu_2) \pi_{i,2} = \lambda \pi_{i-1,2} + \mu_1 \pi_{i,1} \tag{5}
+          \pi_{3,2}(\mu_2 + \mu_1 + \lambda) = \pi_{1,1}\,\lambda + \pi_{2,3}\,\mu_1 + \pi_{1,4}\,\mu_2 \tag{6}
+        \]
+
+        <p><strong>Trạng thái \((1,j)\), \(j \geq 3\):</strong></p>
+        \[
+          \pi_{1,j}(\mu_2 + \lambda) = \pi_{1,j-1}\,\lambda + \pi_{3,j}\,\mu_1 \tag{7}
+        \]
+
+        <p><strong>Trạng thái \((2,j)\), \(j \geq 3\):</strong></p>
+        \[
+          \pi_{2,j}(\mu_1 + \lambda) = \pi_{2,j-1}\,\lambda + \pi_{3,j+1}\,\mu_2 \tag{8}
+        \]
+
+        <p><strong>Trạng thái \((3,j)\), \(j \geq 3\):</strong></p>
+        \[
+          \pi_{3,j}(\mu_2 + \mu_1 + \lambda) = \pi_{3,j-1}\,\lambda + \pi_{2,j+1}\,\mu_1 + \pi_{1,j+2}\,\mu_2 \tag{9}
         \]
       {% include components/box-end.html %}
 
-      <p>Thêm điều kiện chuẩn hóa:</p>
+      <p>Điều kiện chuẩn hóa (eq 10):</p>
       \[
-        \pi_{0,0} + \sum_{i=1}^{\infty} (\pi_{i,1} + \pi_{i,2}) = 1 \tag{6}
+        \pi_{0,0} + \pi_{1,1} + \pi_{2,1} + \sum_{j=2}^{\infty} (\pi_{1,j} + \pi_{2,j} + \pi_{3,j}) = 1 \tag{10}
       \]
+
+      {% include components/example-start.html title='Đọc phương trình (9): trạng thái (3,j)' %}
+        <p>Trạng thái \((3,j)\) với \(j \geq 3\): cả hai server bận, \(j\) khách trong hệ.</p>
+        <p><strong>Tốc độ ra:</strong> \((\mu_2 + \mu_1 + \lambda)\pi_{3,j}\) — S2 xong, hoặc S1 xong (bị chặn), hoặc khách đến.</p>
+        <p><strong>Tốc độ vào</strong> từ 3 nguồn:</p>
+        <ul>
+          <li>\(\pi_{3,j-1}\lambda\): từ \((3,j{-}1)\), khách đến → vào bộ đệm.</li>
+          <li>\(\pi_{2,j+1}\mu_1\): từ \((2,j{+}1)\), S1 xong → 1 khách rời → cả hai rảnh → 2 khách từ bộ đệm lấp cả hai server.</li>
+          <li>\(\pi_{1,j+2}\mu_2\): từ \((1,j{+}2)\), S2 xong → <strong>2 khách rời</strong> → cả hai rảnh → 2 khách từ bộ đệm lấp cả hai server.</li>
+        </ul>
+      {% include components/example-end.html %}
 
       <!-- ================================================================ -->
       <h2 id="dieu-kien-on-dinh">7. Điều kiện ổn định <small>(Stability Condition)</small></h2>
 
-      {% include components/box-start.html type="theorem" title='Proposition 1 (Điều kiện ổn định)' %}
-        <p>Hệ thống tollbooth ổn định (có phân phối dừng) khi và chỉ khi:</p>
+      {% include components/box-start.html type="theorem" title='Proposition 1 — Điều kiện ổn định (eq 13)' %}
+        <p>CTMC \(\{I^*(t), J(t)\}\) ổn định (tồn tại phân phối dừng) khi và chỉ khi:</p>
         \[
-          \lambda < \frac{\mu_1 \mu_2}{\mu_1 + \mu_2}
+          \lambda < \frac{2\mu_1 \mu_2 (\mu_1 + \mu_2)}{\mu_1^2 + \mu_1 \mu_2 + \mu_2^2} \tag{13}
         \]
-        <p>Tương đương: \(\displaystyle\frac{1}{\lambda} > \frac{1}{\mu_1} + \frac{1}{\mu_2}\), nghĩa là
-        thời gian trung bình giữa hai lần đến phải lớn hơn tổng thời gian phục vụ trung bình của cả hai server.</p>
       {% include components/box-end.html %}
 
-      <p><strong>Ý nghĩa trực quan:</strong> Tốc độ phục vụ hiệu dụng của hệ tandem là
-      \(\mu_1 \mu_2 / (\mu_1 + \mu_2)\), chính là nghịch đảo của tổng thời gian phục vụ trung bình.
-      Nếu khách đến nhanh hơn tốc độ này, hàng đợi sẽ dài vô hạn.</p>
+      <p><strong>Chứng minh</strong> (Proposition 1, bài báo): Áp dụng Theorem 1.7.1 (eq 1.7.11) trong sách Neuts (1981),
+      CTMC dạng GI/M/1-type ổn định khi và chỉ khi:</p>
+      \[
+        \boldsymbol{\pi} A_0 \mathbf{e} < \boldsymbol{\pi} A_2 \mathbf{e} + 2\boldsymbol{\pi} A_3 \mathbf{e} \tag{14}
+      \]
+      <p>trong đó \(\boldsymbol{\pi} A = \mathbf{0}\), \(A = A_0 + A_1 + A_2 + A_3\),
+      \(\boldsymbol{\pi}\mathbf{e} = 1\), \(\mathbf{e}^T = [1, 1, 1]\).
+      Nghiệm:</p>
+      \[
+        \boldsymbol{\pi} = \frac{1}{\mu_1^2 + \mu_1\mu_2 + \mu_2^2}
+        \begin{bmatrix} \mu_1^2, & \mu_2^2, & \mu_1\mu_2 \end{bmatrix}
+      \]
+      <p>Thay \(\boldsymbol{\pi}\), \(A_0\), \(A_2\), \(A_3\) vào (14), ta được (13). \(\square\)</p>
 
       {% include components/example-start.html title='Ví dụ: Kiểm tra điều kiện ổn định' %}
-        <p>Cho \(\mu_1 = 2\), \(\mu_2 = 3\) (khách/phút). Tốc độ phục vụ hiệu dụng:</p>
+        <p>Cho \(\mu_1 = 2\), \(\mu_2 = 3\) (khách/phút). Ngưỡng ổn định:</p>
         \[
-          \frac{\mu_1 \mu_2}{\mu_1 + \mu_2} = \frac{2 \times 3}{2 + 3} = \frac{6}{5} = 1.2 \text{ khách/phút}
+          \frac{2 \cdot 2 \cdot 3 \cdot (2 + 3)}{2^2 + 2 \cdot 3 + 3^2}
+          = \frac{2 \cdot 6 \cdot 5}{4 + 6 + 9}
+          = \frac{60}{19} \approx 3{,}16 \text{ khách/phút}
         \]
-        <p>Hệ ổn định khi \(\lambda < 1.2\). Nếu \(\lambda = 1\): ổn định. Nếu \(\lambda = 1.5\): không ổn định.</p>
+        <p>Hệ ổn định khi \(\lambda < 3{,}16\). Nếu \(\lambda = 3\): ổn định. Nếu \(\lambda = 4\): không ổn định.</p>
       {% include components/example-end.html %}
 
       <!-- ================================================================ -->
-      <h2 id="qbd-spectral">8. Quá trình QBD & Spectral expansion <small>(QBD Process & Spectral Expansion)</small></h2>
+      <h2 id="qbd-spectral">8. Quá trình GI/M/1-type & Spectral expansion <small>(GI/M/1-type & Spectral Expansion)</small></h2>
 
-      <p>Cấu trúc lặp lại của phương trình cân bằng (4)–(5) cho thấy đây là quá trình <strong>QBD</strong>
-      với mức <em>(level)</em> \(i\) và pha <em>(phase)</em> \(j \in \{1, 2\}\).</p>
+      <p>Từ các phương trình cân bằng (7)–(9), ta rút ra quan hệ truy hồi cho \(\mathbf{v}_j\) (eq 12):</p>
+
+      {% include components/box-start.html type="formula" title='Quan hệ truy hồi GI/M/1-type (eq 12)' %}
+        \[
+          \mathbf{v}_{j-1} A_0 + \mathbf{v}_j A_1 + \mathbf{v}_{j+1} A_2 + \mathbf{v}_{j+2} A_3 = \mathbf{0}, \quad j \geq 3 \tag{12}
+        \]
+        <p>Đây là quá trình <strong>GI/M/1-type</strong> (không phải QBD chuẩn) vì có ma trận \(A_3\) —
+        chuyển xuống <strong>2 mức</strong> do hiện tượng rời đôi.</p>
+      {% include components/box-end.html %}
+
+      <p>Trong quá trình QBD chuẩn, chỉ có \(A_0\), \(A_1\), \(A_2\) (block-tridiagonal).
+      Ở đây, ma trận \(A_3\) khiến cấu trúc là block-<strong>pentadiagonal</strong> theo nghĩa rộng.</p>
 
       {% include components/box-start.html type="definition" title='Phương pháp Spectral Expansion' %}
-        <p>Phương pháp spectral expansion tìm nghiệm dạng:</p>
+        <p>Đặt ma trận đa thức đặc trưng (eq 15–16):</p>
         \[
-          \boldsymbol{\pi}_i = (\pi_{i,1},\; \pi_{i,2}) = \sum_{k} a_k x_k^i \boldsymbol{\psi}_k, \quad i \geq 1
+          Q(x) = A_0 + A_1 x + A_2 x^2 + A_3 x^3
+        \]
+        <p>Theo Chakka & Do (2007), nghiệm spectral expansion có dạng:</p>
+        \[
+          \mathbf{v}_j = \sum_{i=1}^{3} a_i x_i^{j-2}\, \boldsymbol{\psi}_i(x_i), \quad j \geq 2 \tag{15}
         \]
         <p>trong đó:</p>
         <ul>
-          <li>\(x_k\) là <strong>trị riêng</strong> <em>(eigenvalue)</em> của ma trận đa thức đặc trưng \(Q(x)\).</li>
-          <li>\(\boldsymbol{\psi}_k\) là <strong>vector riêng</strong> <em>(eigenvector)</em> tương ứng.</li>
-          <li>\(a_k\) là <strong>hệ số</strong> xác định bởi điều kiện biên.</li>
+          <li>\(x_i\) là <strong>trị riêng</strong> <em>(eigenvalue)</em> nằm trong đường tròn đơn vị (\(|x_i| < 1\)).</li>
+          <li>\(\boldsymbol{\psi}_i(x_i)\) là <strong>vector riêng trái</strong> <em>(left eigenvector)</em> tương ứng, có 3 thành phần.</li>
+          <li>\(a_i\) là <strong>hệ số</strong> xác định bởi điều kiện biên.</li>
         </ul>
-        <p>Yêu cầu: \(|x_k| < 1\) để tổng hội tụ (xác suất hữu hạn).</p>
+        <p>Trị riêng và vector riêng thỏa mãn (eq 16):</p>
+        \[
+          \det[Q(x_i)] = 0, \quad \boldsymbol{\psi}_i(x_i)\, Q(x_i) = \mathbf{0}, \quad i = 1, 2, 3 \tag{16}
+        \]
       {% include components/box-end.html %}
 
-      <p>Ma trận đa thức đặc trưng:</p>
-
-      {% include components/box-start.html type="formula" title='Ma trận đa thức đặc trưng Q(x)' %}
-        \[
-          Q(x) = A_0 x^2 + A_1 x + A_2 = \begin{bmatrix} \lambda x^2 - (\lambda + \mu_1)x & \mu_1 x \\ \mu_2 & \lambda x^2 - (\lambda + \mu_2)x \end{bmatrix}
-        \]
-        <p>Trị riêng \(x\) được tìm từ điều kiện:</p>
-        \[
-          \det[Q(x)] = 0
-        \]
-        <p>Phương trình này là đa thức bậc 4 theo \(x\), và bài báo chỉ ra rằng nó có thể giải được bằng công thức tường minh.
-        Chi tiết xem <a href="ch2.html">Chương 2: Lời giải dạng đóng</a>.</p>
-      {% include components/box-end.html %}
+      <p><strong>So sánh với QBD chuẩn:</strong> Nếu là QBD, \(Q(x) = A_0 + A_1 x + A_2 x^2\) (bậc 2, ma trận \(2 \times 2\)),
+      cho đa thức đặc trưng bậc 4 với 2 trị riêng trong đường tròn đơn vị.
+      Ở đây, \(Q(x)\) bậc 3, ma trận \(3 \times 3\), cho đa thức đặc trưng bậc 5 với 3 trị riêng —
+      vừa đủ cho ma trận pha kích thước 3.
+      Chi tiết xem <a href="ch2.html">Chương 2: Lời giải dạng đóng</a>.</p>
 
       {% include components/box-start.html type="summary" title='Tóm tắt chương' %}
         <ul>
-          <li>Mô hình tollbooth = hàng đợi tandem với blocking, mô hình hóa bằng CTMC.</li>
-          <li>Không gian trạng thái: \(S = \{(0,0)\} \cup \{(i,j) : i \geq 1, j \in \{1,2\}\}\).</li>
-          <li>Ma trận tốc độ chuyển có cấu trúc QBD (block-tridiagonal lặp lại).</li>
-          <li>Điều kiện ổn định: \(\lambda < \mu_1\mu_2 / (\mu_1 + \mu_2)\).</li>
-          <li>Phương pháp spectral expansion: tìm trị riêng & vector riêng của \(Q(x)\).</li>
+          <li>Mô hình tollbooth: 5 quy tắc phục vụ, đặc biệt <strong>rời đôi</strong> và <strong>cả hai rảnh → vào S2</strong>.</li>
+          <li>CTMC với <strong>4 trạng thái server</strong> \(I^* \in \{0,1,2,3\}\) (Table 1).</li>
+          <li>Ma trận tốc độ chuyển \(3 \times 3\): \(A_0, A_1, A_2, A_3\) (eq 11).</li>
+          <li><strong>9 phương trình cân bằng</strong> (eqs 1–9) + chuẩn hóa (eq 10).</li>
+          <li>Điều kiện ổn định: \(\lambda < 2\mu_1\mu_2(\mu_1+\mu_2)/(\mu_1^2+\mu_1\mu_2+\mu_2^2)\) (Prop. 1, eq 13).</li>
+          <li>Cấu trúc <strong>GI/M/1-type</strong> (không phải QBD chuẩn) do \(A_3\) — chuyển xuống 2 mức.</li>
+          <li>Spectral expansion: \(Q(x) = A_0+A_1 x+A_2 x^2+A_3 x^3\), cần 3 trị riêng trong đường tròn đơn vị.</li>
         </ul>
       {% include components/box-end.html %}

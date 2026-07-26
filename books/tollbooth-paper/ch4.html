@@ -19,30 +19,73 @@ sections:
       <h2 id="tom-tat-dong-gop">1. Tóm tắt đóng góp <small>(Summary of Contributions)</small></h2>
 
       {% include components/box-start.html type="summary" title='Tóm tắt toàn bài' %}
-        <p>Bài báo đã đạt được:</p>
+        <p>Bài báo đã đạt được (Section 5):</p>
         <ol>
-          <li>Đưa ra <strong>lời giải dạng đóng đầu tiên</strong> cho hàng đợi tollbooth tandem
-              với hai server <strong>không đồng nhất</strong>.</li>
-          <li>Sử dụng phương pháp <strong>spectral expansion</strong> với trị riêng tường minh
-              (nhờ ma trận pha kích thước nhỏ \(3 \times 3\)).</li>
-          <li>Chứng minh rằng nên đặt <strong>server nhanh hơn ở vị trí cuối</strong>
+          <li>Trình bày <strong>lời giải dạng đóng tường minh</strong> <em>(exact closed-form solution)</em>
+              cho hàng đợi tollbooth tandem với hai server <strong>không đồng nhất</strong>
+              và thời gian phục vụ phân phối mũ.</li>
+          <li>Chỉ ra chuỗi Markov đặc trưng hệ thống có dạng <strong>GI/M/1-type</strong>
+              và sử dụng phương pháp <strong>spectral expansion</strong> với ma trận pha \(3 \times 3\)
+              cho trị riêng tường minh qua công thức bậc 4.</li>
+          <li>Chứng minh qua kết quả số rằng nên đặt <strong>server nhanh hơn ở vị trí cuối</strong>
               để tối ưu hiệu năng.</li>
         </ol>
       {% include components/box-end.html %}
 
-      <p><em>Nội dung chi tiết đang được biên soạn...</em></p>
+      <p>Trích Section 5: <em>"We have presented the exact and closed-form solution for a tollbooth
+      queueing system where customers arrive according to a Poisson process and there are
+      two heterogeneous servers of exponential service times.
+      A closed-form solution can be easily implemented (see the e-companion)."</em></p>
 
       <!-- ================================================================ -->
       <h2 id="y-nghia-thuc-tien">2. Ý nghĩa thực tiễn <small>(Practical Implications)</small></h2>
 
-      <p><em>Nội dung đang được biên soạn...</em></p>
+      <p>Trích Section 5: <em>"Numerical results show that from the management viewpoint
+      of the tollbooth system with two servers, it is always advised to place a more skilled person
+      in the second server position."</em></p>
+
+      <p>Kết quả này có ý nghĩa thực tiễn trực tiếp cho việc bố trí nhân sự tại trạm thu phí:
+      luôn đặt nhân viên có tay nghề cao hơn ở cửa cuối (server 2) để giảm thời gian chờ
+      và xác suất bị chặn.</p>
 
       <!-- ================================================================ -->
       <h2 id="han-che-huong-phat-trien">3. Hạn chế & Hướng phát triển <small>(Limitations & Future Work)</small></h2>
 
-      <p><em>Nội dung đang được biên soạn...</em></p>
+      <p>Bài báo ghi nhận hướng mở rộng trong tương lai (Section 5):</p>
+
+      <ul>
+        <li><strong>Batch processing:</strong> <em>"In future work, we will consider a batch processing
+            (Wu, 2014) to extend the application of tollbooth-type models for the performance
+            evaluation of manufacturing systems."</em></li>
+      </ul>
+
+      <p>Ngoài ra, trong quá trình chuẩn bị bài báo, một reviewer đã giới thiệu công trình
+      sắp xuất bản của Chao, He & Ross — trình bày lời giải dạng đóng cho trường hợp
+      <strong>vô hạn server đồng nhất</strong> <em>(infinite homogeneous servers)</em>.</p>
 
       <!-- ================================================================ -->
       <h2 id="tai-lieu-tham-khao">4. Tài liệu tham khảo <small>(References)</small></h2>
 
-      <p><em>Danh sách tham khảo đang được biên soạn...</em></p>
+      <p>Danh sách tài liệu tham khảo chính từ bài báo:</p>
+
+      <ul style="font-size: 0.92em; line-height: 1.6;">
+        <li>Bertsimas, D. (1990). An analytic approach to a general class of G/G/s queueing systems. <em>Operations Research</em>, 38(1), 139–155.</li>
+        <li>Borwein, P. B. & Erdélyi, T. (1995). <em>Polynomials and polynomial inequalities</em>. Graduate texts in mathematics. New York: Springer.</li>
+        <li>Chakka, R. & Do, T. V. (2007). The MM \(\sum_{k=1}^K\) CPP_k/GE/c/L G-queue with heterogeneous servers. <em>Performance Evaluation</em>, 64(3), 191–209.</li>
+        <li>Chao, X., He, Q.-M., Ross, S. M. (in press). Tollbooth tandem queues with infinite homogeneous servers. <em>Journal of Applied Probability</em>.</li>
+        <li>Do, T. V. (2010). M/M/1 retrial queue with working vacations. <em>Acta Informatica</em>, 47(1), 67–75.</li>
+        <li>Evans, R. V. (1967). Geometric distribution in some two-dimensional queueing systems. <em>Operations Research</em>, 15, 830–846.</li>
+        <li>Grassmann, W. K. (2003). The use of eigenvalues for finding equilibrium probabilities of certain Markovian two-dimensional queueing problems. <em>INFORMS Journal on Computing</em>, 15(4), 412–421.</li>
+        <li>Grassmann, W. K. & Drekic, S. (2000). An analytical solution for a tandem queue with blocking. <em>Queueing System</em>, 1–3, 221–235.</li>
+        <li>Grassmann, W. K. & Tavakoli, J. (2005). Two-station queueing networks with moving servers, blocking, and customer loss. <em>Electronic Journal of Linear Algebra</em>, 13, 77–89.</li>
+        <li>Hall, R. W. & Daganzo, C. F. (1983). Tandem tollbooths for the golden gate bridge. <em>Transportation Research Record</em>, 905, 7–14.</li>
+        <li>He, Q.-M. & Chao, X. (2014). A tollbooth tandem queue with heterogeneous servers. <em>European Journal of Operational Research</em>, 236(1), 177–189.</li>
+        <li>Latouche, G. & Ramaswami, V. (1999). <em>Introduction to matrix analytic methods in stochastic modeling</em>. ASA-SIAM.</li>
+        <li>Little, J. D. C. (1961). A proof for the queuing formula: \(L = \lambda W\). <em>Operations Research</em>, 9, 383–387.</li>
+        <li>Mitrani, I. & Chakka, R. (1995). Spectral expansion solution for a class of Markov models. <em>Performance Evaluation</em>, 23(3), 241–260.</li>
+        <li>Mitrany, I. L. & Avi-Itzhak, B. (1968). A many-server queue with service interruptions. <em>Operations Research</em>, 16(3), 628–638.</li>
+        <li>Neuts, M. F. (1981). <em>Matrix geometric solutions in stochastic model</em>. Baltimore: Johns Hopkins University Press.</li>
+        <li>Teimoury, E., Yazdi, M. M., Haddadi, M. & Fathi, M. (2011). Modelling and improvement of non-standard queueing systems: A gas station case study. <em>International Journal of Applied Decision Sciences</em>, 4(4), 324–340.</li>
+        <li>Wallace, V. L. (1969). <em>The solution of quasi birth and death processes arising from multiple access computer systems</em>. University of Michigan.</li>
+        <li>Wu, K. (2014). Taxonomy of batch queueing models in manufacturing systems. <em>European Journal of Operational Research</em>, 237(1), 129–135.</li>
+      </ul>

@@ -26,185 +26,213 @@ sections:
       <!-- ================================================================ -->
       <h2 id="ma-tran-dac-trung">1. Ma trận đa thức đặc trưng <small>(Characteristic Matrix Polynomial)</small></h2>
 
-      <p>Từ phương trình cân bằng ở <a href="ch1.html">Chương 1</a>,
-      phương pháp spectral expansion đòi hỏi ta giải phương trình:</p>
+      <p>Từ quan hệ truy hồi (eq 12) ở <a href="ch1.html">Chương 1</a>,
+      phương pháp spectral expansion đòi hỏi ta tìm trị riêng và vector riêng của ma trận đa thức:</p>
 
-      {% include components/box-start.html type="formula" title='Phương trình đặc trưng' %}
+      {% include components/box-start.html type="formula" title='Ma trận đa thức đặc trưng Q(x)' %}
         \[
-          Q(x) \boldsymbol{\psi} = \mathbf{0}
+          Q(x) = A_0 + A_1 x + A_2 x^2 + A_3 x^3
         \]
-        <p>với ma trận đa thức đặc trưng:</p>
+        <p>Đây là <strong>đa thức bậc 3</strong> theo \(x\) với hệ số là ma trận \(3 \times 3\).
+        Trị riêng \(x\) và vector riêng trái \(\boldsymbol{\psi}(x)\) thỏa mãn (eq 16):</p>
         \[
-          Q(x) = A_2 + A_1 x + A_0 x^2
-            = \begin{bmatrix}
-              \lambda x^2 - (\lambda + \mu_1)x & \mu_1 x \\
-              \mu_2 & \lambda x^2 - (\lambda + \mu_2)x
-            \end{bmatrix}
+          \det[Q(x)] = 0, \quad \boldsymbol{\psi}(x)\, Q(x) = \mathbf{0}
         \]
       {% include components/box-end.html %}
 
-      <p>Để tồn tại vector riêng \(\boldsymbol{\psi} \neq \mathbf{0}\), ta cần:</p>
+      <p>Thay các ma trận \(A_0, A_1, A_2, A_3\) từ eq 11:</p>
       \[
-        \det[Q(x)] = 0
+        Q(x) = \begin{bmatrix}
+          \lambda - (\lambda+\mu_2)x & 0 & \mu_2 x^3 \\
+          0 & \lambda - (\mu_1+\lambda)x + \mu_1 x^2 & 0 \\
+          \mu_1 x & \mu_2 x^2 & \lambda - (\mu_1+\mu_2+\lambda)x
+        \end{bmatrix}
       \]
 
       <!-- ================================================================ -->
       <h2 id="tri-rieng">2. Trị riêng <small>(Eigenvalues)</small></h2>
 
-      <p>Khai triển định thức:</p>
+      <p>Khai triển \(\det[Q(x)] = 0\), bài báo chỉ ra (eq 17):</p>
 
-      {% include components/box-start.html type="formula" title='Đa thức đặc trưng (eq 17)' %}
+      {% include components/box-start.html type="formula" title='Đa thức đặc trưng bậc 5 (eq 17)' %}
         \[
-          \det[Q(x)] = [\lambda x^2 - (\lambda + \mu_1)x][\lambda x^2 - (\lambda + \mu_2)x] - \mu_1 \mu_2 x = 0
+        \begin{aligned}
+          \det[Q(x)] &= (x - 1)\big(ax^4 + bx^3 + cx^2 + dx + e\big) \tag{17}
+        \end{aligned}
         \]
-        <p>Rút gọn (chia cho \(x\), vì \(x = 0\) là nghiệm tầm thường):</p>
+        <p>với các hệ số:</p>
         \[
-          \lambda^2 x^3 - \lambda(2\lambda + \mu_1 + \mu_2)x^2 + (\lambda^2 + \lambda\mu_1 + \lambda\mu_2 + \mu_1\mu_2)x
-          - (\lambda + \mu_1)(\lambda + \mu_2) + \mu_1\mu_2 \cdot \frac{1}{1} = 0
+        \begin{aligned}
+          a &= \mu_1\mu_2(2\lambda + \mu_1 + \mu_2), \\
+          b &= \mu_1\mu_2(\mu_1 + \mu_2), \\
+          c &= -\lambda\big[(\lambda + \mu_1)^2 + (2\lambda + 3\mu_1)\mu_2 + \mu_2^2\big], \\
+          d &= 2\lambda^2(\lambda + \mu_1 + \mu_2), \\
+          e &= -\lambda^3.
+        \end{aligned}
         \]
-        <p>Đây là đa thức bậc 4 theo \(x\) (trước khi chia cho \(x\)).</p>
       {% include components/box-end.html %}
 
-      <p>Bài báo chỉ ra rằng \(x = 0\) là một nghiệm tầm thường. Chia cho \(x\), ta được
-      đa thức bậc 3, nhưng kết hợp với cấu trúc đặc biệt, phương trình ban đầu bậc 4
-      có thể giải bằng công thức tường minh.</p>
+      <p><strong>Cấu trúc:</strong> Đa thức bậc 5 = \((x-1)\) × đa thức bậc 4.
+      Nghiệm \(x = 1\) ứng với điều kiện chuẩn hóa.
+      Bốn nghiệm còn lại \(r_1, r_2, r_3, r_4\) từ phương trình bậc 4.</p>
 
       <!-- ================================================================ -->
       <h2 id="quartic">3. Giải phương trình bậc 4 <small>(Quartic Formula)</small></h2>
 
-      <p>Bài báo sử dụng kết quả của Borwein & Erdélyi (1995) để tìm công thức tường minh cho 4 nghiệm:</p>
+      <p>Bài báo sử dụng công thức giải phương trình bậc 4 của Borwein & Erdélyi (1995)
+      để tìm tường minh 4 nghiệm \(r_1, r_2, r_3, r_4\) của \(ax^4 + bx^3 + cx^2 + dx + e = 0\).</p>
 
       {% include components/box-start.html type="formula" title='Bốn trị riêng r₁, r₂, r₃, r₄ (eqs 18–21)' %}
-        <p>Đặt các hệ số trung gian:</p>
         \[
-          \alpha = \mu_1 + \mu_2, \quad \beta = \mu_1 \mu_2
+        \begin{aligned}
+          r_1 &= -\frac{b}{4a} - Y - \frac{1}{2}\sqrt{-4Y^2 - 2p + \frac{q}{Y}} \tag{18} \\[6pt]
+          r_2 &= -\frac{b}{4a} - Y + \frac{1}{2}\sqrt{-4Y^2 - 2p + \frac{q}{Y}} \tag{19} \\[6pt]
+          r_3 &= -\frac{b}{4a} + Y + \frac{1}{2}\sqrt{-4Y^2 - 2p - \frac{q}{Y}} \tag{20} \\[6pt]
+          r_4 &= -\frac{b}{4a} + Y - \frac{1}{2}\sqrt{-4Y^2 - 2p - \frac{q}{Y}} \tag{21}
+        \end{aligned}
         \]
-
-        <p>Bốn nghiệm của \(\det[Q(x)] = 0\) là:</p>
-
-        <p>\(r_1 = 0\) (nghiệm tầm thường).</p>
-
-        <p>\(r_2 = 1\) (nghiệm ứng với điều kiện chuẩn hóa).</p>
-
-        <p>\(r_3, r_4\): hai nghiệm còn lại, cho bởi công thức tường minh phụ thuộc \(\lambda, \mu_1, \mu_2\).</p>
-
-        <p>Cụ thể (từ eqs 18–21 trong bài báo):</p>
-        \[
-          r_3 = \frac{2\lambda + \alpha + \sqrt{D}}{2\lambda}, \quad
-          r_4 = \frac{2\lambda + \alpha - \sqrt{D}}{2\lambda}
-        \]
-        <p>với \(D = \alpha^2 - 4\beta + 4\lambda\alpha\) (biệt thức, luôn dương khi \(\mu_1 \neq \mu_2\)).</p>
-        <p><em>Lưu ý: Đây là dạng đơn giản hóa. Công thức chính xác trong bài báo phức tạp hơn và dựa trên quartic formula.</em></p>
       {% include components/box-end.html %}
+
+      <p>Các đại lượng trung gian (eqs 22–27):</p>
+
+      {% include components/box-start.html type="formula" title='Các hệ số trung gian Δ₀, Δ₁, X, p, q, Y (eqs 22–27)' %}
+        \[
+        \begin{aligned}
+          \Delta_0 &= c^2 - 3bd + 12ae \tag{22} \\[4pt]
+          \Delta_1 &= 2c^3 - 9bcd + 27b^2 e + 27ad^2 - 72ace \tag{23} \\[4pt]
+          X &= \left(\frac{\Delta_1 + (\Delta_1^2 - 4\Delta_0^3)^{1/2}}{2}\right)^{1/3} \tag{24} \\[4pt]
+          p &= \frac{8ac - 3b^2}{8a^2} \tag{25} \\[4pt]
+          q &= \frac{b^3 - 4abc + 8a^2 d}{8a^3} \tag{26} \\[4pt]
+          Y &= \left(\frac{1}{2}\left(-\frac{2p}{3} + \frac{1}{3a}\left(X + \frac{\Delta_0}{X}\right)\right)\right)^{1/2} \tag{27}
+        \end{aligned}
+        \]
+      {% include components/box-end.html %}
+
+      <p><strong>Tại sao giải được tường minh?</strong> Ma trận pha kích thước \(3 \times 3\) cho đa thức đặc trưng bậc 5,
+      phân tích thành \((x-1)\) × bậc 4. Phương trình bậc 4 có <strong>công thức nghiệm tường minh</strong>.
+      Từ bậc 5 trở lên, không tồn tại công thức tổng quát (định lý Abel–Ruffini).</p>
 
       <!-- ================================================================ -->
       <h2 id="proposition-2">4. Proposition 2 <small>(Three eigenvalues inside the unit circle)</small></h2>
 
       {% include components/box-start.html type="theorem" title='Proposition 2' %}
-        <p>Khi điều kiện ổn định \(\lambda < \mu_1\mu_2/(\mu_1 + \mu_2)\) thỏa mãn,
-        có đúng <strong>3 trị riêng</strong> nằm trong đường tròn đơn vị <em>(unit circle)</em>:</p>
-        <ul>
-          <li>\(r_1 = 0\) (hiển nhiên \(|r_1| < 1\)).</li>
-          <li>\(|r_3| < 1\) và \(|r_4| < 1\).</li>
-        </ul>
-        <p>Nghiệm \(r_2 = 1\) nằm trên đường tròn đơn vị, không dùng trong biểu diễn spectral
-        (nhưng cần cho điều kiện chuẩn hóa).</p>
+        <p>Các trị riêng dùng để tính xác suất dừng là \(r_2\), \(r_3\) và \(r_4\).</p>
       {% include components/box-end.html %}
 
-      <p><strong>Tại sao quan trọng?</strong> Trong phương pháp spectral expansion, chỉ các trị riêng với
-      \(|x_k| < 1\) mới đóng góp vào nghiệm (để tổng \(\sum a_k x_k^i\) hội tụ khi \(i \to \infty\)).
-      Có 3 trị riêng phù hợp cho ma trận pha kích thước \(2 \times 2\), vừa đủ để xác định duy nhất nghiệm.</p>
+      <p><strong>Giải thích:</strong> Từ eq 17, \(Q(x)\) có <strong>5 trị riêng</strong>: \(r_0 = 1\) (từ nhân tử \(x-1\))
+      và \(r_1, r_2, r_3, r_4\) (từ phương trình bậc 4).</p>
+
+      <p>Bài báo chỉ ra rằng \(Y > 0\), \(p < 0\), \(q > 0\), và từ eqs 18–21,
+      \(|r_1|\) là giá trị lớn nhất trong \(\{|r_1|, |r_2|, |r_3|, |r_4|\}\).
+      Mặt khác, từ Section 3.2, \(Q(x)\) chỉ có đúng <strong>3 trị riêng trong đường tròn đơn vị</strong>,
+      do đó:</p>
+      <ul>
+        <li>\(|r_1| > 1\) (ngoài đường tròn đơn vị, không dùng).</li>
+        <li>\(|r_2| < 1\), \(|r_3| < 1\), \(|r_4| < 1\) (trong đường tròn đơn vị, dùng cho spectral expansion).</li>
+        <li>\(r_0 = 1\) nằm trên đường tròn đơn vị.</li>
+      </ul>
+
+      <p><strong>Remark 1</strong> (bài báo): Đặt \(x_1 = r_2\), \(x_2 = r_3\), \(x_3 = r_4\)
+      để dùng trong công thức spectral expansion (eq 15).</p>
 
       <!-- ================================================================ -->
       <h2 id="vector-rieng">5. Vector riêng <small>(Eigenvectors)</small></h2>
 
-      <p>Với mỗi trị riêng \(x_k\) (\(k = 1, 3, 4\)), vector riêng tương ứng
-      \(\boldsymbol{\psi}_k = (\psi_{k,1}, \psi_{k,2})\) thỏa mãn \(Q(x_k)\boldsymbol{\psi}_k = \mathbf{0}\).</p>
+      <p>Với mỗi trị riêng \(x_i\) (\(i = 1, 2, 3\)), vector riêng trái tương ứng
+      \(\boldsymbol{\psi}_i(x_i)\) có <strong>3 thành phần</strong> và thỏa mãn \(\boldsymbol{\psi}_i Q(x_i) = \mathbf{0}\).</p>
 
-      {% include components/box-start.html type="formula" title='Vector riêng ψₖ (eq 28)' %}
-        <p>Từ hàng đầu tiên của \(Q(x_k)\boldsymbol{\psi}_k = \mathbf{0}\):</p>
+      {% include components/box-start.html type="formula" title='Vector riêng ψᵢ(x) — 3 thành phần (eq 28)' %}
+        <p>Từ eq 16, giải hệ phương trình tuyến tính, ta được:</p>
         \[
-          \boldsymbol{\psi}_k = \begin{pmatrix} \mu_1 x_k \\ (\lambda + \mu_1)x_k - \lambda x_k^2 \end{pmatrix}
-          = \begin{pmatrix} \mu_1 x_k \\ x_k[(\lambda + \mu_1) - \lambda x_k] \end{pmatrix}
+          \boldsymbol{\psi}_i(x) = \left[1,\;\;
+            \frac{\mu_2 x(\lambda x - \lambda + \mu_2)}{\mu_1(\lambda x - \lambda + \mu_1 x)},\;\;
+            \frac{\lambda x + \mu_2 x - \lambda}{\mu_1 x}\right] \tag{28}
         \]
-        <p>Đặc biệt với \(r_1 = 0\): \(\boldsymbol{\psi}_1 = (0, 0)\), nghiệm tầm thường, cần xử lý riêng.</p>
+        <p>Vector riêng được chuẩn hóa sao cho thành phần đầu tiên bằng 1.</p>
       {% include components/box-end.html %}
 
       <!-- ================================================================ -->
       <h2 id="he-so">6. Hệ số a₁, a₂, a₃ <small>(Coefficients: Proposition 3)</small></h2>
 
-      <p>Xác suất trạng thái dừng được biểu diễn:</p>
+      <p>Xác suất dừng tại mức \(j \geq 2\) được biểu diễn (eq 15):</p>
       \[
-        \boldsymbol{\pi}_i = a_1 r_1^i \boldsymbol{\psi}_1 + a_3 r_3^i \boldsymbol{\psi}_3 + a_4 r_4^i \boldsymbol{\psi}_4, \quad i \geq 1
+        \mathbf{v}_j = \sum_{i=1}^{3} a_i\, x_i^{j-2}\, \boldsymbol{\psi}_i(x_i), \quad j \geq 2
       \]
-
-      <p>Vì \(r_1 = 0\), số hạng đầu tiên chỉ đóng góp tại \(i = 1\) (theo quy ước \(0^0 = 1\)),
-      nên thực tế ta cần xác định 3 hệ số \(a_1, a_3, a_4\) từ:</p>
+      <p>Cần xác định 3 hệ số \(a_1, a_2, a_3\) từ điều kiện biên và chuẩn hóa.</p>
 
       {% include components/box-start.html type="theorem" title='Proposition 3 (eqs 29–31)' %}
-        <p>Ba hệ số \(a_1, a_3, a_4\) được xác định bởi hệ phương trình tuyến tính
-        từ <strong>điều kiện biên</strong> (phương trình cân bằng tại mức 0 và 1)
-        và <strong>điều kiện chuẩn hóa</strong>:</p>
-        <ol>
-          <li>Phương trình cân bằng tại \((1,1)\) và \((1,2)\).</li>
-          <li>Điều kiện chuẩn hóa: \(\pi_{0,0} + \sum_{i=1}^{\infty}(\pi_{i,1} + \pi_{i,2}) = 1\).</li>
-        </ol>
-        <p>Hệ này có nghiệm duy nhất vì các trị riêng phân biệt và nằm trong đường tròn đơn vị.</p>
+        <p>Ba hệ số được cho bởi:</p>
+        \[
+          a_1 = \frac{\lambda^2 \mu_1(-1+x_1)x_1\big(\lambda(-1+x_1)+\mu_1 x_1\big)(-1+x_2)(-1+x_3)}{G} \tag{29}
+        \]
+        \[
+          a_2 = \frac{\lambda^2 \mu_1(x_1-1)(x_2-1)x_2\big(\lambda(x_2-1)+\mu_1 x_2\big)(1-x_3)}{G} \tag{30}
+        \]
+        \[
+          a_3 = \frac{\lambda^2 \mu_1(1-x_1)(x_2-1)(1-x_3)x_3\big(\lambda(x_3-1)+\mu_1 x_3\big)}{G} \tag{31}
+        \]
+        <p>trong đó \(G = (x_1 - x_2)(x_1 - x_3)(\mu_1^2(\mu_1+\mu_2)(x_1-1)(x_3-1)(x_2-1) + \cdots)\)
+        là biểu thức dài (xem bài báo gốc).</p>
       {% include components/box-end.html %}
+
+      <p><strong>Chứng minh</strong> (Proposition 3): Thay (15) và (28) vào phương trình cân bằng (1)–(6) và
+      điều kiện chuẩn hóa (10). Trong 6 phương trình (1)–(6), chỉ 5 là độc lập.
+      Từ đó, cần 6 phương trình tuyến tính (5 balance + 1 normalization) để xác định
+      6 ẩn: \(\pi_{0,0}\), \(\pi_{1,1}\), \(\pi_{2,1}\), \(a_1\), \(a_2\), \(a_3\).
+      Ba hệ số được xác định duy nhất cùng với \(\pi_{0,0}\), \(\pi_{1,1}\), \(\pi_{2,1}\). \(\square\)</p>
 
       <!-- ================================================================ -->
       <h2 id="xac-suat-dung">7. Xác suất trạng thái dừng <small>(Steady-State Probabilities)</small></h2>
 
       {% include components/box-start.html type="definition" title='Xác suất trạng thái dừng (eqs 32–34)' %}
-        <p>Sau khi giải hệ phương trình, các xác suất trạng thái dừng quan trọng:</p>
-
-        <p><strong>Xác suất hệ trống:</strong></p>
+        <p><strong>Xác suất hệ trống</strong> (eq 32):</p>
         \[
-          \pi_{0,0} = \frac{\mu_2}{\lambda} \cdot (\pi_{1,2})  \tag{32}
+          \pi_{0,0} = \frac{(\lambda + \mu_2)(\mu_2 \pi_{1,2} + \mu_1 \pi_{2,1}) + \mu_2(\mu_2 \pi_{1,3} + \mu_1 \pi_{2,2})}{\lambda^2} \tag{32}
         \]
 
-        <p><strong>Xác suất tại mức 1:</strong></p>
+        <p><strong>Xác suất tại mức 1</strong> (eqs 33–34):</p>
         \[
-          \pi_{1,1} = a_1 \psi_{1,1} + a_3 r_3 \psi_{3,1} + a_4 r_4 \psi_{4,1} \tag{33}
+          \pi_{1,1} = \frac{\mu_2 \pi_{1,2} + \mu_2 \pi_{1,3} + \mu_1 \pi_{2,1} + \mu_1 \pi_{2,2}}{\lambda} \tag{33}
         \]
         \[
-          \pi_{1,2} = a_1 \psi_{1,2} + a_3 r_3 \psi_{3,2} + a_4 r_4 \psi_{4,2} \tag{34}
+          \pi_{2,1} = \frac{\mu_2 \pi_{3,2}}{\mu_1 + \lambda} \tag{34}
         \]
 
-        <p><strong>Xác suất tại mức \(i \geq 2\):</strong></p>
+        <p><strong>Xác suất tại mức \(j \geq 2\):</strong></p>
         \[
-          \pi_{i,j} = a_3 r_3^i \psi_{3,j} + a_4 r_4^i \psi_{4,j}, \quad j \in \{1, 2\}
+          [\pi_{1,j},\; \pi_{2,j},\; \pi_{3,j}] = \sum_{i=1}^{3} a_i\, x_i^{j-2}\, \boldsymbol{\psi}_i(x_i)
         \]
       {% include components/box-end.html %}
 
       <!-- ================================================================ -->
       <h2 id="hieu-nang">8. Công thức hiệu năng <small>(Performance Measures)</small></h2>
 
-      {% include components/box-start.html type="formula" title='Các chỉ số hiệu năng (eqs 35–37)' %}
-        <p><strong>Số khách trung bình trong hệ \(L\):</strong></p>
+      {% include components/box-start.html type="formula" title='Số khách trung bình L (eq 35)' %}
         \[
-          L = \sum_{i=1}^{\infty} i \cdot (\pi_{i,1} + \pi_{i,2})
-            = \sum_{k \in \{3,4\}} a_k \frac{r_k}{(1-r_k)^2}(\psi_{k,1} + \psi_{k,2}) + (\pi_{1,1} + \pi_{1,2}) \tag{35}
+          L = \pi_{1,1} + \pi_{2,1} + \sum_{j=2}^{\infty} j\,\mathbf{v}_j\,\mathbf{e}
+            = \pi_{1,1} + \pi_{2,1} + \sum_{i=1}^{3} a_i \frac{2 - x_i}{(1 - x_i)^2}\,\boldsymbol{\psi}_i(x_i)\,\mathbf{e} \tag{35}
+        \]
+        <p>với \(\mathbf{e} = [1, 1, 1]^T\).</p>
+      {% include components/box-end.html %}
+
+      {% include components/box-start.html type="formula" title='Thời gian chờ W và xác suất blocking' %}
+        <p><strong>Thời gian chờ trung bình \(W\)</strong> — theo Little's law (Little, 1961):</p>
+        \[
+          W = \frac{L}{\lambda}
         \]
 
-        <p><strong>Thời gian chờ trung bình \(W\)</strong> (theo Little's law):</p>
-        \[
-          W = \frac{L}{\lambda} \tag{36}
-        \]
-
-        <p><strong>Xác suất bị chặn \(P_B\):</strong></p>
-        \[
-          P_B = \sum_{i=1}^{\infty} \pi_{i,2} = \sum_{k \in \{3,4\}} a_k \frac{r_k}{1-r_k} \psi_{k,2} + \pi_{1,2} \tag{37}
-        \]
-        <p>Đây là xác suất server 2 đang bận: khi một khách mới hoàn thành tại server 1, nó sẽ bị chặn với xác suất này.</p>
+        <p><strong>Xác suất bị chặn \(P_b\)</strong> — bài báo ghi nhận rằng xác suất khách bị chặn bởi server 2
+        "can easily be computed" từ phân phối dừng đã tìm được.</p>
       {% include components/box-end.html %}
 
       {% include components/box-start.html type="summary" title='Tóm tắt chương' %}
         <ul>
-          <li>Phương trình \(\det[Q(x)] = 0\) là đa thức bậc 4, giải tường minh bằng quartic formula.</li>
-          <li>3 trị riêng nằm trong đường tròn đơn vị: \(r_1 = 0, r_3, r_4\).</li>
-          <li>Vector riêng và hệ số xác định duy nhất từ điều kiện biên + chuẩn hóa.</li>
-          <li>Xác suất dừng có dạng đóng: \(\pi_{i,j} = \sum_k a_k r_k^i \psi_{k,j}\).</li>
-          <li>Chỉ số hiệu năng \(L, W, P_B\) đều có công thức tường minh.</li>
+          <li>\(\det[Q(x)] = (x-1)(ax^4+bx^3+cx^2+dx+e)\) — đa thức <strong>bậc 5</strong>, phân tích thành \((x-1)\) × bậc 4 (eq 17).</li>
+          <li>5 trị riêng: \(r_0 = 1\) (trên), \(r_1\) (ngoài), \(r_2, r_3, r_4\) (trong đường tròn đơn vị).</li>
+          <li>Proposition 2: dùng \(r_2, r_3, r_4\) cho spectral expansion.</li>
+          <li>Vector riêng \(\boldsymbol{\psi}_i\) có <strong>3 thành phần</strong> (eq 28).</li>
+          <li>Hệ số \(a_1, a_2, a_3\) từ Proposition 3 (eqs 29–31).</li>
+          <li>Xác suất dừng dạng đóng: \(\mathbf{v}_j = \sum a_i x_i^{j-2}\boldsymbol{\psi}_i\).</li>
+          <li>\(L\) từ eq 35, \(W = L/\lambda\).</li>
         </ul>
       {% include components/box-end.html %}

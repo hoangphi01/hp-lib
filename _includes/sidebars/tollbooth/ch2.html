@@ -2,42 +2,41 @@
   <h4><span class="material-icons-outlined" style="font-size:16px">functions</span> Công thức chính</h4>
 
   <h5>Ma trận đặc trưng</h5>
-  <p>\(Q(x) = A_2 + A_1 x + A_0 x^2\)</p>
-  <p class="sidebar-tip">Tìm \(x\) sao cho \(\det[Q(x)] = 0\).</p>
+  <p>\(Q(x) = A_0 + A_1 x + A_2 x^2 + A_3 x^3\)</p>
+  <p class="sidebar-tip">Đa thức bậc 3 theo \(x\), hệ số là ma trận \(3 \times 3\).</p>
 
-  <h5>Bốn trị riêng</h5>
-  <p>\(r_1 = 0\), \(r_2 = 1\)</p>
-  <p>\(r_3, r_4\): từ quartic formula</p>
-  <p class="sidebar-tip">Chỉ \(r_1, r_3, r_4\) nằm trong đường tròn đơn vị (\(|r_k| < 1\)).</p>
+  <h5>Đa thức đặc trưng bậc 5</h5>
+  <p>\(\det[Q(x)] = (x\!-\!1)(ax^4\!+\!bx^3\!+\!cx^2\!+\!dx\!+\!e)\)</p>
+  <p class="sidebar-tip">\((x\!-\!1)\) × bậc 4 → giải bằng quartic formula.</p>
+</div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">radio_button_unchecked</span> 5 trị riêng</h4>
+  <p>\(r_0 = 1\) — trên đường tròn đơn vị</p>
+  <p>\(r_1\) — <strong>ngoài</strong> (không dùng)</p>
+  <p>\(r_2, r_3, r_4\) — <strong>trong</strong> (\(|r_k| < 1\))</p>
+  <p class="sidebar-tip">Proposition 2: dùng \(r_2, r_3, r_4\). Đặt \(x_1\!=\!r_2\), \(x_2\!=\!r_3\), \(x_3\!=\!r_4\).</p>
 </div>
 
 <div class="sidebar-card">
   <h4><span class="material-icons-outlined" style="font-size:16px">auto_awesome</span> Spectral expansion</h4>
-  <p>\(\boldsymbol{\pi}_i = \sum_k a_k r_k^i \boldsymbol{\psi}_k\)</p>
-  <p class="sidebar-tip">Xác suất dừng = tổ hợp tuyến tính của vector riêng, hệ số mũ theo trị riêng.</p>
+  <p>\(\mathbf{v}_j = \sum_{i=1}^{3} a_i x_i^{j-2}\boldsymbol{\psi}_i\), \(j \geq 2\)</p>
+  <p class="sidebar-tip">Vector riêng \(\boldsymbol{\psi}_i\) có <strong>3 thành phần</strong> (eq 28).</p>
+  <p class="sidebar-tip">Hệ số \(a_1, a_2, a_3\) từ Proposition 3 (eqs 29–31).</p>
 </div>
 
 <div class="sidebar-card">
   <h4><span class="material-icons-outlined" style="font-size:16px">speed</span> Hiệu năng</h4>
   <h5>Số khách trung bình</h5>
-  <p>\(L = \sum_{i \geq 1} i(\pi_{i,1} + \pi_{i,2})\)</p>
+  <p>\(L = \pi_{1,1} + \pi_{2,1} + \sum a_i \frac{2-x_i}{(1-x_i)^2}\boldsymbol{\psi}_i\mathbf{e}\)</p>
 
   <h5>Thời gian chờ</h5>
   <p>\(W = L / \lambda\)</p>
-  <p class="sidebar-tip">Little's law.</p>
-
-  <h5>Xác suất blocking</h5>
-  <p>\(P_B = \sum_{i \geq 1} \pi_{i,2}\)</p>
-</div>
-
-<div class="sidebar-card">
-  <h4><span class="material-icons-outlined" style="font-size:16px">radio_button_unchecked</span> Đường tròn đơn vị</h4>
-  <p>Chỉ trị riêng với \(|x_k| < 1\) mới dùng được trong spectral expansion.</p>
-  <p class="sidebar-tip"><strong>Lý do:</strong> chuỗi \(\sum a_k x_k^i\) chỉ hội tụ khi \(|x_k| < 1\). Nếu \(|x_k| \geq 1\), xác suất tăng vô hạn theo level \(i\).</p>
+  <p class="sidebar-tip">Little's law (1961).</p>
 </div>
 
 <div class="sidebar-card">
   <h4><span class="material-icons-outlined" style="font-size:16px">calculate</span> Quartic formula</h4>
   <p>Đa thức bậc 4 có <strong>công thức nghiệm tường minh</strong>, tương tự công thức bậc 2 nhưng phức tạp hơn nhiều.</p>
-  <p class="sidebar-tip">Từ bậc 5 trở lên, <strong>không tồn tại</strong> công thức tổng quát (định lý Abel–Ruffini). Đây là lý do ma trận pha \(3 \times 3\) (cho đa thức bậc 4) là giới hạn để có lời giải dạng đóng.</p>
+  <p class="sidebar-tip">Từ bậc 5 trở lên, <strong>không tồn tại</strong> công thức tổng quát (định lý Abel–Ruffini). Đây là lý do ma trận pha \(3 \times 3\) (cho đa thức bậc 5 = \((x\!-\!1)\) × bậc 4) là giới hạn để có lời giải dạng đóng.</p>
 </div>

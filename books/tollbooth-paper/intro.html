@@ -27,37 +27,41 @@ sections:
       <ul>
         <li>Nên đặt nhân viên giỏi hơn ở cửa nào?</li>
         <li>Trung bình xe phải chờ bao lâu?</li>
-        <li>Xác suất một xe bị <strong>chặn</strong> <em>(blocking)</em> (khi cửa phía sau đầy) là bao nhiêu?</li>
+        <li>Xác suất một xe bị <strong>chặn</strong> <em>(blocking)</em> là bao nhiêu?</li>
       </ul>
 
       {% include components/example-start.html title='Ví dụ thực tế: Trạm thu phí đường cao tốc' %}
-        <p>Trạm thu phí trên xa lộ M3 (Hungary) có hai bước xử lý nối tiếp:</p>
+        <p>Trạm thu phí có hai bước xử lý nối tiếp:</p>
         <ol>
           <li><strong>Cửa 1:</strong> Quét thẻ / kiểm tra loại xe, với tốc độ phục vụ \(\mu_1\).</li>
           <li><strong>Cửa 2:</strong> Thanh toán phí, với tốc độ phục vụ \(\mu_2\).</li>
         </ol>
         <p>Xe đến theo <strong>quá trình Poisson</strong> với tốc độ \(\lambda\).
         Nếu xe ở cửa 1 hoàn thành nhưng cửa 2 đang bận, xe bị <strong>chặn</strong> <em>(blocked)</em>
-        và phải đợi tại cửa 1 cho đến khi cửa 2 trống.</p>
-        <p>Mô hình này là <strong>hàng đợi tandem</strong> <em>(tandem queue)</em>: hai server nối tiếp với bộ đệm giữa chúng bằng 0.</p>
+        và phải đợi — khi cửa 2 xong, <strong>cả hai xe cùng rời</strong>.</p>
+        <p>Đặc biệt: nếu cả hai cửa đều rảnh, xe đến được phục vụ trực tiếp bởi <strong>cửa 2</strong>.</p>
       {% include components/example-end.html %}
 
       <p>Bài toán này thuộc lớp <strong>hàng đợi tandem</strong>, một chủ đề quan trọng trong lý thuyết hàng đợi
-      với nhiều ứng dụng trong viễn thông, sản xuất, và giao thông.</p>
+      với nhiều ứng dụng trong viễn thông, sản xuất, và giao thông
+      (Hall & Daganzo, 1983; Teimoury et al., 2011).</p>
 
       <!-- ================================================================ -->
       <h2 id="dong-gop-bai-bao">2. Đóng góp của bài báo <small>(Contributions)</small></h2>
 
-      <p>Trước bài báo này (2015), <strong>lời giải dạng đóng</strong> <em>(closed-form solution)</em>
-      chỉ tồn tại cho trường hợp hai server <strong>đồng nhất</strong> <em>(homogeneous)</em>, tức \(\mu_1 = \mu_2\)
-      (NewHall & Harris, 1972).</p>
+      <p>Trong công trình gần đây, He & Chao (2014) đã tổng hợp các nghiên cứu liên quan
+      và chỉ ra rằng <strong>chưa có lời giải dạng đóng</strong> <em>(closed-form solution)</em>
+      cho phân phối dừng của hàng đợi tollbooth với quá trình Poisson
+      và hai server đồng nhất có thời gian phục vụ phân phối mũ (Section 1, bài báo).</p>
 
-      <p>Bài báo của thầy Đỗ Văn Tiến mở rộng kết quả này cho trường hợp <strong>không đồng nhất</strong>
-      <em>(heterogeneous)</em>, tức \(\mu_1 \neq \mu_2\). Đây là trường hợp thực tế hơn nhiều.</p>
+      <p>Bài báo của thầy Đỗ Văn Tiến xem xét hàng đợi tollbooth với hai server <strong>không đồng nhất</strong>
+      <em>(heterogeneous)</em>, tức \(\mu_1 \neq \mu_2\), và đưa ra lời giải dạng đóng.
+      Trích nguyên văn: <em>"To our best knowledge, this is the first work that provides a closed-form solution
+      for the problem in question."</em></p>
 
       {% include components/box-start.html type="summary" title='Tóm tắt đóng góp chính' %}
         <ol>
-          <li><strong>Lời giải dạng đóng</strong> cho xác suất trạng thái dừng của hàng đợi tollbooth
+          <li><strong>Lời giải dạng đóng đầu tiên</strong> cho xác suất trạng thái dừng của hàng đợi tollbooth
               với hai server không đồng nhất và thời gian phục vụ phân phối mũ.</li>
           <li><strong>Công thức tường minh</strong> cho trị riêng <em>(eigenvalues)</em> của ma trận đa thức đặc trưng,
               sử dụng phương pháp spectral expansion.</li>
@@ -69,35 +73,37 @@ sections:
       <!-- ================================================================ -->
       <h2 id="phuong-phap-tiep-can">3. Phương pháp tiếp cận <small>(Methodology)</small></h2>
 
-      <p>Bài báo sử dụng <strong>phương pháp spectral expansion</strong> <em>(spectral expansion method)</em>, một kỹ thuật
-      mạnh mẽ để phân tích các quá trình <strong>Quasi-Birth-Death</strong> (QBD).</p>
+      <p>Bài báo sử dụng <strong>phương pháp spectral expansion</strong> <em>(spectral expansion method)</em>
+      (Mitrani & Chakka, 1995) để phân tích chuỗi Markov đặc trưng cho hệ thống.</p>
+
+      <p>Điểm then chốt: tác giả chỉ ra rằng chuỗi Markov của hệ tollbooth có dạng <strong>GI/M/1-type</strong>
+      (Latouche & Ramaswami, 1999), <strong>không phải</strong> QBD chuẩn <em>(block-tridiagonal)</em>.
+      Lý do: hiện tượng <strong>rời đôi</strong> — khi server 2 hoàn thành và có khách bị chặn tại server 1,
+      hai khách cùng rời hệ thống, tạo ra chuyển xuống 2 mức.</p>
 
       <p>Ý tưởng chính:</p>
       <ol>
-        <li><strong>Mô hình hóa</strong> hệ thống bằng chuỗi Markov liên tục <em>(CTMC)</em> với không gian trạng thái vô hạn đếm được.</li>
-        <li><strong>Nhận diện</strong> cấu trúc QBD, trong đó ma trận tốc độ chuyển có dạng block-tridiagonal lặp lại.</li>
-        <li><strong>Tìm trị riêng</strong> của ma trận đa thức đặc trưng \(Q(x)\), đây là bước then chốt.</li>
-        <li><strong>Biểu diễn</strong> xác suất trạng thái dừng dưới dạng tổ hợp tuyến tính của các vector riêng.</li>
+        <li><strong>Mô hình hóa</strong> hệ thống bằng CTMC với <strong>4 trạng thái server</strong> (Table 1)
+            trên không gian trạng thái vô hạn đếm được.</li>
+        <li><strong>Nhận diện</strong> cấu trúc GI/M/1-type, với 4 ma trận tốc độ chuyển \(A_0, A_1, A_2, A_3\),
+            tất cả kích thước \(3 \times 3\).</li>
+        <li><strong>Xây dựng</strong> ma trận đa thức đặc trưng \(Q(x) = A_0 + A_1 x + A_2 x^2 + A_3 x^3\) (bậc 3 theo \(x\)).</li>
+        <li><strong>Tìm trị riêng:</strong> \(\det[Q(x)] = 0\) cho đa thức bậc 5 = \((x-1)\) × bậc 4.
+            Phương trình bậc 4 giải được bằng <strong>công thức quartic</strong> (Borwein & Erdélyi, 1995).</li>
+        <li><strong>Biểu diễn</strong> xác suất dừng dưới dạng tổ hợp tuyến tính của 3 vector riêng
+            (ứng với 3 trị riêng \(r_2, r_3, r_4\) trong đường tròn đơn vị).</li>
       </ol>
 
-      {% include components/box-start.html type="definition" title='Quá trình QBD <small>(Quasi-Birth-Death Process)</small>' %}
-        <p>Một <strong>quá trình QBD</strong> là chuỗi Markov liên tục có không gian trạng thái phân cấp theo "mức" <em>(level)</em>,
-        trong đó từ mỗi mức chỉ có thể chuyển sang mức kề bên (lên 1, giữ nguyên, hoặc xuống 1),
-        tương tự quá trình sinh-tử <em>(birth-death)</em>, nhưng mỗi mức có nhiều "pha" <em>(phase)</em>.</p>
-        <p>Ma trận tốc độ chuyển có dạng block-tridiagonal:</p>
+      {% include components/box-start.html type="definition" title='Quá trình GI/M/1-type' %}
+        <p>Một quá trình <strong>GI/M/1-type</strong> là chuỗi Markov liên tục có không gian trạng thái phân cấp theo "mức" <em>(level)</em>,
+        trong đó từ mỗi mức có thể chuyển lên 1 mức nhưng chuyển <strong>xuống nhiều mức</strong>.
+        Cụ thể, quan hệ truy hồi có dạng (eq 12):</p>
         \[
-          \mathbf{Q} = \begin{bmatrix}
-            B_1 & A_0 & & \\
-            A_2 & A_1 & A_0 & \\
-            & A_2 & A_1 & A_0 & \\
-            & & \ddots & \ddots & \ddots
-          \end{bmatrix}
+          \mathbf{v}_{j-1} A_0 + \mathbf{v}_j A_1 + \mathbf{v}_{j+1} A_2 + \mathbf{v}_{j+2} A_3 = \mathbf{0}, \quad j \geq 3
         \]
+        <p>Sự hiện diện của \(A_3\) (chuyển xuống 2 mức) là đặc trưng khác biệt so với QBD chuẩn
+        (chỉ có \(A_0, A_1, A_2\) — block-tridiagonal).</p>
       {% include components/box-end.html %}
-
-      <p>Điểm đặc biệt của bài báo: thay vì giải số <em>(numerically)</em>, tác giả tìm được
-      <strong>công thức tường minh</strong> cho trị riêng nhờ ma trận pha chỉ có kích thước \(3 \times 3\),
-      dẫn đến đa thức đặc trưng bậc 4 có thể giải bằng công thức giải phương trình bậc 4 <em>(quartic formula)</em>.</p>
 
       <!-- ================================================================ -->
       <h2 id="cau-truc-bai-bao">4. Cấu trúc bài báo <small>(Paper Structure)</small></h2>
@@ -119,14 +125,9 @@ sections:
             <td>Trang này</td>
           </tr>
           <tr>
-            <td>Section 2</td>
-            <td>Mô hình & Spectral Expansion</td>
-            <td><a href="ch1.html">Chương 1</a></td>
-          </tr>
-          <tr>
-            <td>Section 3</td>
-            <td>Lời giải dạng đóng <em>(Closed-form Solution)</em></td>
-            <td><a href="ch2.html">Chương 2</a></td>
+            <td>Sections 2–3</td>
+            <td>Mô hình & Spectral Expansion + Lời giải dạng đóng</td>
+            <td><a href="ch1.html">Chương 1</a> & <a href="ch2.html">Chương 2</a></td>
           </tr>
           <tr>
             <td>Section 4</td>
