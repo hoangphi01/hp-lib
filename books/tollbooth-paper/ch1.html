@@ -233,51 +233,80 @@ sections:
       Gọi \(\pi_{i,j} = \lim_{t \to \infty} \Pr(I^*(t) = i,\; J(t) = j)\) là xác suất trạng thái dừng.
       Bài báo đưa ra <strong>9 phương trình cân bằng</strong> (eqs 1–9):</p>
 
-      {% include components/box-start.html type="formula" title='Phương trình cân bằng (eqs 1–9)' %}
-        <p><strong>Trạng thái \((0,0)\):</strong></p>
+      <p>Nguyên tắc đọc: <strong>vế trái</strong> = tốc độ ra (rời trạng thái), <strong>vế phải</strong> = tốc độ vào (đến trạng thái).
+      Mỗi số hạng ở vế phải tương ứng một "nguồn" có thể chuyển vào trạng thái đang xét.</p>
+
+      {% include components/box-start.html type="formula" title='Phương trình biên: trạng thái tại mức 0 và 1 (eqs 1–6)' %}
+        <p><strong>Trạng thái \((0,0)\)</strong> — hệ trống:</p>
         \[
           \pi_{0,0}\,\lambda = (\pi_{1,1} + \pi_{1,2})\,\mu_2 + \pi_{2,1}\,\mu_1 \tag{1}
         \]
+        <p class="eq-note">Ra: khách đến (\(\lambda\)).
+        Vào từ: \((1,1)\) khi S2 xong, 1 khách rời;
+        \((1,2)\) khi S2 xong, <strong>2 khách rời đôi</strong>;
+        \((2,1)\) khi S1 xong, 1 khách rời.</p>
 
-        <p><strong>Trạng thái \((1,1)\):</strong></p>
+        <p><strong>Trạng thái \((1,1)\)</strong> — S2 bận, 1 khách:</p>
         \[
           \pi_{1,1}(\mu_2 + \lambda) = \pi_{0,0}\,\lambda + \pi_{1,3}\,\mu_2 + \pi_{2,2}\,\mu_1 \tag{2}
         \]
+        <p class="eq-note">Ra: S2 xong (\(\mu_2\)) hoặc khách đến (\(\lambda\)).
+        Vào từ: \((0,0)\) khi khách đến → vào S2;
+        \((1,3)\) khi S2 xong → 2 rời đôi → 1 khách còn → vào S2;
+        \((2,2)\) khi S1 xong → 1 rời → 1 khách còn → vào S2.</p>
 
-        <p><strong>Trạng thái \((2,1)\):</strong></p>
+        <p><strong>Trạng thái \((2,1)\)</strong> — S1 bận, 1 khách:</p>
         \[
           \pi_{2,1}(\mu_1 + \lambda) = \pi_{3,2}\,\mu_2 \tag{3}
         \]
+        <p class="eq-note">Chỉ có 1 nguồn vào: từ \((3,2)\) khi S2 xong → 1 khách rời → S1 vẫn bận.</p>
 
-        <p><strong>Trạng thái \((1,2)\):</strong></p>
+        <p><strong>Trạng thái \((1,2)\)</strong> — S1 bị chặn + S2 bận, 2 khách:</p>
         \[
           \pi_{1,2}(\mu_2 + \lambda) = \pi_{3,2}\,\mu_1 \tag{4}
         \]
+        <p class="eq-note">Chỉ có 1 nguồn vào: từ \((3,2)\) khi S1 xong → bị chặn (vì S2 bận).</p>
 
-        <p><strong>Trạng thái \((2,2)\):</strong></p>
+        <p><strong>Trạng thái \((2,2)\)</strong> — S1 bận, S2 rảnh, 2 khách:</p>
         \[
           \pi_{2,2}(\mu_1 + \lambda) = \pi_{2,1}\,\lambda + \pi_{3,3}\,\mu_2 \tag{5}
         \]
+        <p class="eq-note">Vào từ: \((2,1)\) khi khách đến → vào bộ đệm;
+        \((3,3)\) khi S2 xong → 1 rời → S1 vẫn bận.</p>
 
-        <p><strong>Trạng thái \((3,2)\):</strong></p>
+        <p><strong>Trạng thái \((3,2)\)</strong> — cả hai bận, 2 khách:</p>
         \[
           \pi_{3,2}(\mu_2 + \mu_1 + \lambda) = \pi_{1,1}\,\lambda + \pi_{2,3}\,\mu_1 + \pi_{1,4}\,\mu_2 \tag{6}
         \]
+        <p class="eq-note">Vào từ: \((1,1)\) khi khách đến → vào S1 → cả hai bận;
+        \((2,3)\) khi S1 xong → 1 rời → cả hai rảnh → 2 khách bộ đệm lấp cả hai;
+        \((1,4)\) khi S2 xong → 2 rời đôi → cả hai rảnh → 2 khách bộ đệm lấp cả hai.</p>
+      {% include components/box-end.html %}
 
-        <p><strong>Trạng thái \((1,j)\), \(j \geq 3\):</strong></p>
+      {% include components/box-start.html type="formula" title='Phương trình lặp: trạng thái tại mức j ≥ 3 (eqs 7–9)' %}
+        <p>Từ mức 3 trở đi, phương trình có <strong>dạng lặp lại</strong> — đây là cấu trúc GI/M/1-type:</p>
+
+        <p><strong>Trạng thái \((1,j)\)</strong> — S1 bị chặn + S2 bận:</p>
         \[
           \pi_{1,j}(\mu_2 + \lambda) = \pi_{1,j-1}\,\lambda + \pi_{3,j}\,\mu_1 \tag{7}
         \]
+        <p class="eq-note">Vào từ: \((1,j{-}1)\) khi khách đến → bộ đệm;
+        \((3,j)\) khi S1 xong → bị chặn.</p>
 
-        <p><strong>Trạng thái \((2,j)\), \(j \geq 3\):</strong></p>
+        <p><strong>Trạng thái \((2,j)\)</strong> — S1 bận, S2 rảnh:</p>
         \[
           \pi_{2,j}(\mu_1 + \lambda) = \pi_{2,j-1}\,\lambda + \pi_{3,j+1}\,\mu_2 \tag{8}
         \]
+        <p class="eq-note">Vào từ: \((2,j{-}1)\) khi khách đến → bộ đệm;
+        \((3,j{+}1)\) khi S2 xong → 1 rời → S1 vẫn bận.</p>
 
-        <p><strong>Trạng thái \((3,j)\), \(j \geq 3\):</strong></p>
+        <p><strong>Trạng thái \((3,j)\)</strong> — cả hai bận:</p>
         \[
           \pi_{3,j}(\mu_2 + \mu_1 + \lambda) = \pi_{3,j-1}\,\lambda + \pi_{2,j+1}\,\mu_1 + \pi_{1,j+2}\,\mu_2 \tag{9}
         \]
+        <p class="eq-note">Vào từ: \((3,j{-}1)\) khi khách đến → bộ đệm;
+        \((2,j{+}1)\) khi S1 xong → 1 rời → cả hai rảnh → 2 từ bộ đệm lấp cả hai;
+        \((1,j{+}2)\) khi S2 xong → <strong>2 rời đôi</strong> → cả hai rảnh → 2 từ bộ đệm lấp cả hai.</p>
       {% include components/box-end.html %}
 
       <p>Điều kiện chuẩn hóa (eq 10):</p>
@@ -285,16 +314,13 @@ sections:
         \pi_{0,0} + \pi_{1,1} + \pi_{2,1} + \sum_{j=2}^{\infty} (\pi_{1,j} + \pi_{2,j} + \pi_{3,j}) = 1 \tag{10}
       \]
 
-      {% include components/example-start.html title='Đọc phương trình (9): trạng thái (3,j)' %}
-        <p>Trạng thái \((3,j)\) với \(j \geq 3\): cả hai server bận, \(j\) khách trong hệ.</p>
-        <p><strong>Tốc độ ra:</strong> \((\mu_2 + \mu_1 + \lambda)\pi_{3,j}\) — S2 xong, hoặc S1 xong (bị chặn), hoặc khách đến.</p>
-        <p><strong>Tốc độ vào</strong> từ 3 nguồn:</p>
+      {% include components/box-start.html type="summary" title='Cấu trúc của 9 phương trình' %}
         <ul>
-          <li>\(\pi_{3,j-1}\lambda\): từ \((3,j{-}1)\), khách đến → vào bộ đệm.</li>
-          <li>\(\pi_{2,j+1}\mu_1\): từ \((2,j{+}1)\), S1 xong → 1 khách rời → cả hai rảnh → 2 khách từ bộ đệm lấp cả hai server.</li>
-          <li>\(\pi_{1,j+2}\mu_2\): từ \((1,j{+}2)\), S2 xong → <strong>2 khách rời</strong> → cả hai rảnh → 2 khách từ bộ đệm lấp cả hai server.</li>
+          <li><strong>Eqs 1–6</strong> (biên): cho các trạng thái tại mức 0, 1 và 2. Mỗi phương trình có dạng riêng vì các mức thấp có ít trạng thái hơn.</li>
+          <li><strong>Eqs 7–9</strong> (lặp): cho mức \(j \geq 3\). Cùng một dạng lặp lại ở mọi mức — đây chính là cấu trúc cho phép dùng spectral expansion.</li>
+          <li>Trong 6 phương trình biên (1)–(6), chỉ <strong>5 là độc lập</strong> (bài báo). Kết hợp với chuẩn hóa (10), ta có đủ phương trình để xác định tất cả các ẩn.</li>
         </ul>
-      {% include components/example-end.html %}
+      {% include components/box-end.html %}
 
       <!-- ================================================================ -->
       <h2 id="dieu-kien-on-dinh">7. Điều kiện ổn định <small>(Stability Condition)</small></h2>
