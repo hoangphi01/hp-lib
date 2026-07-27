@@ -1,10 +1,4 @@
 <div class="sidebar-card">
-  <h4><span class="material-icons-outlined" style="font-size:16px">translate</span> Characteristic matrix polynomial</h4>
-  <p><strong>Characteristic matrix polynomial</strong> = ma trận đa thức đặc trưng. Là một đa thức theo biến \(x\) mà mỗi hệ số là một <strong>ma trận</strong> (thay vì số).</p>
-  <p class="sidebar-tip">Vai trò giống đa thức đặc trưng \(\det(A - \lambda I) = 0\) trong đại số tuyến tính, nhưng cho hệ phương trình truy hồi ma trận. Tìm \(x\) sao cho \(\det[Q(x)] = 0\) để có trị riêng.</p>
-</div>
-
-<div class="sidebar-card">
   <h4><span class="material-icons-outlined" style="font-size:16px">functions</span> Công thức chính</h4>
 
   <h5>Ma trận đặc trưng</h5>
@@ -42,7 +36,32 @@
 </div>
 
 <div class="sidebar-card">
-  <h4><span class="material-icons-outlined" style="font-size:16px">calculate</span> Quartic formula</h4>
-  <p>Đa thức bậc 4 có <strong>công thức nghiệm tường minh</strong>, tương tự công thức bậc 2 nhưng phức tạp hơn nhiều.</p>
-  <p class="sidebar-tip">Từ bậc 5 trở lên, <strong>không tồn tại</strong> công thức tổng quát (định lý Abel–Ruffini). Đây là lý do ma trận pha \(3 \times 3\) (cho đa thức bậc 5 = \((x\!-\!1)\) × bậc 4) là giới hạn để có lời giải dạng đóng.</p>
+  <h4><span class="material-icons-outlined" style="font-size:16px">translate</span> Thuật ngữ</h4>
+
+  <h5>Characteristic matrix polynomial</h5>
+  <p>Ma trận đa thức đặc trưng. Một đa thức theo biến \(x\), nhưng mỗi hệ số là một <strong>ma trận</strong> thay vì số. Vai trò tương tự đa thức đặc trưng \(\det(A - \lambda I) = 0\) trong đại số tuyến tính, nhưng dùng cho hệ phương trình truy hồi ma trận.</p>
+
+  <h5>Eigenvalue</h5>
+  <p>Trị riêng. Giá trị \(x\) thỏa mãn \(\det[Q(x)] = 0\). Mỗi trị riêng tương ứng với một "mode" suy giảm của xác suất dừng: \(x^j\) giảm dần khi \(j\) tăng (nếu \(|x| < 1\)).</p>
+
+  <h5>Eigenvector</h5>
+  <p>Vector riêng \(\boldsymbol{\psi}(x)\). Hướng trong không gian pha mà theo đó xác suất dừng suy giảm. Thỏa mãn \(\boldsymbol{\psi} Q(x) = \mathbf{0}\), có 3 thành phần ứng với 3 pha (trạng thái server 1, 2, 3).</p>
+
+  <h5>Unit circle</h5>
+  <p>Đường tròn đơn vị trên mặt phẳng phức, tức tập hợp các số phức có \(|z| = 1\). Chỉ trị riêng nằm <strong>bên trong</strong> (\(|x| < 1\)) mới dùng được, vì chuỗi \(x^j\) chỉ hội tụ về 0 khi \(|x| < 1\). Nếu \(|x| \geq 1\), xác suất sẽ phát tán vô hạn.</p>
+
+  <h5>Determinant</h5>
+  <p>Định thức, \(\det[Q(x)]\). Điều kiện \(\det = 0\) cho biết hệ phương trình \(Q(x)\boldsymbol{\psi} = \mathbf{0}\) có nghiệm không tầm thường (vector riêng khác 0).</p>
+
+  <h5>Quartic formula</h5>
+  <p>Công thức nghiệm tường minh cho phương trình bậc 4, tương tự công thức nghiệm bậc 2 nhưng phức tạp hơn nhiều (eqs 18–27). Từ bậc 5 trở lên, không tồn tại công thức tổng quát (định lý Abel–Ruffini).</p>
+
+  <h5>Closed-form solution</h5>
+  <p>Lời giải dạng đóng. Nghiệm được biểu diễn bằng công thức tường minh từ các tham số đầu vào (\(\lambda, \mu_1, \mu_2\)), không cần giải số (iterative/numerical). Ưu điểm: tính ngay bằng máy tính bỏ túi, không cần thuật toán lặp.</p>
+
+  <h5>Little's law</h5>
+  <p>Định luật Little (1961): \(L = \lambda W\). Mối quan hệ phổ quát giữa số khách trung bình trong hệ (\(L\)), tốc độ đến (\(\lambda\)), và thời gian chờ trung bình (\(W\)). Áp dụng cho mọi hệ hàng đợi ổn định, không cần biết phân phối cụ thể.</p>
+
+  <h5>Normalization</h5>
+  <p>Điều kiện chuẩn hóa: tổng tất cả xác suất dừng = 1. Dùng để xác định duy nhất các hệ số \(a_1, a_2, a_3\) trong khai triển spectral.</p>
 </div>

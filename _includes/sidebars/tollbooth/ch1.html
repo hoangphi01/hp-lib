@@ -29,32 +29,7 @@
 <div class="sidebar-card">
   <h4><span class="material-icons-outlined" style="font-size:16px">verified</span> Điều kiện ổn định (eq 13)</h4>
   <p>\(\lambda < \dfrac{2\mu_1\mu_2(\mu_1+\mu_2)}{\mu_1^2+\mu_1\mu_2+\mu_2^2}\)</p>
-  <p class="sidebar-tip">Proposition 1 — áp dụng Theorem 1.7.1, Neuts (1981) cho GI/M/1-type.</p>
-</div>
-
-<div class="sidebar-card">
-  <h4><span class="material-icons-outlined" style="font-size:16px">translate</span> Quasi-Birth-Death (QBD)</h4>
-  <p><strong>Quasi-Birth-Death</strong> = quá trình "gần giống sinh-tử". Trong quá trình sinh-tử thuần, mỗi trạng thái chỉ chuyển lên hoặc xuống 1 bậc. QBD mở rộng: mỗi "bậc" (level) chứa <strong>nhiều pha</strong>, nhưng vẫn chỉ chuyển giữa các level kề nhau.</p>
-  <p class="sidebar-tip">Ma trận tốc độ chuyển có dạng <strong>block-tridiagonal</strong> (3 đường chéo block). Mô hình tollbooth <strong>không phải</strong> QBD vì có chuyển xuống 2 level (rời đôi).</p>
-</div>
-
-<div class="sidebar-card">
-  <h4><span class="material-icons-outlined" style="font-size:16px">translate</span> Equilibrium equations</h4>
-  <p><strong>Equilibrium equations</strong> = phương trình cân bằng. Tại trạng thái dừng, tổng tốc độ đi vào mỗi trạng thái bằng tổng tốc độ đi ra.</p>
-  <p class="sidebar-tip">Tên khác: <em>balance equations</em>, <em>steady-state equations</em>. Trong bài báo là eqs 1–9.</p>
-</div>
-
-<div class="sidebar-card">
-  <h4><span class="material-icons-outlined" style="font-size:16px">layers</span> GI/M/1-type</h4>
-  <p>Mở rộng của QBD: cho phép chuyển xuống <strong>nhiều level</strong> cùng lúc (ở đây: xuống 2 level do rời đôi, qua ma trận \(A_3\)).</p>
-  <p class="sidebar-tip">Quan hệ truy hồi (eq 12):<br>
-  \(\mathbf{v}_{j-1}A_0 + \mathbf{v}_j A_1 + \mathbf{v}_{j+1}A_2 + \mathbf{v}_{j+2}A_3 = \mathbf{0}\)</p>
-</div>
-
-<div class="sidebar-card">
-  <h4><span class="material-icons-outlined" style="font-size:16px">timeline</span> Phân phối mũ</h4>
-  <p>Thời gian phục vụ \(\sim \text{Exp}(\mu)\): trung bình \(1/\mu\), phương sai \(1/\mu^2\).</p>
-  <p class="sidebar-tip"><strong>Tính không nhớ:</strong> \(\Pr(X > s + t \mid X > s) = \Pr(X > t)\). Đây là lý do CTMC hoạt động: tương lai không phụ thuộc quá khứ.</p>
+  <p class="sidebar-tip">Proposition 1, áp dụng Theorem 1.7.1 của Neuts (1981).</p>
 </div>
 
 <div class="sidebar-card">
@@ -66,4 +41,51 @@
     <li>S2 rảnh + S1 bận → S2 <strong>không nhận</strong> từ bộ đệm.</li>
     <li>Cả hai rảnh → khách vào <strong>S2</strong>.</li>
   </ol>
+</div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">translate</span> Thuật ngữ</h4>
+
+  <h5>Poisson process</h5>
+  <p>Quá trình đếm sự kiện xảy ra ngẫu nhiên theo thời gian. Hai tính chất chính: các sự kiện <strong>độc lập</strong> với nhau, và tốc độ trung bình không đổi (\(\lambda\) sự kiện/đơn vị thời gian). Khoảng cách giữa hai sự kiện liên tiếp tuân theo phân phối mũ.</p>
+
+  <h5>Exponential distribution</h5>
+  <p>Phân phối mũ, \(X \sim \text{Exp}(\mu)\). Trung bình \(1/\mu\). Tính chất quan trọng: <strong>không nhớ</strong> (memoryless), tức \(\Pr(X > s+t \mid X > s) = \Pr(X > t)\). Nhờ tính chất này, trạng thái tương lai của hệ chỉ phụ thuộc hiện tại, không phụ thuộc quá khứ.</p>
+
+  <h5>CTMC</h5>
+  <p>Continuous-Time Markov Chain, chuỗi Markov thời gian liên tục. Hệ thống chuyển giữa các trạng thái theo thời gian liên tục (không theo bước rời rạc). Thời gian lưu lại mỗi trạng thái tuân theo phân phối mũ.</p>
+
+  <h5>State space</h5>
+  <p>Không gian trạng thái, tập hợp tất cả các trạng thái có thể của hệ thống. Ở đây là tập \(S\) gồm các cặp \((I^*, J)\).</p>
+
+  <h5>Tandem queue</h5>
+  <p>Hàng đợi nối tiếp, hệ thống gồm nhiều server sắp xếp thành chuỗi. Khách phải đi qua từng server theo thứ tự. Giữa các server có thể có hoặc không có chỗ đợi (buffer).</p>
+
+  <h5>Blocking</h5>
+  <p>Hiện tượng chặn. Xảy ra khi một khách hoàn thành phục vụ tại server trước nhưng không thể tiến tới vì server sau đang bận. Khách bị "kẹt" tại chỗ, chiếm vị trí phục vụ.</p>
+
+  <h5>Heterogeneous servers</h5>
+  <p>Hai server có tốc độ phục vụ khác nhau (\(\mu_1 \neq \mu_2\)), trái ngược với homogeneous (đồng nhất, \(\mu_1 = \mu_2\)).</p>
+
+  <h5>Transition rate</h5>
+  <p>Tốc độ chuyển trạng thái, cho biết hệ thống chuyển từ trạng thái này sang trạng thái khác nhanh cỡ nào. Đơn vị: lần/đơn vị thời gian.</p>
+
+  <h5>Steady-state probability</h5>
+  <p>Xác suất trạng thái dừng \(\pi_{i,j}\). Khi hệ chạy đủ lâu, xác suất ở mỗi trạng thái ổn định không đổi theo thời gian. Điều kiện: hệ phải thỏa mãn điều kiện ổn định.</p>
+
+  <h5>Equilibrium equations</h5>
+  <p>Phương trình cân bằng (hay balance equations). Tại trạng thái dừng, tổng tốc độ đi vào = tổng tốc độ đi ra cho mỗi trạng thái. Trong bài báo: eqs 1–9.</p>
+
+  <h5>Normalization</h5>
+  <p>Điều kiện chuẩn hóa: tổng tất cả xác suất dừng phải bằng 1 (eq 10). Đảm bảo \(\pi_{i,j}\) thực sự là phân phối xác suất.</p>
+
+  <h5>QBD (Quasi-Birth-Death)</h5>
+  <p>Quá trình "gần giống sinh-tử". Mỗi level chứa nhiều pha, nhưng chỉ chuyển giữa các level kề nhau (lên 1 hoặc xuống 1). Ma trận tốc độ chuyển có dạng block-tridiagonal.</p>
+  <p class="sidebar-tip">Mô hình tollbooth <strong>không phải</strong> QBD vì có chuyển xuống 2 level.</p>
+
+  <h5>GI/M/1-type</h5>
+  <p>Mở rộng của QBD: cho phép chuyển xuống nhiều level cùng lúc. Ở đây: lên 1, xuống 1 (qua \(A_2\)) hoặc xuống 2 (qua \(A_3\)).</p>
+
+  <h5>Spectral expansion</h5>
+  <p>Phương pháp khai triển phổ. Biểu diễn nghiệm (xác suất dừng) dưới dạng tổ hợp tuyến tính của các vector riêng, với hệ số giảm theo lũy thừa của trị riêng. Tương tự việc phân tích tín hiệu thành các tần số cơ bản.</p>
 </div>
