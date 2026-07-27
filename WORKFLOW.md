@@ -375,7 +375,15 @@ File tồn tại:    _includes/sidebars/mynewbook/ch1.html  ← phải tồn t�
 {% include components/review-end.html %}
 ```
 
-**Box types:** `definition` (xanh lá), `theorem` (đỏ), `formula` (vàng, left-border), `summary` (xanh dương, left-border)
+**Box types:** `definition` (xanh lá), `theorem` (đỏ), `formula` (vàng), `summary` (xanh dương), `discussion` (cam)
+
+**Quy tắc quan trọng:** Mọi suy nghĩ cá nhân, câu hỏi thảo luận, hoặc nhận xét của người nghiên cứu **phải** dùng box type `discussion`. Không trộn lẫn nội dung gốc từ tài liệu với ý kiến cá nhân trong cùng một box.
+
+```html
+{% include components/box-start.html type="discussion" title='Thảo luận: Tiêu đề câu hỏi' %}
+  <p>Suy nghĩ / câu hỏi / nhận xét cá nhân...</p>
+{% include components/box-end.html %}
+```
 
 ### Deep-link với status
 
