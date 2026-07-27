@@ -1,9 +1,10 @@
 # Mới nhất ở trên
 - week: "2026-07-27"
-  label: "Con đã đọc kỹ bài báo và có hai điểm muốn thảo luận với thầy:"
+  label: "Con đã đọc kỹ bài báo và có một số điểm muốn thảo luận với thầy:"
   items:
     - "Trong mô hình, khi cả hai server đều rảnh thì khách đến được phục vụ bởi server 2 (thay vì server 1). Quy tắc này dẫn đến hiện tượng rời đôi, tức hai khách cùng rời hệ thống khi server 2 hoàn thành, và khiến chuỗi Markov có dạng GI/M/1-type thay vì QBD thông thường. Con muốn hỏi thầy: quy tắc này phản ánh thực tế vận hành trạm thu phí, hay được thiết kế để mô hình có cấu trúc toán học phù hợp cho lời giải dạng đóng?"
     - "Điều kiện ổn định của mô hình (Proposition 1) cho ngưỡng λ cao hơn đáng kể so với hàng đợi tandem thông thường. Trực giác của con là nhờ cơ chế rời đôi, hệ thống giải phóng khách nhanh hơn nên chịu được tải lớn hơn. Cách hiểu này có đúng không, hay còn yếu tố nào khác mà con chưa nhận ra?"
+    - "Lời giải dạng đóng đòi hỏi nhiều giả thiết chặt: phân phối mũ, đúng 2 server, quy tắc phục vụ cụ thể. Nếu nới lỏng bất kỳ giả thiết nào (ví dụ: phân phối phục vụ tổng quát, hoặc 3 server), lời giải dạng đóng có thể không còn tồn tại và phải dùng phương pháp số. Vậy theo thầy, việc theo đuổi lời giải dạng đóng có đánh đổi tính tổng quát của bài toán không, hay giá trị chính nằm ở chỗ khác?"
 
 - week: "2026-07-23"
   label: "Thưa thầy, trong thời gian vừa rồi do có nhiều việc bận nên con không kịp cập nhật thường xuyên. Dưới đây là những gì con đã làm được:"
