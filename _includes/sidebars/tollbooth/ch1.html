@@ -12,6 +12,25 @@
 </div>
 
 <div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">apartment</span> Hai tầng trạng thái</h4>
+  <p>Hệ thống có <strong>vô hạn</strong> trạng thái, không phải chỉ 4. Mỗi trạng thái là một cặp \((I^*, J)\) gồm 2 tầng:</p>
+  <p><strong>Tầng 1 — Mức (level):</strong> số khách \(J = 0, 1, 2, 3, \ldots\) Đây là chiều vô hạn.</p>
+  <p><strong>Tầng 2 — Pha (phase):</strong> trạng thái server \(I^* \in \{0,1,2,3\}\). Đây là chiều hữu hạn (4 giá trị).</p>
+  <p class="sidebar-tip">Ví dụ: \((3, 5)\) = cả hai server bận, 5 khách trong hệ (2 đang phục vụ + 3 trong bộ đệm).</p>
+
+  <h5>Không phải mọi cặp đều tồn tại</h5>
+  <p>Mức 0: chỉ có \((0,0)\) vì 0 khách thì cả hai phải rảnh.</p>
+  <p>Mức 1: chỉ \((1,1)\) và \((2,1)\) vì 1 khách thì không thể cả hai bận.</p>
+  <p>Mức \(\geq 2\): có 3 pha \((1,j)\), \((2,j)\), \((3,j)\) vì \(I^*\!=\!0\) không thể xảy ra khi có khách.</p>
+
+  <h5>Các pha chuyển đổi thế nào?</h5>
+  <p>\(3 \xrightarrow{\mu_1} 1\): S1 xong → bị chặn (cùng mức).</p>
+  <p>\(3 \xrightarrow{\mu_2} 2\): S2 xong → 1 rời (xuống 1 mức).</p>
+  <p>\(2 \xrightarrow{\mu_1} 3\): S1 xong → 1 rời → 2 từ bộ đệm lấp cả hai (xuống 1 mức).</p>
+  <p>\(1 \xrightarrow{\mu_2} 3\): S2 xong → 2 rời đôi → 2 từ bộ đệm lấp cả hai (xuống 2 mức).</p>
+</div>
+
+<div class="sidebar-card">
   <h4><span class="material-icons-outlined" style="font-size:16px">grid_on</span> Ma trận 3×3 (eq 11)</h4>
   <h5>Chuyển lên (thêm khách)</h5>
   <p>\(A_0 = \lambda I_{3 \times 3}\)</p>
