@@ -454,7 +454,11 @@ mjx-container {
   overflow-y: hidden;
 }
 
-/* All box types (definition, theorem, formula, summary) use filled header */
+/* Discussion box: hardcoded fallback (dark header to stand out from paper content) */
+.box.discussion .box-title { background: #263238; }
+.box.discussion .box-body  { background: #eceff1; border-color: #90a4ae; }
+
+/* All box types (definition, theorem, formula, summary, discussion) use filled header */
 
 /* === Component Spacing === */
 .box + .box, .box + .example, .example + .box, .example + .example { margin-top: 32px; }
