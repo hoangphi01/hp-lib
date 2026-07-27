@@ -458,6 +458,41 @@ mjx-container {
 .box.discussion .box-title { background: #263238; }
 .box.discussion .box-body  { background: #eceff1; border-color: #90a4ae; }
 
+/* Discussion nav: indicator below chapter title */
+.discussion-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: -8px 0 28px;
+}
+.discussion-nav-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #263238;
+  background: #eceff1;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid #90a4ae;
+}
+.discussion-nav-btn {
+  font-size: 12px;
+  color: #263238;
+  background: #fff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid #b0bec5;
+  text-decoration: none;
+  transition: background 0.15s;
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.discussion-nav-btn:hover {
+  background: #eceff1;
+}
+
 /* All box types (definition, theorem, formula, summary, discussion) use filled header */
 
 /* === Component Spacing === */
