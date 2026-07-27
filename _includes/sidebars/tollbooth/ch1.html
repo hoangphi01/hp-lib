@@ -89,3 +89,20 @@
   <h5>Spectral expansion</h5>
   <p>Phương pháp khai triển phổ. Biểu diễn nghiệm (xác suất dừng) dưới dạng tổ hợp tuyến tính của các vector riêng, với hệ số giảm theo lũy thừa của trị riêng. Tương tự việc phân tích tín hiệu thành các tần số cơ bản.</p>
 </div>
+
+<div class="sidebar-card">
+  <h4><span class="material-icons-outlined" style="font-size:16px">account_tree</span> So sánh các loại chuỗi Markov</h4>
+  <p>Tưởng tượng chuỗi Markov như tòa nhà nhiều tầng:</p>
+
+  <h5>Chuỗi Markov tổng quát</h5>
+  <p>Từ mỗi tầng có thể nhảy đến <strong>bất kỳ tầng nào</strong>. Không có cấu trúc đặc biệt. Khi không gian trạng thái vô hạn, chỉ giải được bằng phương pháp số (cắt ngắn không gian trạng thái, rồi giải hệ phương trình hữu hạn). Không có lời giải dạng đóng.</p>
+
+  <h5>QBD</h5>
+  <p>Từ mỗi tầng chỉ đi <strong>lên 1, giữ nguyên, hoặc xuống 1</strong>. Cấu trúc block-tridiagonal lặp lại cho phép dùng matrix-geometric hoặc spectral expansion. Có thể có lời giải dạng đóng nếu ma trận pha đủ nhỏ.</p>
+
+  <h5>GI/M/1-type</h5>
+  <p>Lên chỉ 1 tầng, nhưng <strong>xuống được nhiều tầng</strong>. Vẫn có cấu trúc lặp lại, vẫn dùng được spectral expansion. Bài báo này thuộc loại này.</p>
+
+  <p class="sidebar-tip"><strong>Tại sao không dùng chuỗi Markov tổng quát?</strong> Bài toán tollbooth có không gian trạng thái <strong>vô hạn</strong> (số khách không giới hạn). Chuỗi Markov tổng quát sẽ cần phương pháp số: cắt ngắn ở \(J = N\), giải hệ \(\pi Q = 0\) kích thước hữu hạn, và hy vọng \(N\) đủ lớn. Kết quả chỉ là <strong>xấp xỉ số</strong>, phụ thuộc vào \(N\).
+  Ngược lại, nhận ra cấu trúc GI/M/1-type cho phép tìm <strong>nghiệm chính xác</strong> dạng đóng: công thức tường minh từ \(\lambda, \mu_1, \mu_2\), không cần cắt ngắn hay lặp. Đây chính là đóng góp cốt lõi của bài báo.</p>
+</div>
