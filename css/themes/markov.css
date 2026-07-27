@@ -81,10 +81,11 @@ h3 { color: var(--text-h3, #34495e); }
 .index-hero .subtitle { color: var(--text-muted, #888); }
 
 /* === Box types via CSS custom properties === */
-.box.definition { --box-header: #2e7d32; --box-bg: #f6fbf4; --box-border: #a5d6a7; }
-.box.theorem    { --box-header: #b71c1c; --box-bg: #fdf4f2; --box-border: #e0a8a0; }
-.box.formula    { --box-header: #c49000; --box-bg: #fefbf0; --box-border: #e0d5a0; }
-.box.summary    { --box-header: #1565c0; --box-bg: #f2f7fc; --box-border: #a8c8e8; }
+.box.definition  { --box-header: #2e7d32; --box-bg: #f6fbf4; --box-border: #a5d6a7; }
+.box.theorem     { --box-header: #b71c1c; --box-bg: #fdf4f2; --box-border: #e0a8a0; }
+.box.formula     { --box-header: #c49000; --box-bg: #fefbf0; --box-border: #e0d5a0; }
+.box.summary     { --box-header: #1565c0; --box-bg: #f2f7fc; --box-border: #a8c8e8; }
+.box.discussion  { --box-header: #e65100; --box-bg: #fff8f0; --box-border: #ffcc80; }
 
 /* Review boxes (collapsible math review - purple) */
 .review { --review-header: #6a1b9a; --review-bg: #faf5ff; --review-border: #ce93d8; }
@@ -225,10 +226,11 @@ aside {
 }
 
 /* Dark mode: adjust box colors for readability */
-html[data-theme="dark"] .box.definition { --box-bg: #1a2e1a; --box-border: #2a5a2a; }
-html[data-theme="dark"] .box.theorem    { --box-bg: #2e1a1a; --box-border: #5a2a2a; }
-html[data-theme="dark"] .box.formula    { --box-bg: #2e2a1a; --box-border: #5a4a2a; }
-html[data-theme="dark"] .box.summary    { --box-bg: #1a1a2e; --box-border: #2a2a5a; }
+html[data-theme="dark"] .box.definition  { --box-bg: #1a2e1a; --box-border: #2a5a2a; }
+html[data-theme="dark"] .box.theorem     { --box-bg: #2e1a1a; --box-border: #5a2a2a; }
+html[data-theme="dark"] .box.formula     { --box-bg: #2e2a1a; --box-border: #5a4a2a; }
+html[data-theme="dark"] .box.summary     { --box-bg: #1a1a2e; --box-border: #2a2a5a; }
+html[data-theme="dark"] .box.discussion  { --box-bg: #2e1f1a; --box-border: #5a3a2a; }
 
 html[data-theme="dark"] .example,
 html[data-theme="dark"] .exercise {

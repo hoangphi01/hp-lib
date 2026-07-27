@@ -63,6 +63,14 @@ sections:
         chuỗi Markov có dạng <strong>GI/M/1-type</strong> (chuyển xuống 2 mức) thay vì QBD chuẩn.</p>
       {% include components/box-end.html %}
 
+      {% include components/box-start.html type="discussion" title='Thảo luận: Quy tắc "cả hai rảnh → vào S2" có phản ánh thực tế?' %}
+        <p>Quy tắc 5 ("cả hai rảnh → khách vào server 2") là quy tắc đặc biệt nhất trong mô hình.
+        Nó trực tiếp tạo ra hiện tượng rời đôi và khiến chuỗi Markov có dạng GI/M/1-type.</p>
+        <p><strong>Câu hỏi:</strong> Quy tắc này phản ánh thực tế vận hành trạm thu phí
+        (ví dụ: cửa 2 gần lối ra hơn nên khách ưu tiên vào đó),
+        hay được thiết kế để mô hình có cấu trúc toán học phù hợp cho lời giải dạng đóng?</p>
+      {% include components/box-end.html %}
+
       <p><strong>Ký hiệu chính:</strong></p>
       <ul>
         <li>\(\lambda\): tốc độ đến <em>(arrival rate)</em></li>
@@ -355,6 +363,14 @@ sections:
         \]
         <p>Hệ ổn định khi \(\lambda < 3{,}16\). Nếu \(\lambda = 3\): ổn định. Nếu \(\lambda = 4\): không ổn định.</p>
       {% include components/example-end.html %}
+
+      {% include components/box-start.html type="discussion" title='Thảo luận: Ngưỡng ổn định cao hơn nhờ rời đôi?' %}
+        <p>Ngưỡng ổn định của mô hình tollbooth (eq 13) cao hơn đáng kể so với hàng đợi tandem thông thường
+        \(\lambda < \mu_1\mu_2/(\mu_1+\mu_2)\).</p>
+        <p><strong>Trực giác:</strong> Cơ chế rời đôi giúp hệ thống giải phóng 2 khách cùng lúc khi server 2 hoàn thành
+        và có khách bị chặn. Điều này tăng "công suất xử lý" hiệu dụng, cho phép hệ chịu được tốc độ đến cao hơn
+        mà vẫn ổn định. Cách hiểu này có đúng không, hay còn yếu tố nào khác?</p>
+      {% include components/box-end.html %}
 
       <!-- ================================================================ -->
       <h2 id="qbd-spectral">8. Quá trình GI/M/1-type & Spectral expansion <small>(GI/M/1-type & Spectral Expansion)</small></h2>
