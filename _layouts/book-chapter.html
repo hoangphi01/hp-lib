@@ -115,7 +115,7 @@
   {% include floating-ui.html show_share=true %}
 
   <script>
-  // Discussion box indicator: add nav buttons below h1 if page has discussion boxes
+  // Discussion pill: single badge below h1, click cycles through discussion boxes
   document.addEventListener('DOMContentLoaded', function() {
     var boxes = document.querySelectorAll('.box.discussion');
     if (!boxes.length) return;
@@ -123,30 +123,26 @@
     var h1 = document.querySelector('.content h1');
     if (!h1) return;
 
-    var nav = document.createElement('div');
-    nav.className = 'discussion-nav';
-    nav.innerHTML = '<span class="discussion-nav-label">' +
-      '<span class="material-icons-outlined" style="font-size:16px;vertical-align:-3px">forum</span> ' +
+    // Ensure all boxes have ids
+    boxes.forEach(function(box, i) { if (!box.id) box.id = 'discussion-' + (i + 1); });
+
+    var current = 0;
+    var pill = document.createElement('a');
+    pill.href = '#' + boxes[0].id;
+    pill.className = 'discussion-pill';
+    pill.innerHTML = '<span class="material-icons-outlined">forum</span>' +
+      '<span class="discussion-pill-text">' +
+      '<small>Trang này có</small>' +
       boxes.length + ' thảo luận</span>';
 
-    boxes.forEach(function(box, i) {
-      var title = box.querySelector('.box-title');
-      var text = title ? title.textContent.replace(/^forum\s*/, '').trim() : 'Thảo luận ' + (i + 1);
-      // Ensure box has an id for scrolling
-      if (!box.id) box.id = 'discussion-' + (i + 1);
-      var btn = document.createElement('a');
-      btn.href = '#' + box.id;
-      btn.className = 'discussion-nav-btn';
-      btn.textContent = text;
-      btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        history.replaceState(null, '', '#' + box.id);
-      });
-      nav.appendChild(btn);
+    pill.addEventListener('click', function(e) {
+      e.preventDefault();
+      boxes[current].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      history.replaceState(null, '', '#' + boxes[current].id);
+      current = (current + 1) % boxes.length;
     });
 
-    h1.insertAdjacentElement('afterend', nav);
+    h1.insertAdjacentElement('afterend', pill);
   });
   </script>
   <script src="{{ '/js/floating-nav.js' | relative_url }}"></script>
