@@ -206,6 +206,14 @@ th {
   color: var(--link-visited, #5a3a8a);
 }
 
+/* Discussion pill: override link colors */
+.content a.discussion-pill,
+.content a.discussion-pill:visited,
+.content a.discussion-pill:hover {
+  color: #fff;
+  border-bottom: none;
+}
+
 /* === Blockquote === */
 blockquote {
   margin: 1.2em 0;
