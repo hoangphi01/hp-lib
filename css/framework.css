@@ -473,7 +473,9 @@ mjx-container {
   transition: background 0.2s;
 }
 .discussion-pill:hover { background: #37474f; }
-.discussion-pill, .discussion-pill:visited, .discussion-pill:hover { color: #fff; }
+.content a.discussion-pill,
+.content a.discussion-pill:visited,
+.content a.discussion-pill:hover { color: #fff; border-bottom: none; }
 .discussion-pill .material-icons-outlined { font-size: 22px; }
 .discussion-pill-text {
   display: flex;
