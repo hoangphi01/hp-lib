@@ -473,21 +473,22 @@ mjx-container {
   transition: background 0.2s;
 }
 .discussion-pill:hover { background: #37474f; }
-.discussion-pill:visited { color: #fff; }
-.discussion-pill .material-icons-outlined { font-size: 22px; opacity: 0.85; }
+.discussion-pill, .discussion-pill:visited, .discussion-pill:hover { color: #fff; }
+.discussion-pill .material-icons-outlined { font-size: 22px; }
 .discussion-pill-text {
   display: flex;
   flex-direction: column;
   line-height: 1.2;
   font-size: 15px;
   font-weight: 700;
+  color: #fff;
 }
 .discussion-pill-text small {
   font-size: 10px;
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  opacity: 0.75;
+  color: rgba(255,255,255,0.8);
 }
 
 /* All box types (definition, theorem, formula, summary, discussion) use filled header */
