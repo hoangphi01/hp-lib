@@ -208,10 +208,12 @@ th {
 
 /* Discussion pill: override link colors */
 .content a.discussion-pill,
+.content a.discussion-pill:link,
 .content a.discussion-pill:visited,
-.content a.discussion-pill:hover {
-  color: #fff;
-  border-bottom: none;
+.content a.discussion-pill:hover,
+.content a.discussion-pill:active {
+  color: #fff !important;
+  border-bottom: none !important;
 }
 
 /* === Blockquote === */
