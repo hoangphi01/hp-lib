@@ -4,43 +4,48 @@ title: "V2X Fields & ROS Mapping"
 description: "Bảng ánh xạ các trường V2X (CPM, CAM, DENM) sang ROS2 topics"
 ---
 
-<section class="lib-doc-viewer">
-  <div class="lib-doc-viewer__header">
-    <div>
-      <h1 class="lib-doc-viewer__title">V2X Fields & ROS Mapping</h1>
-      <p class="lib-doc-viewer__desc">Bảng ánh xạ các trường ASN.1 của CPM, CAM, DENM sang ROS2 PredictedObject</p>
+<!-- Toolbar -->
+<div class="csv-toolbar">
+  <div class="csv-toolbar__left">
+    <span class="material-icons-outlined csv-toolbar__icon">table_chart</span>
+    <span class="csv-toolbar__filename">v2x_fields_and_ros_mapping.csv</span>
+    <span class="csv-toolbar__meta" id="csv-meta"></span>
+  </div>
+  <div class="csv-toolbar__right">
+    <div class="csv-toolbar__search">
+      <span class="material-icons-outlined">search</span>
+      <input type="text" id="csv-search" placeholder="Tìm kiếm..." />
     </div>
-    <a href="/v2x_fields_and_ros_mapping.csv" download class="lib-doc-viewer__download">
+    <a href="/v2x_fields_and_ros_mapping.csv" download class="csv-toolbar__btn csv-toolbar__btn--download">
       <span class="material-icons-outlined">download</span>
       Tải CSV
     </a>
   </div>
+</div>
 
-  <div class="lib-doc-viewer__legend">
-    <span class="lib-doc-viewer__tag lib-doc-viewer__tag--exists">EXISTS</span> Bridge đã triển khai
-    <span class="lib-doc-viewer__tag lib-doc-viewer__tag--nobridge">NO BRIDGE</span> Chưa có bridge
-  </div>
+<!-- Legend -->
+<div class="csv-legend">
+  <span class="csv-tag csv-tag--exists">EXISTS</span> Bridge đã triển khai
+  <span class="csv-tag csv-tag--nobridge">NO BRIDGE</span> Chưa có bridge
+</div>
 
-  <div class="lib-doc-viewer__table-wrap" id="csv-table-wrap">
-    <p class="lib-doc-viewer__loading">Đang tải bảng...</p>
-  </div>
-</section>
+<!-- Table -->
+<div class="csv-wrap" id="csv-table-wrap">
+  <p class="csv-loading">Đang tải bảng...</p>
+</div>
 
 <script>
 (function() {
   function parseCSV(text) {
-    var rows = [];
-    var current = [];
-    var field = '';
-    var inQuotes = false;
+    var rows = [], current = [], field = '', inQ = false;
     for (var i = 0; i < text.length; i++) {
       var c = text[i];
-      if (inQuotes) {
+      if (inQ) {
         if (c === '"' && text[i+1] === '"') { field += '"'; i++; }
-        else if (c === '"') { inQuotes = false; }
+        else if (c === '"') { inQ = false; }
         else { field += c; }
       } else {
-        if (c === '"') { inQuotes = true; }
+        if (c === '"') { inQ = true; }
         else if (c === ',') { current.push(field); field = ''; }
         else if (c === '\n' || (c === '\r' && text[i+1] === '\n')) {
           current.push(field); field = '';
@@ -53,13 +58,6 @@ description: "Bảng ánh xạ các trường V2X (CPM, CAM, DENM) sang ROS2 top
     return rows;
   }
 
-  function statusClass(val) {
-    var v = (val || '').trim().toUpperCase();
-    if (v === 'EXISTS') return 'lib-doc-viewer__tag--exists';
-    if (v === 'NO BRIDGE') return 'lib-doc-viewer__tag--nobridge';
-    return '';
-  }
-
   fetch('/v2x_fields_and_ros_mapping.csv')
     .then(function(r) { return r.text(); })
     .then(function(text) {
@@ -67,42 +65,51 @@ description: "Bảng ánh xạ các trường V2X (CPM, CAM, DENM) sang ROS2 top
       if (!rows.length) return;
 
       var headers = rows[0];
-      var html = '<table class="lib-csv-table"><thead><tr>';
+      var dataRows = [];
+      var rowNum = 0;
+      for (var i = 1; i < rows.length; i++) {
+        var row = rows[i];
+        var empty = true;
+        for (var e = 0; e < row.length; e++) { if (row[e].trim()) { empty = false; break; } }
+        if (empty) { dataRows.push({ type: 'sep' }); continue; }
+        rowNum++;
+        dataRows.push({ type: 'data', num: rowNum, cells: row });
+      }
+
+      // Meta info
+      var meta = document.getElementById('csv-meta');
+      if (meta) meta.textContent = rowNum + ' rows \u00d7 ' + headers.length + ' cols';
+
+      // Find status column
+      var statusCol = -1;
+      for (var s = 0; s < headers.length; s++) {
+        if (headers[s].trim().toLowerCase().indexOf('bridge status') > -1) { statusCol = s; break; }
+      }
+
+      // Build table
+      var html = '<table class="csv-table"><thead><tr><th class="csv-table__rownum">#</th>';
       for (var h = 0; h < headers.length; h++) {
         html += '<th>' + headers[h] + '</th>';
       }
       html += '</tr></thead><tbody>';
 
-      var statusCol = -1;
-      for (var s = 0; s < headers.length; s++) {
-        if (headers[s].trim().toLowerCase().indexOf('bridge status') > -1 ||
-            headers[s].trim().toLowerCase() === 'bridge status') {
-          statusCol = s; break;
-        }
-      }
-
-      for (var i = 1; i < rows.length; i++) {
-        var row = rows[i];
-        // Skip empty separator rows
-        var empty = true;
-        for (var e = 0; e < row.length; e++) { if (row[e].trim()) { empty = false; break; } }
-        if (empty) {
-          html += '<tr class="lib-csv-table__separator"><td colspan="' + headers.length + '"></td></tr>';
+      for (var d = 0; d < dataRows.length; d++) {
+        var dr = dataRows[d];
+        if (dr.type === 'sep') {
+          html += '<tr class="csv-table__sep"><td colspan="' + (headers.length + 1) + '"></td></tr>';
           continue;
         }
-
-        // Determine row type from first column
-        var rowClass = '';
-        var first = (row[0] || '').trim().toUpperCase();
-        if (first.indexOf('NO BRIDGE') > -1) rowClass = ' class="lib-csv-table__row--nobridge"';
-        else if (first.indexOf('EXISTS') > -1) rowClass = ' class="lib-csv-table__row--exists"';
-
-        html += '<tr' + rowClass + '>';
+        var first = (dr.cells[0] || '').toUpperCase();
+        var rowCls = first.indexOf('NO BRIDGE') > -1 ? ' csv-table__row--nobridge' :
+                     first.indexOf('EXISTS') > -1 ? ' csv-table__row--exists' : '';
+        html += '<tr class="csv-table__row' + rowCls + '">';
+        html += '<td class="csv-table__rownum">' + dr.num + '</td>';
         for (var j = 0; j < headers.length; j++) {
-          var cell = row[j] || '';
+          var cell = dr.cells[j] || '';
           if (j === statusCol && cell.trim()) {
-            var cls = statusClass(cell);
-            html += '<td><span class="lib-doc-viewer__tag ' + cls + '">' + cell.trim() + '</span></td>';
+            var v = cell.trim().toUpperCase();
+            var cls = v === 'EXISTS' ? 'csv-tag--exists' : v === 'NO BRIDGE' ? 'csv-tag--nobridge' : '';
+            html += '<td><span class="csv-tag ' + cls + '">' + cell.trim() + '</span></td>';
           } else {
             html += '<td>' + cell + '</td>';
           }
@@ -111,10 +118,19 @@ description: "Bảng ánh xạ các trường V2X (CPM, CAM, DENM) sang ROS2 top
       }
       html += '</tbody></table>';
       document.getElementById('csv-table-wrap').innerHTML = html;
+
+      // Search
+      document.getElementById('csv-search').addEventListener('input', function() {
+        var q = this.value.toLowerCase();
+        var trs = document.querySelectorAll('.csv-table__row');
+        for (var t = 0; t < trs.length; t++) {
+          trs[t].style.display = !q || trs[t].textContent.toLowerCase().indexOf(q) > -1 ? '' : 'none';
+        }
+      });
     })
     .catch(function() {
       document.getElementById('csv-table-wrap').innerHTML =
-        '<p style="color:#c00">Loi tai file CSV.</p>';
+        '<p style="color:#c00;padding:40px;text-align:center">Lỗi tải file CSV.</p>';
     });
 })();
 </script>
