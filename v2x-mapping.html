@@ -4,21 +4,19 @@ title: "V2X Fields & ROS Mapping"
 description: "Bảng ánh xạ các trường V2X (CPM, CAM, DENM) sang ROS2 topics"
 ---
 
-<div class="lib-csv">
-
 <!-- Toolbar -->
-<div class="lib-csv-toolbar">
-  <div class="lib-csv-toolbar__left">
-    <span class="material-icons-outlined lib-csv-toolbar__icon">table_chart</span>
-    <span class="lib-csv-toolbar__filename">v2x_fields_and_ros_mapping.csv</span>
-    <span class="lib-csv-toolbar__meta" id="csv-meta"></span>
+<div class="csv-toolbar">
+  <div class="csv-toolbar__left">
+    <span class="material-icons-outlined csv-toolbar__icon">table_chart</span>
+    <span class="csv-toolbar__filename">v2x_fields_and_ros_mapping.csv</span>
+    <span class="csv-toolbar__meta" id="csv-meta"></span>
   </div>
-  <div class="lib-csv-toolbar__right">
-    <div class="lib-csv-toolbar__search">
+  <div class="csv-toolbar__right">
+    <div class="csv-toolbar__search">
       <span class="material-icons-outlined">search</span>
       <input type="text" id="csv-search" placeholder="Tìm kiếm..." />
     </div>
-    <a href="/v2x_fields_and_ros_mapping.csv" download class="lib-csv-toolbar__btn lib-csv-toolbar__btn--download">
+    <a href="/v2x_fields_and_ros_mapping.csv" download class="csv-toolbar__btn csv-toolbar__btn--download">
       <span class="material-icons-outlined">download</span>
       Tải CSV
     </a>
@@ -26,16 +24,14 @@ description: "Bảng ánh xạ các trường V2X (CPM, CAM, DENM) sang ROS2 top
 </div>
 
 <!-- Legend -->
-<div class="lib-csv-legend">
-  <span class="lib-csv-tag lib-csv-tag--exists">EXISTS</span> Bridge đã triển khai
-  <span class="lib-csv-tag lib-csv-tag--nobridge">NO BRIDGE</span> Chưa có bridge
+<div class="csv-legend">
+  <span class="csv-tag csv-tag--exists">EXISTS</span> Bridge đã triển khai
+  <span class="csv-tag csv-tag--nobridge">NO BRIDGE</span> Chưa có bridge
 </div>
 
 <!-- Table -->
-<div class="lib-csv-wrap" id="csv-table-wrap">
-  <p class="lib-csv-loading">Đang tải bảng...</p>
-</div>
-
+<div class="csv-wrap" id="csv-table-wrap">
+  <p class="csv-loading">Đang tải bảng...</p>
 </div>
 
 <script>
@@ -91,7 +87,7 @@ description: "Bảng ánh xạ các trường V2X (CPM, CAM, DENM) sang ROS2 top
       }
 
       // Build table
-      var html = '<table class="lib-csv-table"><thead><tr><th class="lib-csv-table__rownum">#</th>';
+      var html = '<table class="csv-table"><thead><tr><th class="csv-table__rownum">#</th>';
       for (var h = 0; h < headers.length; h++) {
         html += '<th>' + headers[h] + '</th>';
       }
@@ -100,20 +96,20 @@ description: "Bảng ánh xạ các trường V2X (CPM, CAM, DENM) sang ROS2 top
       for (var d = 0; d < dataRows.length; d++) {
         var dr = dataRows[d];
         if (dr.type === 'sep') {
-          html += '<tr class="lib-csv-table__sep"><td colspan="' + (headers.length + 1) + '"></td></tr>';
+          html += '<tr class="csv-table__sep"><td colspan="' + (headers.length + 1) + '"></td></tr>';
           continue;
         }
         var first = (dr.cells[0] || '').toUpperCase();
-        var rowCls = first.indexOf('NO BRIDGE') > -1 ? ' lib-csv-table__row--nobridge' :
-                     first.indexOf('EXISTS') > -1 ? ' lib-csv-table__row--exists' : '';
-        html += '<tr class="lib-csv-table__row' + rowCls + '">';
-        html += '<td class="lib-csv-table__rownum">' + dr.num + '</td>';
+        var rowCls = first.indexOf('NO BRIDGE') > -1 ? ' csv-table__row--nobridge' :
+                     first.indexOf('EXISTS') > -1 ? ' csv-table__row--exists' : '';
+        html += '<tr class="csv-table__row' + rowCls + '">';
+        html += '<td class="csv-table__rownum">' + dr.num + '</td>';
         for (var j = 0; j < headers.length; j++) {
           var cell = dr.cells[j] || '';
           if (j === statusCol && cell.trim()) {
             var v = cell.trim().toUpperCase();
-            var cls = v === 'EXISTS' ? 'lib-csv-tag--exists' : v === 'NO BRIDGE' ? 'lib-csv-tag--nobridge' : '';
-            html += '<td><span class="lib-csv-tag ' + cls + '">' + cell.trim() + '</span></td>';
+            var cls = v === 'EXISTS' ? 'csv-tag--exists' : v === 'NO BRIDGE' ? 'csv-tag--nobridge' : '';
+            html += '<td><span class="csv-tag ' + cls + '">' + cell.trim() + '</span></td>';
           } else {
             html += '<td>' + cell + '</td>';
           }
@@ -126,7 +122,7 @@ description: "Bảng ánh xạ các trường V2X (CPM, CAM, DENM) sang ROS2 top
       // Search
       document.getElementById('csv-search').addEventListener('input', function() {
         var q = this.value.toLowerCase();
-        var trs = document.querySelectorAll('.lib-csv-table__row');
+        var trs = document.querySelectorAll('.csv-table__row');
         for (var t = 0; t < trs.length; t++) {
           trs[t].style.display = !q || trs[t].textContent.toLowerCase().indexOf(q) > -1 ? '' : 'none';
         }
