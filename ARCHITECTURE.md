@@ -273,11 +273,11 @@ Tất cả CSS variables dùng chung: `--hp-*` prefix.
 
 ### 8.2. CSV Viewer (`v2x-mapping.html`)
 
-- Layout: `default`
-- CSS: `lib-csv-*` classes (warm brown palette)
+- Layout: `default`, permalink: `/tai-lieu/v2x-mapping`
+- CSS: `csv-*` classes (cold Material Design palette — giữ nguyên, không dùng warm tokens)
 - JS: inline script — fetch CSV → parse → render `<table>`
 - Features: search filter, row numbering, status tags (EXISTS/NO BRIDGE), download button
-- Container: `max-width: 960px`, centered
+- **Quy tắc:** Tất cả file CSV trong tương lai đều dùng viewer này (copy template + đổi fetch URL)
 
 ---
 
@@ -327,9 +327,10 @@ bundle exec jekyll build    # Output → _site/
 ### Thêm 1 CSV viewer page mới:
 
 1. Đặt file `.csv` vào root
-2. Thêm entry vào `_data/documents.yml` (title, type, url, icon, file)
-3. Tạo page HTML mới (copy `v2x-mapping.html`, đổi filename trong fetch)
-4. CSS đã có sẵn (`lib-csv-*` classes), không cần thêm
+2. Thêm entry vào `_data/documents.yml` (title, type, url, icon, file, date_added)
+3. Tạo page HTML mới: copy `v2x-mapping.html`, đổi filename trong fetch, set `permalink: /tai-lieu/<tên>`
+4. CSS đã có sẵn (`csv-*` classes, cold palette), không cần thêm
+5. **LUÔN dùng viewer này cho mọi file CSV** — không tạo viewer mới
 
 ### Thêm 1 sách mới:
 
