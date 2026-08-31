@@ -1,0 +1,29 @@
+---
+layout: default
+title: "Tài liệu"
+description: "Danh sách tài liệu nghiên cứu"
+---
+
+<section class="lib-docs">
+  <h1 class="lib-docs__title">Tài liệu</h1>
+  <p class="lib-docs__subtitle">Tài liệu nghiên cứu, bảng dữ liệu, và tệp tham khảo</p>
+
+  <div class="lib-docs__grid">
+    {% for doc in site.data.documents %}
+    <a href="{{ doc.url | relative_url }}" class="lib-docs__card">
+      <div class="lib-docs__card-icon">
+        <span class="material-icons-outlined">{{ doc.icon | default: "description" }}</span>
+      </div>
+      <div class="lib-docs__card-body">
+        <h3 class="lib-docs__card-title">{{ doc.title }}</h3>
+        <p class="lib-docs__card-desc">{{ doc.description }}</p>
+        <div class="lib-docs__card-meta">
+          <span class="lib-docs__card-type">{{ doc.type | upcase }}</span>
+          <span class="lib-docs__card-date">{{ doc.date_added | date: "%d/%m/%Y" }}</span>
+        </div>
+      </div>
+      <span class="material-icons-outlined lib-docs__card-arrow">chevron_right</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>

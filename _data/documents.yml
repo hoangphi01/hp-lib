@@ -1,0 +1,7 @@
+- title: "V2X Fields & ROS Mapping"
+  description: "Bảng ánh xạ các trường ASN.1 của CPM, CAM, DENM sang ROS2 PredictedObject"
+  icon: table_chart
+  type: csv
+  url: /v2x-mapping
+  file: /v2x_fields_and_ros_mapping.csv
+  date_added: 2026-09-01
