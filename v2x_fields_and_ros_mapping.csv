@@ -1,0 +1,55 @@
+Message Type,#,ASN.1 C Access Path,C Typedef,Value / Range,ROS Field After Bridge,Transform,Bridge Status,Source File
+,,,,,,,,
+CPM (bridge EXISTS),1,message->cpm.cpmParameters.managementContainer.referencePosition.latitude,Latitude_t (long),-900000000..900000001 (1/10 micro-deg),PredictedObject.kinematics.initial_pose_with_covariance.pose.position.x,/ 1e7 → GeographicLib::UTMUPS::Forward() → MGRS,EXISTS,cpm_application.cpp:114 → v2x_node.cpp:125
+CPM (bridge EXISTS),2,message->cpm.cpmParameters.managementContainer.referencePosition.longitude,Longitude_t (long),-1800000000..1800000001,PredictedObject.kinematics.initial_pose_with_covariance.pose.position.y,/ 1e7 → GeographicLib::UTMUPS::Forward() → MGRS,EXISTS,cpm_application.cpp:115 → v2x_node.cpp:126
+CPM (bridge EXISTS),3,...stationDataContainer->choice.originatingVehicleContainer.heading.headingValue,ITS_Container_HeadingValue_t (long),0-3600 (0.1 deg) 3601=unavail,PredictedObject.kinematics.initial_pose_with_covariance.pose.orientation.{x;y;z;w},(90 - heading/10) * PI/180 → tf2::Quaternion::setRPY(),EXISTS,cpm_application.cpp:132-134 → v2x_node.cpp:86-92
+CPM (bridge EXISTS),4,...perceivedObjectContainer->list.array[i]->xDistance.value,DistanceValue_t (long),centimeters,PredictedObject.kinematics.initial_pose_with_covariance.pose.position.x,/ 100 → rotate by sender heading → + sender MGRS x,EXISTS,cpm_application.cpp:154-158 → v2x_node.cpp:125
+CPM (bridge EXISTS),5,...perceivedObjectContainer->list.array[i]->yDistance.value,DistanceValue_t (long),centimeters,PredictedObject.kinematics.initial_pose_with_covariance.pose.position.y,/ 100 → rotate by sender heading → + sender MGRS y,EXISTS,cpm_application.cpp:155-159 → v2x_node.cpp:126
+CPM (bridge EXISTS),6,...perceivedObjectContainer->list.array[i]->planarObjectDimension2->value,ObjectDimension_t (long),0.1m units,PredictedObject.shape.dimensions.x,/ 10.0 → meters,EXISTS,cpm_application.cpp:160 → v2x_node.cpp:121
+CPM (bridge EXISTS),7,...perceivedObjectContainer->list.array[i]->planarObjectDimension1->value,ObjectDimension_t (long),0.1m units,PredictedObject.shape.dimensions.y,/ 10.0 → meters,EXISTS,cpm_application.cpp:161 → v2x_node.cpp:122
+CPM (bridge EXISTS),8,...perceivedObjectContainer->list.array[i]->verticalObjectDimension->value,ObjectDimension_t (long),0.1m units,PredictedObject.shape.dimensions.z,/ 10.0 → meters,EXISTS,cpm_application.cpp:162 → v2x_node.cpp:123
+CPM (bridge EXISTS),9,...perceivedObjectContainer->list.array[i]->yawAngle->value,CartesianAngle (long),0.1 degree units,PredictedObject.kinematics.initial_pose_with_covariance.pose.orientation.{x;y;z;w},(PI * yaw / 10) / 180 → tf2::Quaternion::setRPY(),EXISTS,cpm_application.cpp:164-172 → v2x_node.cpp:129-132
+CPM (bridge EXISTS),10,(hardcoded),N/A,N/A,PredictedObject.classification[0].label = CAR,hardcoded ObjectClassification::CAR probability=0.99,EXISTS,v2x_node.cpp:117-118
+CPM (bridge EXISTS),11,(hardcoded),N/A,N/A,PredictedObject.shape.type = BOUNDING_BOX,hardcoded,EXISTS,v2x_node.cpp:120
+CPM (bridge EXISTS),12,(hardcoded),N/A,N/A,PredictedObject.pose.position.z = 0.1,hardcoded,EXISTS,v2x_node.cpp:127
+,,,,,,,,
+CAM (NO bridge),1,cam->header.protocolVersion,OrdinalNumber1B_t (long),2,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,ETSI-ITS-CDD_ItsPduHeader.h:26
+CAM (NO bridge),2,cam->header.messageId,MessageId_t (long),2 = CAM,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,ETSI-ITS-CDD_ItsPduHeader.h:27
+CAM (NO bridge),3,cam->header.stationId,StationId_t (unsigned long),0-4294967295,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,StationId.h:22
+CAM (NO bridge),4,cam->cam.generationDeltaTime,ETSI_ITS_CDD_GenerationDeltaTime_t (long),0-65535 ms (modulo 65536),N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,CamPayload.h:25
+CAM (NO bridge),5,cam->cam.camParameters.basicContainer.stationType,ETSI_ITS_CDD_StationType_t (long),0-15 (5=passengerCar 15=RSU),N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,CAM-PDU-Description_CamParameters.h:30
+CAM (NO bridge),6,cam->cam.camParameters.basicContainer.referencePosition.latitude,Latitude_t (long),-900000000..900000001 (1/10 micro-deg),N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,ETSI-ITS-CDD_ReferencePosition.h
+CAM (NO bridge),7,cam->cam.camParameters.basicContainer.referencePosition.longitude,Longitude_t (long),-1800000000..1800000001,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,ETSI-ITS-CDD_ReferencePosition.h
+CAM (NO bridge),8,cam->cam.camParameters.basicContainer.referencePosition.altitude.altitudeValue,AltitudeValue_t (long),-100000..800001 (0.01m),N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,ETSI-ITS-CDD_ReferencePosition.h
+CAM (NO bridge),9,cam->...highFrequencyContainer.choice.basicVehicleContainerHighFrequency.heading.headingValue,ITS_Container_HeadingValue_t (long),0-3600 (0.1 deg) 3601=unavail,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,cam_application.cpp:276+512
+CAM (NO bridge),10,cam->...basicVehicleContainerHighFrequency.heading.headingConfidence,ITS_Container_HeadingConfidence_t (long),1-126 127=unavailable,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,cam_application.cpp:513-514
+CAM (NO bridge),11,cam->...basicVehicleContainerHighFrequency.speed.speedValue,ITS_Container_SpeedValue_t (long),0-16383 (0.01 m/s) 16383=unavail,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,cam_application.cpp:275+516
+CAM (NO bridge),12,cam->...basicVehicleContainerHighFrequency.speed.speedConfidence,ITS_Container_SpeedConfidence_t (long),1-126 127=unavailable,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,cam_application.cpp:517-518
+CAM (NO bridge),13,cam->...basicVehicleContainerHighFrequency.driveDirection,ETSI_ITS_CDD_DriveDirection_t (long),0=forward 1=backward 2=unavail,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,cam_application.cpp:520
+CAM (NO bridge),14,cam->...basicVehicleContainerHighFrequency.vehicleLength.vehicleLengthValue,ITS_Container_VehicleLengthValue_t (long),1-1023 (0.1m) 1023=unavail,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,cam_application.cpp:523
+CAM (NO bridge),15,cam->...basicVehicleContainerHighFrequency.vehicleWidth,ETSI_ITS_CDD_VehicleWidth_t (long),1-62 (0.1m) 62=unavailable,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,cam_application.cpp:525
+CAM (NO bridge),16,cam->...basicVehicleContainerHighFrequency.longitudinalAcceleration.value,AccelerationValue_t (long),-160..161 (0.1 m/s2) 161=unavail,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,cam_application.cpp:521
+CAM (NO bridge),17,cam->...basicVehicleContainerHighFrequency.curvature.curvatureValue,ITS_Container_CurvatureValue_t (long),-1023..1023 (1/30000 m-1),N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,cam_application.cpp:527
+CAM (NO bridge),18,cam->...basicVehicleContainerHighFrequency.curvatureCalculationMode,ETSI_ITS_CDD_CurvatureCalculationMode_t (long),0=yawRateUsed 1=not 2=unavail,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,cam_application.cpp:529
+CAM (NO bridge),19,cam->...basicVehicleContainerHighFrequency.yawRate.yawRateValue,ITS_Container_YawRateValue_t (long),-32766..32766 (0.01 deg/s) 32767=unavail,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,cam_application.cpp:531
+CAM (NO bridge),20,cam->...basicVehicleContainerHighFrequency.accelerationControl,ETSI_ITS_CDD_AccelerationControl_t* (BIT STRING),7 bits: brakePedal(0) gasPedal(1) emergencyBrake(2),N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,cam_application.cpp:533-537
+,,,,,,,,
+DENM (NO bridge),1,denm->header.protocolVersion,OrdinalNumber1B_t (long),1-255,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,ETSI-ITS-CDD_ItsPduHeader.h:26
+DENM (NO bridge),2,denm->header.messageId,MessageId_t (long),1 = DENM,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,ETSI-ITS-CDD_ItsPduHeader.h:27
+DENM (NO bridge),3,denm->header.stationId,StationId_t (unsigned long),0-4294967295,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,StationId.h:22
+DENM (NO bridge),4,denm->denm.management.actionId.originatingStationId,StationId_t (unsigned long),0-4294967295,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,ActionId.h:25
+DENM (NO bridge),5,denm->denm.management.actionId.sequenceNumber,ETSI_ITS_CDD_SequenceNumber_t (long),0-65535,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,ActionId.h:26
+DENM (NO bridge),6,denm->denm.management.detectionTime,ETSI_ITS_CDD_TimestampIts_t (INTEGER_t),ms since 2004-01-01,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,DENM-PDU-Description_ManagementContainer.h:33
+DENM (NO bridge),7,denm->denm.management.referenceTime,ETSI_ITS_CDD_TimestampIts_t (INTEGER_t),ms since 2004-01-01,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,DENM-PDU-Description_ManagementContainer.h:34
+DENM (NO bridge),8,denm->denm.management.termination,DENM_PDU_Description_Termination_t* (long),0=isCancellation 1=isNegation (OPTIONAL),N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,DENM-PDU-Description_ManagementContainer.h:35
+DENM (NO bridge),9,denm->denm.management.eventPosition.latitude,Latitude_t (long),-900000000..900000001 (1/10 micro-deg),N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,ETSI-ITS-CDD_ReferencePosition.h
+DENM (NO bridge),10,denm->denm.management.eventPosition.longitude,Longitude_t (long),-1800000000..1800000001,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,ETSI-ITS-CDD_ReferencePosition.h
+DENM (NO bridge),11,denm->denm.management.eventPosition.altitude.altitudeValue,AltitudeValue_t (long),-100000..800001 (0.01m),N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,ETSI-ITS-CDD_ReferencePosition.h
+DENM (NO bridge),12,denm->denm.management.validityDuration,DeltaTimeSecond_t* (long),default 600s (OPTIONAL),N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,DENM-PDU-Description_ManagementContainer.h:39
+DENM (NO bridge),13,denm->denm.management.stationType,ETSI_ITS_CDD_StationType_t (long),0-15 (5=passengerCar),N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,DENM-PDU-Description_ManagementContainer.h:41
+DENM (NO bridge),14,denm->denm.situation->eventType.ccAndScc.present,CauseCodeChoice_PR (enum),EEBL = CauseCodeChoice_PR_dangerousSituation99,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,CauseCodeChoice.h:150
+DENM (NO bridge),15,denm->denm.situation->eventType.ccAndScc.choice.dangerousSituation99,ETSI_ITS_CDD_DangerousSituationSubCauseCode_t (long),EEBL = 1 (emergencyElectronicBrakeEngaged),N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,CauseCodeChoice.h:285
+DENM (NO bridge),16,denm->denm.situation->informationQuality,ETSI_ITS_CDD_InformationQuality_t (long),0-7 (0=unavail 7=highest),N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,DENM-PDU-Description_SituationContainer.h:31
+DENM (NO bridge),17,denm->denm.location->eventSpeed,ETSI_ITS_CDD_Speed_t*,OPTIONAL,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,DENM-PDU-Description_LocationContainer.h:35
+DENM (NO bridge),18,denm->denm.location->eventPositionHeading,Wgs84Angle_t*,OPTIONAL,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,DENM-PDU-Description_LocationContainer.h:36
+DENM (NO bridge),19,denm->denm.location->roadType,ETSI_ITS_CDD_RoadType_t*,OPTIONAL,N/A — NO BRIDGE EXISTS,N/A,NO BRIDGE,DENM-PDU-Description_LocationContainer.h:38

@@ -1,0 +1,120 @@
+---
+layout: default
+title: "V2X Fields & ROS Mapping"
+description: "Bảng ánh xạ các trường V2X (CPM, CAM, DENM) sang ROS2 topics"
+---
+
+<section class="lib-doc-viewer">
+  <div class="lib-doc-viewer__header">
+    <div>
+      <h1 class="lib-doc-viewer__title">V2X Fields & ROS Mapping</h1>
+      <p class="lib-doc-viewer__desc">Bảng ánh xạ các trường ASN.1 của CPM, CAM, DENM sang ROS2 PredictedObject</p>
+    </div>
+    <a href="/v2x_fields_and_ros_mapping.csv" download class="lib-doc-viewer__download">
+      <span class="material-icons-outlined">download</span>
+      Tải CSV
+    </a>
+  </div>
+
+  <div class="lib-doc-viewer__legend">
+    <span class="lib-doc-viewer__tag lib-doc-viewer__tag--exists">EXISTS</span> Bridge đã triển khai
+    <span class="lib-doc-viewer__tag lib-doc-viewer__tag--nobridge">NO BRIDGE</span> Chưa có bridge
+  </div>
+
+  <div class="lib-doc-viewer__table-wrap" id="csv-table-wrap">
+    <p class="lib-doc-viewer__loading">Đang tải bảng...</p>
+  </div>
+</section>
+
+<script>
+(function() {
+  function parseCSV(text) {
+    var rows = [];
+    var current = [];
+    var field = '';
+    var inQuotes = false;
+    for (var i = 0; i < text.length; i++) {
+      var c = text[i];
+      if (inQuotes) {
+        if (c === '"' && text[i+1] === '"') { field += '"'; i++; }
+        else if (c === '"') { inQuotes = false; }
+        else { field += c; }
+      } else {
+        if (c === '"') { inQuotes = true; }
+        else if (c === ',') { current.push(field); field = ''; }
+        else if (c === '\n' || (c === '\r' && text[i+1] === '\n')) {
+          current.push(field); field = '';
+          rows.push(current); current = [];
+          if (c === '\r') i++;
+        } else { field += c; }
+      }
+    }
+    if (field || current.length) { current.push(field); rows.push(current); }
+    return rows;
+  }
+
+  function statusClass(val) {
+    var v = (val || '').trim().toUpperCase();
+    if (v === 'EXISTS') return 'lib-doc-viewer__tag--exists';
+    if (v === 'NO BRIDGE') return 'lib-doc-viewer__tag--nobridge';
+    return '';
+  }
+
+  fetch('/v2x_fields_and_ros_mapping.csv')
+    .then(function(r) { return r.text(); })
+    .then(function(text) {
+      var rows = parseCSV(text);
+      if (!rows.length) return;
+
+      var headers = rows[0];
+      var html = '<table class="lib-csv-table"><thead><tr>';
+      for (var h = 0; h < headers.length; h++) {
+        html += '<th>' + headers[h] + '</th>';
+      }
+      html += '</tr></thead><tbody>';
+
+      var statusCol = -1;
+      for (var s = 0; s < headers.length; s++) {
+        if (headers[s].trim().toLowerCase().indexOf('bridge status') > -1 ||
+            headers[s].trim().toLowerCase() === 'bridge status') {
+          statusCol = s; break;
+        }
+      }
+
+      for (var i = 1; i < rows.length; i++) {
+        var row = rows[i];
+        // Skip empty separator rows
+        var empty = true;
+        for (var e = 0; e < row.length; e++) { if (row[e].trim()) { empty = false; break; } }
+        if (empty) {
+          html += '<tr class="lib-csv-table__separator"><td colspan="' + headers.length + '"></td></tr>';
+          continue;
+        }
+
+        // Determine row type from first column
+        var rowClass = '';
+        var first = (row[0] || '').trim().toUpperCase();
+        if (first.indexOf('NO BRIDGE') > -1) rowClass = ' class="lib-csv-table__row--nobridge"';
+        else if (first.indexOf('EXISTS') > -1) rowClass = ' class="lib-csv-table__row--exists"';
+
+        html += '<tr' + rowClass + '>';
+        for (var j = 0; j < headers.length; j++) {
+          var cell = row[j] || '';
+          if (j === statusCol && cell.trim()) {
+            var cls = statusClass(cell);
+            html += '<td><span class="lib-doc-viewer__tag ' + cls + '">' + cell.trim() + '</span></td>';
+          } else {
+            html += '<td>' + cell + '</td>';
+          }
+        }
+        html += '</tr>';
+      }
+      html += '</tbody></table>';
+      document.getElementById('csv-table-wrap').innerHTML = html;
+    })
+    .catch(function() {
+      document.getElementById('csv-table-wrap').innerHTML =
+        '<p style="color:#c00">Loi tai file CSV.</p>';
+    });
+})();
+</script>
